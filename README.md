@@ -9,14 +9,14 @@ You need to disable EAC to use this mod!
 It is still the same base [MicroSplat][4] shader, but I've added e.g.
 the anti-tiling module for better visual fidelity. It will also
 allow me to open up the shader to use 32 textures instead of 24.
-
 Currently 3 different performance/quality settings are included,
 which are automatically switched with the in-game terrain quality.
 
 ## Download
 
 End-Users are encouraged to download my mods from [NexusMods][3].  
-Every download there helps me to buy stuff for mod development.  
+Every download there helps me to buy stuff for mod development.
+
 Otherwise please use one of the [official releases][2] here.  
 Only clone or download the repo if you know what you do!
 
