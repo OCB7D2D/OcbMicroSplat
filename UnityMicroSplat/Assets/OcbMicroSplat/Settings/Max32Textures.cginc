@@ -1,0 +1,1 @@
+#define _MAX32TEXTURES 1

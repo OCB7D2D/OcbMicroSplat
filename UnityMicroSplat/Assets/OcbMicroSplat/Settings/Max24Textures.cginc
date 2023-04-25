@@ -1,0 +1,1 @@
+#define _MAX24TEXTURES 1

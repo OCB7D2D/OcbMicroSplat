@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9aafab5ec24e3a468cbf65f5c7e23b0, type: 3}
+  m_Name: AssetBundle
+  m_EditorClassIdentifier: 
+  Path: ..\..\Resources\OcbMicroSplat.unity3d
+  IncludeAssetsFromFolders: 0
+  SearchFoldersRecursively: 0
+  CreateDeterministicAssetBundle: 1
+  AppendHashToAssetBundleName: 1
+  Compression: 1
+  VerboseLogging: 0
+  Objects:
+  - {fileID: 2800000, guid: 8911a74aa4ce00143bffb4cb832f8d11, type: 3}
+  - {fileID: 2800000, guid: d258ce422a9e817439d89de9d3c6eb97, type: 3}
+  - {fileID: 2800000, guid: f6f9bad3b5b0d5248a5c6b217ea3a931, type: 3}
+  - {fileID: 2800000, guid: 37f2107ea75176042b1d6d5a14dd000d, type: 3}
+  - {fileID: 2800000, guid: 5742e32ad40d0654a95c5eed200a2ef4, type: 3}
+  - {fileID: 2800000, guid: 6cf15ee406d55fe4a8a8813746dd0e1b, type: 3}
+  - {fileID: 2800000, guid: 11d88b620c0b6e74f8e3cd6caef0498a, type: 3}
+  - {fileID: 2800000, guid: 934b0a7c3a1086149909deca074b5c25, type: 3}
+  - {fileID: 4800000, guid: 7a67448656770114a867382f8f194b9c, type: 3}
+  - {fileID: 4800000, guid: 86c264ca012bf27498dd970167c845ae, type: 3}
+  - {fileID: 4800000, guid: e22a838bc7667c943a187061e9d3f4c0, type: 3}
+  - {fileID: 4800000, guid: b7708893700e69f4f90feda583343e2e, type: 3}
+  - {fileID: 4800000, guid: 2fd05063deae57f4db83be0c3706df32, type: 3}
+  - {fileID: 4800000, guid: 577ba27d8784ce647bdfe29262616063, type: 3}
+  - {fileID: 4800000, guid: dfb9c5e7bbe85e44db45c7b2df87b250, type: 3}
+  - {fileID: 4800000, guid: 0cf327f4fd25d4e4dbc3ea1b5810d2bf, type: 3}
