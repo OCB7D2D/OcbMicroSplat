@@ -101,8 +101,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
             {
                 case "get":
                     Log.Out("Showing current value of {0}", _params[0]);
-                    Log.Out(" details: {1}", GetMatProperty(mesh.material, _params[1], _params[2]));
-                    Log.Out(" distant: {1}", GetMatProperty(mesh.material, _params[1], _params[2]));
+                    Log.Out(" details: {0}", GetMatProperty(mesh.material, _params[1], _params[2]));
+                    Log.Out(" distant: {0}", GetMatProperty(mesh.material, _params[1], _params[2]));
                     return;
             }
         if (_params.Count == 4)
