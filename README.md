@@ -32,6 +32,10 @@ Some features that may be included at some point:
 
 ## Changelog
 
+### Version 0.1.1
+
+- Fix normals and noise
+
 ### Version 0.1.0
 
 - Initial version
