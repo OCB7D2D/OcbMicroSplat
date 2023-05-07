@@ -67,11 +67,11 @@ public class OcbMicroSplat : IModApi
         mat.SetFloat("_DistanceResampleAlbedoStrength", 1);
         mat.SetFloat("_DistanceResampleNormalStrength", 1);
         mat.SetTexture("_NormalNoise", noiseNormal1);
-        mat.SetVector("_NormalNoiseScaleStrength", new Vector4(8f, 0.5f, 0, 0));
+        mat.SetVector("_NormalNoiseScaleStrength", new Vector2(0.0113f, 0.223f));
         mat.SetTexture("_NormalNoise2", noiseNormal2);
-        mat.SetVector("_NormalNoiseScaleStrength2", new Vector4(8f, 0.5f, 0, 0));
+        mat.SetVector("_NormalNoiseScaleStrength2", new Vector2(0.096f, 0.197f));
         mat.SetTexture("_NormalNoise3", noiseNormal3);
-        mat.SetVector("_NormalNoiseScaleStrength3", new Vector4(8f, 0.5f, 0, 0));
+        mat.SetVector("_NormalNoiseScaleStrength3", new Vector2(0.081f, 0.173f));
         mat.SetVector("_WorldHeightRange", new Vector4(0, 250, 0, 0));
         mat.SetVector("_ResampleDistanceParams", new Vector4(0.25f, 0.5f, 100, 250));
         mat.SetTexture("_DetailNoise", noiseDetail);
