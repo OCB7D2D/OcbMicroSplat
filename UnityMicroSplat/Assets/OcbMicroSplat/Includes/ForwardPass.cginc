@@ -2162,7 +2162,7 @@ void DoDebugOutput(inout MicroSplatLayer l)
 
 
 #if _PACKINGHQ
-    #define MICROSPLAT_SAMPLE_NORMAL(u, cl, l) half4(MICROSPLAT_SAMPLE(_NormalSAO, u, l).ga, MICROSPLAT_SAMPLE(_SmoothAO, u, l).ga).brag
+    #define MICROSPLAT_SAMPLE_NORMAL(u, cl, l) half4(MICROSPLAT_SAMPLE(_NormalSAO, u, l).ag, MICROSPLAT_SAMPLE(_SmoothAO, u, l).ga).brag
 #else
     #define MICROSPLAT_SAMPLE_NORMAL(u, cl, l) MICROSPLAT_SAMPLE(_NormalSAO, u, l)
 #endif
