@@ -23,8 +23,8 @@ Shader "OcbMicroSplat24MedVertex"
       [NoScaleOffset]_Diffuse ("Diffuse Array", 2DArray) = "white" {}
       [NoScaleOffset]_NormalSAO ("Normal Array", 2DArray) = "bump" {}
       [NoScaleOffset]_PerTexProps("Per Texture Properties", 2D) = "black" {}
-      [HideInInspector] _TerrainHolesTexture("Holes Map (RGB)", 2D) = "white" {}
-      [HideInInspector] _PerPixelNormal("Per Pixel Normal", 2D) = "bump" {}
+      // [HideInInspector] _TerrainHolesTexture("Holes Map (RGB)", 2D) = "white" {}
+      // [HideInInspector] _PerPixelNormal("Per Pixel Normal", 2D) = "bump" {}
       _Contrast("Blend Contrast", Range(0.01, 0.99)) = 0.4
       _UVScale("UV Scales", Vector) = (45, 45, 0, 0)
 
@@ -36,8 +36,8 @@ Shader "OcbMicroSplat24MedVertex"
       [NoScaleOffset]_DetailNoise("Detail Noise (Lum/Normal)", 2D) = "grey" {}
       _DetailNoiseScaleStrengthFade("Detail Scale", Vector) = (4, 0.5, 5, 0)
       // distance noise
-      [NoScaleOffset]_DistanceNoise("Detail Noise (Lum/Normal)", 2D) = "grey" {}
-      _DistanceNoiseScaleStrengthFade("Detail Scale", Vector) = (0.25, 0.5, 100, 250)
+      [NoScaleOffset]_DistanceNoise("Distance Noise (Lum/Normal)", 2D) = "grey" {}
+      _DistanceNoiseScaleStrengthFade("Distance Scale", Vector) = (0.25, 0.5, 100, 250)
       _NoiseHeight("Noise Texture", 2D) = "grey" {}
       _NoiseHeightData("Noise Height Data", Vector) = (1, 0.15, 0, 0)
       // distance resampling
@@ -53,6 +53,9 @@ Shader "OcbMicroSplat24MedVertex"
       [NoScaleOffset]_NormalNoise2("Normal Noise 2", 2D) = "bump" {}
       _NormalNoiseScaleStrength2("Normal Scale 2", Vector) = (8, 0.5, 0, 0)
 
+      [NoScaleOffset]_NormalNoise3("Normal Noise 3", 2D) = "bump" {}
+      _NormalNoiseScaleStrength3("Normal Scale 3", Vector) = (8, 0.5, 0, 0)
+
       _WorldHeightRange("World Height Range", Vector) = (0, 500, 0, 0)
       // for custom 7D2D
       _WorldDim("World Dimension", Vector) = (6144, 6144, 0, 0)
@@ -61,7 +64,7 @@ Shader "OcbMicroSplat24MedVertex"
       // geotexture
       _ProcTexCurves("ProcTextureCurves", 2D) = "black" {}
       _ProcTexParams("ProcTextureParams", 2D) = "black" {}
-      _ProcTexNoise("Noise Texture", 2D) = "white" {}
+      _ProcTexNoise("Proc Noise Texture", 2D) = "white" {}
       _PCLayerCount("Layer Count", Int) = 0
       _ProcBiomeCurveWeight("Curve Weight for Biome mask", Range(0.01,0.5)) = 0.5
       _ProcTexBiomeMask("Biome Mask", 2D) = "white" {}
