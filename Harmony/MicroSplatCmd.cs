@@ -94,6 +94,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
     {
 
         // set v4 _SnowDistanceResampleScaleStrengthFade 1,2,3,4
+        if (GameManager.IsDedicatedServer) return; // Nothing to do here
+        if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return;
         var mesh = MeshDescription.meshes[MeshDescription.MESH_TERRAIN];
 
         if (_params.Count == 3)

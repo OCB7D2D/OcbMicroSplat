@@ -279,6 +279,7 @@ public class OcbMicroSplat : IModApi
         static void Postfix()
         {
             if (GameManager.IsDedicatedServer) return; // Nothing to do here
+            if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return;
             var terrain = MeshDescription.meshes[MeshDescription.MESH_TERRAIN];
             UpdateAllShaders(terrain.materialDistant, "Distant");
             UpdateAllShaders(terrain.material, "Vertex");
