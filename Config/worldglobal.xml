@@ -1,0 +1,36 @@
+<configs>
+
+  <append xpath="/worldglobal">
+    
+    <microsplat-terrain>
+      <property name="ShaderDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat24{0}Vertex"/>
+      <property name="ShaderDistant" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat24{0}Distant"/>
+      <property name="NoisePerlin" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_perlin"/>
+      <property name="NoiseDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise"/>
+      <property name="NoiseNormal1" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_01"/>
+      <property name="NoiseNormal2" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02"/>
+      <property name="NoiseNormal3" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03"/>
+
+      <property name="NoiseHeightData" value="0, 0.15"/>
+      <property name="WorldHeightRange" value="0, 500"/>
+
+      <property name="DistanceResampleAlbedoStrength" value="1"/>
+      <property name="DistanceResampleNormalStrength" value="1"/>
+
+      <property name="NoiseNormal1Params" value="0.113,0.223"/>
+      <property name="NoiseNormal2Params" value="0.096,0.197"/>
+      <property name="NoiseNormal3Params" value="0.081,0.173"/>
+
+      <property name="ResampleDistanceParams" value="0.25, 0.5, 100"/>
+
+      <property name="DetailNoiseScaleStrengthFade" value="4, 0.5, 5"/>
+      <property name="DistanceNoiseScaleStrengthFade" value="0.25, 0.5, 100, 250"/>
+
+      <property name="TriplanarContrast" value="8"/>
+      <property name="TriplanarUVScale" value="1, 1, 0, 0"/>
+
+    </microsplat-terrain>
+
+  </append>
+
+</configs>

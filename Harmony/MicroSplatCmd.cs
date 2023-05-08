@@ -93,7 +93,6 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
     public override void Execute(List<string> _params, CommandSenderInfo _senderInfo)
     {
 
-        // set v4 _SnowDistanceResampleScaleStrengthFade 1,2,3,4
         if (GameManager.IsDedicatedServer) return; // Nothing to do here
         if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return;
         var mesh = MeshDescription.meshes[MeshDescription.MESH_TERRAIN];
@@ -111,6 +110,7 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
             switch (_params[0])
             {
                 case "set":
+                    // E.g. set v4 _SnowDistanceResampleScaleStrengthFade 1,2,3,4
                     SetMatProperty(mesh.material, _params[1], _params[2], _params[3]);
                     SetMatProperty(mesh.materialDistant, _params[1], _params[2], _params[3]);
                     return;
