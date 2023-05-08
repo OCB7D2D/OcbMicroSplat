@@ -29,7 +29,7 @@ Shader "OcbMicroSplat24MedDistant"
       _UVScale("UV Scales", Vector) = (45, 45, 0, 0)
 
       // for Unity 2020.3 bug
-      _MainTex("Unity Bug", 2D) = "white" {}
+      // _MainTex("Unity Bug", 2D) = "white" {}
       [NoScaleOffset]_SmoothAO ("Smooth AO Array", 2DArray) = "black" {}
 
       // terrain
