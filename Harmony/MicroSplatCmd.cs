@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using static StringParsers;
+using System.Diagnostics;
 
 public class OcbMicroSplatCmd : ConsoleCmdAbstract
 {
@@ -96,6 +97,21 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
         if (GameManager.IsDedicatedServer) return; // Nothing to do here
         if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return;
         var mesh = MeshDescription.meshes[MeshDescription.MESH_TERRAIN];
+
+        if (_params.Count == 1)
+            switch (_params[0])
+            {
+                case "dump":
+                    Log.Out("Dumping all microsplat textures");
+                    var watch = new Stopwatch();
+                    watch.Start();
+                    MicroSplatDump.DumpMicroSplat();
+                    MicroSplatDump.DumpOldTerrain();
+                    watch.Stop();
+                    Log.Out("Export took {0} seconds",
+                        watch.ElapsedMilliseconds / 1000f);
+                    return;
+            }
 
         if (_params.Count == 3)
             switch (_params[0])

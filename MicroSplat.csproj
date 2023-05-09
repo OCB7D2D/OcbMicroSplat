@@ -93,6 +93,9 @@
     <Compile Include="Harmony\MicroSplat.cs" />
     <Compile Include="Harmony\MicroSplatXmlConfig.cs" />
     <Compile Include="Library\Configs\MicroSplatTerrain.cs" />
+    <Compile Include="Library\Utils\MicroSplatDump.cs" />
+    <Compile Include="Library\Utils\OcbTextureDumper.cs" />
+    <Compile Include="Library\Utils\OcbTextureUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\worldglobal.xml" />
