@@ -119,7 +119,7 @@ Shader "OcbMicroSplat24MedDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/ForwardPass.cginc"
+         #include "Includes/Distant/ForwardBase.cginc"
 
          ENDCG
       }
@@ -166,7 +166,7 @@ Shader "OcbMicroSplat24MedDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/LightPass.cginc"
+         #include "Includes/Distant/ForwardAdd.cginc"
 
          ENDCG
 
@@ -214,7 +214,7 @@ Shader "OcbMicroSplat24MedDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/ShadingPass.cginc"
+         #include "Includes/Distant/Deferred.cginc"
 
          ENDCG
 
@@ -262,7 +262,7 @@ Shader "OcbMicroSplat24MedDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/CasterPass.cginc"
+         #include "Includes/Distant/ShadowCaster.cginc"
 
          ENDCG
 
@@ -312,7 +312,7 @@ Shader "OcbMicroSplat24MedDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/MetaPass.cginc"
+         #include "Includes/Distant/Meta.cginc"
 
          ENDCG
 
