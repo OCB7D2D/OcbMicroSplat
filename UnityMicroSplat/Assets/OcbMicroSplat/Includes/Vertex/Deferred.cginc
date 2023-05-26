@@ -1,4 +1,3 @@
-
 #if defined(SHADER_API_GAMECORE)
 
    #define ZERO_INITIALIZE(type, name) name = (type)0;
