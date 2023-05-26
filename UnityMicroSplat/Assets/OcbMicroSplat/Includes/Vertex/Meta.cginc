@@ -519,7 +519,7 @@
 #include "UnityMetaPass.cginc"
 
 
-#if _MICROTERRAIN && !_TERRAINBLENDABLESHADER
+#if _MICROTERRAIN && !(_TERRAINBLENDABLESHADER || _VERTEX7D2D)
     #define UNITY_ASSUME_UNIFORM_SCALING
     #define UNITY_DONT_INSTANCE_OBJECT_MATRICES
     #define UNITY_INSTANCED_LOD_FADE
@@ -537,7 +537,7 @@ struct VertexToPixel
     float3 worldNormal : TEXCOORD1;
     float4 worldTangent : TEXCOORD2;
     float4 texcoord0 : TEXCCOORD3;
-    #if !_MICROTERRAIN || _TERRAINBLENDABLESHADER || _VERTEX7D2D
+    #if !_MICROTERRAIN || (_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         float4 texcoord1 : TEXCCOORD4;
         float4 texcoord2 : TEXCCOORD5;
     #endif
@@ -633,11 +633,7 @@ struct VertexData
     float4 vertex : POSITION;
     float3 normal : NORMAL;
     float4 texcoord0 : TEXCOORD0;
-    #if _VERTEX7D2D
-        float4 texcoord1 : TEXCOORD1;
-        float4 texcoord2 : TEXCOORD2;
-        float4 texcoord3 : TEXCOORD3;
-    #elif !_MICROTERRAIN || _TERRAINBLENDABLESHADER
+    #if !_MICROTERRAIN || (_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         float4 tangent : TANGENT;
         float4 texcoord1 : TEXCOORD1;
         float4 texcoord2 : TEXCOORD2;
@@ -663,7 +659,7 @@ struct TessVertex
     float4 vertex : INTERNALTESSPOS;
     float3 normal : NORMAL;
     float4 texcoord0 : TEXCOORD0;
-    #if !_MICROTERRAIN || _TERRAINBLENDABLESHADER
+    #if !_MICROTERRAIN || (_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         float4 tangent : TANGENT;
         float4 texcoord1 : TEXCOORD1;
         float4 texcoord2 : TEXCOORD2;
@@ -2347,7 +2343,7 @@ inout MIPFORMAT normalLOD, inout MIPFORMAT emisLOD, inout MIPFORMAT origAlbedoLO
 
     float2 uscale = 0.1 * _TriplanarUVScale.xy; // this was a mistake, but too late to undo.
     float4 triScale = _TriplanarUVScale;
-    #if _TERRAINBLENDABLESHADER && _TERRAINBLENDMATCHWORLDUV && _WORLDUV
+    #if (_TERRAINBLENDABLESHADER || _VERTEX7D2D) && _TERRAINBLENDMATCHWORLDUV && _WORLDUV
         uscale = _UVScale.xy;
         triScale.zw = _UVScale.zw;
     #endif
@@ -5143,7 +5139,7 @@ MicroSplatLayer Sample(Input i, half4 weights, inout Config config, float camDis
         #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
             #if _MICROMESH
                 fxLevels = SampleFXLevels(InverseLerp(_UVMeshRange.xy, _UVMeshRange.zw, config.uv), wetLevel, burnLevel, traxBuffer);
-            #elif _MICROVERTEXMESH || _MICRODIGGERMESH  || _MEGASPLAT || _VERTEX7D2D
+            #elif _MICROVERTEXMESH || _MICRODIGGERMESH  || _MEGASPLAT
                 fxLevels = ProcessFXLevels(i.fx, traxBuffer);
             #else
                 fxLevels = SampleFXLevels(config.uv, wetLevel, burnLevel, traxBuffer);
@@ -6228,7 +6224,7 @@ float4 ConstructTerrainTangent(float3 normal, float3 positiveZ)
 
 void TerrainInstancing(inout float4 vertex, inout float3 normal, inout float2 uv)
 {
-    #if _MICROTERRAIN && defined(UNITY_INSTANCING_ENABLED) && !_TERRAINBLENDABLESHADER
+    #if _MICROTERRAIN && defined(UNITY_INSTANCING_ENABLED) && !(_TERRAINBLENDABLESHADER || _VERTEX7D2D)
 
         float2 patchVertex = vertex.xy;
         float4 instanceData = UNITY_ACCESS_INSTANCED_PROP(Terrain, _TerrainPatchInstanceData);
@@ -6252,12 +6248,12 @@ void TerrainInstancing(inout float4 vertex, inout float3 normal, inout float2 uv
 
 void ApplyMeshModification(inout VertexData input)
 {
-    #if _MICROTERRAIN && !_TERRAINBLENDABLESHADER
+    #if _MICROTERRAIN && !(_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         float2 uv = input.texcoord0.xy;
         TerrainInstancing(input.vertex, input.normal, uv);
         input.texcoord0.xy = uv;
     #endif
-    #if _PERPIXNORMAL && !_TERRAINBLENDABLESHADER
+    #if _PERPIXNORMAL && !(_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         input.normal = float3(0,1,0);
     #endif
 
@@ -6266,12 +6262,12 @@ void ApplyMeshModification(inout VertexData input)
 // called by the template, so we can remove tangent from VertexData
 void ApplyTerrainTangent(inout VertexToPixel input)
 {
-    #if (_MICROTERRAIN || _PERPIXNORMAL) && !_TERRAINBLENDABLESHADER
+    #if (_MICROTERRAIN || _PERPIXNORMAL) && !(_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         input.worldTangent = ConstructTerrainTangent(input.worldNormal, float3(0, 0, 1));
     #endif
 
     // digger meshes ain't got no tangent either..
-    #if (_MICRODIGGERMESH || _VERTEX7D2D) && !_TERRAINBLENDABLESHADER
+    #if _MICRODIGGERMESH && !(_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         input.worldTangent = ConstructTerrainTangent(input.worldNormal, float3(0, 0, 1));
     #endif
 }
@@ -6317,7 +6313,7 @@ void SurfaceFunction(inout Surface o, inout ShaderData d)
 
     float3 worldNormalVertex = d.worldSpaceNormal;
 
-    #if (defined(UNITY_INSTANCING_ENABLED) && _MICROTERRAIN && !_TERRAINBLENDABLESHADER)
+    #if (defined(UNITY_INSTANCING_ENABLED) && _MICROTERRAIN && !(_TERRAINBLENDABLESHADER || _VERTEX7D2D))
         float2 sampleCoords = (d.texcoord0.xy / _TerrainHeightmapRecipSize.zw + 0.5f) * _TerrainHeightmapRecipSize.xy;
         #if _TOONHARDEDGENORMAL
             sampleCoords = ToonEdgeUV(d.texcoord0.xy);
@@ -6333,7 +6329,7 @@ void SurfaceFunction(inout Surface o, inout ShaderData d)
         d.TBNMatrix = float3x3(geomTangent, geomBitangent, geomNormal);
         d.tangentSpaceViewDir = mul(d.worldSpaceViewDir, d.TBNMatrix);
 
-    #elif _PERPIXNORMAL &&  (_MICROTERRAIN || _MICROMESHTERRAIN) && !_TERRAINBLENDABLESHADER
+    #elif _PERPIXNORMAL &&  (_MICROTERRAIN || _MICROMESHTERRAIN) && !(_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         float2 sampleCoords = (d.texcoord0.xy * _PerPixelNormal_TexelSize.zw + 0.5f) * _PerPixelNormal_TexelSize.xy;
         #if _TOONHARDEDGENORMAL
             sampleCoords = ToonEdgeUV(d.texcoord0.xy);
@@ -6411,7 +6407,7 @@ ShaderData CreateShaderData(VertexToPixel i)
     d.worldSpaceViewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
     d.tangentSpaceViewDir = mul(d.worldSpaceViewDir, d.TBNMatrix);
     d.texcoord0 = i.texcoord0;
-    #if !_MICROTERRAIN || _TERRAINBLENDABLESHADER || _VERTEX7D2D
+    #if !_MICROTERRAIN || (_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         d.texcoord1 = i.texcoord1;
         d.texcoord2 = i.texcoord2;
     #endif
@@ -6514,7 +6510,7 @@ VertexToPixel Vert (VertexData v)
         ChainModifyVertex(v, o);
     #endif
 
-    #if !_MICROTERRAIN || _TERRAINBLENDABLESHADER
+    #if !_MICROTERRAIN || (_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         float2 uv1 = v.texcoord1.xy;
         float2 uv2 = v.texcoord2.xy;
     #else
@@ -6538,7 +6534,7 @@ VertexToPixel Vert (VertexData v)
 
 
     o.texcoord0 = v.texcoord0;
-    #if !_MICROTERRAIN || _TERRAINBLENDABLESHADER || _VERTEX7D2D
+    #if !_MICROTERRAIN || (_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         o.texcoord1 = v.texcoord1;
         o.texcoord2 = v.texcoord2;
     #endif
@@ -6547,7 +6543,7 @@ VertexToPixel Vert (VertexData v)
     // o.screenPos = ComputeScreenPos(o.pos);
     o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
     o.worldNormal = UnityObjectToWorldNormal(v.normal);
-    #if !_MICROTERRAIN || _TERRAINBLENDABLESHADER
+    #if !_MICROTERRAIN || (_TERRAINBLENDABLESHADER || _VERTEX7D2D)
         o.worldTangent.xyz = UnityObjectToWorldDir(v.tangent.xyz);
         fixed tangentSign = v.tangent.w * unity_WorldTransformParams.w;
         o.worldTangent.w = tangentSign;
