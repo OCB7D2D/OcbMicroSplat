@@ -46,6 +46,8 @@ Shader "OcbMicroSplat24HighVertex"
 
       _DistanceResampleAlbedoStrength("Resampled Albedo Strength", Range(0.1, 1.0)) = 1
       _DistanceResampleNormalStrength("Resampled Normal Strength", Range(0.1, 1.3)) = 1
+      _DistanceResampleMaterialStrength("Resampled Material Strength", Range(0.1, 1.3)) = 0.25
+
       // terrain
       [NoScaleOffset]_NormalNoise("Normal Noise", 2D) = "bump" {}
       _NormalNoiseScaleStrength("Normal Scale", Vector) = (8, 0.5, 0, 0)

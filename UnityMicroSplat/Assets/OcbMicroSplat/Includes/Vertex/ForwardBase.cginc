@@ -921,6 +921,7 @@ float4 _PerTexProps_TexelSize;
 
 
 half _DistanceResampleNormalStrength;
+half _DistanceResampleMaterialStrength;
 half _DistanceResampleAlbedoStrength;
 float2 _WorldHeightRange;
 
@@ -3462,8 +3463,10 @@ void DistanceResample(inout RawSamples o, Config config, TriplanarConfig tc, flo
                 nsao0.xy -= 1;
                 nsao1.xy -= 1;
             #endif
-            o.normSAO0.zw = lerp(o.normSAO0.zw, nsao0.zw, dblend0);
-            o.normSAO1.zw = lerp(o.normSAO1.zw, nsao1.zw, dblend1);
+            #if _DISTANCERESAMPLEMATERIAL
+            o.normSAO0.zw = lerp(o.normSAO0.zw, nsao0.zw, dblend0 * _DistanceResampleMaterialStrength);
+            o.normSAO1.zw = lerp(o.normSAO1.zw, nsao1.zw, dblend1 * _DistanceResampleMaterialStrength);
+            #endif
 
             #if _SURFACENORMALS
                 o.surf0 += ConvertNormal2ToGradient(nsao0.xy) * _DistanceResampleNormalStrength * dblend0;
@@ -3478,7 +3481,9 @@ void DistanceResample(inout RawSamples o, Config config, TriplanarConfig tc, flo
                     nsao2.xy *= 2;
                     nsao2.xy -= 1;
                 #endif
-                o.normSAO2.zw = lerp(o.normSAO2.zw, nsao2.zw, dblend2);
+                #if _DISTANCERESAMPLEMATERIAL
+                o.normSAO2.zw = lerp(o.normSAO2.zw, nsao2.zw, dblend2 * _DistanceResampleMaterialStrength);
+                #endif
 
                 #if _SURFACENORMALS
                     o.surf2 += ConvertNormal2ToGradient(nsao2.xy) * _DistanceResampleNormalStrength * dblend2;
@@ -3492,7 +3497,9 @@ void DistanceResample(inout RawSamples o, Config config, TriplanarConfig tc, flo
                     nsao3.xy *= 2;
                     nsao3.xy -= 1;
                 #endif
-                o.normSAO3.zw = lerp(o.normSAO3.zw, nsao3.zw, dblend3);
+                #if _DISTANCERESAMPLEMATERIAL
+                o.normSAO3.zw = lerp(o.normSAO3.zw, nsao3.zw, dblend3 * _DistanceResampleMaterialStrength);
+                #endif
 
                 #if _SURFACENORMALS
                     o.surf3 += ConvertNormal2ToGradient(nsao3.xy) * _DistanceResampleNormalStrength * dblend3;
@@ -6051,7 +6058,7 @@ MicroSplatLayer SurfImpl(Input i, float3 worldNormalVertex)
         i.worldPos.xyz += _OriginPos.xyz;
         // #endif
         i.uv_Control0 = (i.worldPos.xz + _WorldDim.xy * half2(0.5, 0.5)) / _WorldDim.xy;
-        i.worldHeight = i.worldPos.y; // * 200;
+        i.worldHeight = i.worldPos.y; // ToDo: check correctness of this
     #elif _ORIGINSHIFT
         i.worldPos = i.worldPos + mul(_GlobalOriginMTX, float4(0,0,0,1)).xyz;
         i.worldHeight = i.worldPos.y;
@@ -6197,8 +6204,10 @@ MicroSplatLayer SurfImpl(Input i, float3 worldNormalVertex)
 
     // On windows, sometimes the shared samplers gets stripped, so we have to do this crap.
     // We sample from the lowest mip, so it shouldn't cost much, but still, I hate this, wtf..
-    l.Albedo *= saturate(SAMPLE_TEXTURE2D_LOD(_Diffuse, sampler_Diffuse, config.uv0, 11).r + 2);
-    l.Albedo *= saturate(SAMPLE_TEXTURE2D_LOD(_NormalSAO, sampler_NormalSAO, config.uv0, 11).r + 2);
+    float stripVal = saturate(SAMPLE_TEXTURE2D_LOD(_Diffuse, sampler_Diffuse, config.uv0, 11).r + 2);
+    stripVal *= saturate(SAMPLE_TEXTURE2D_LOD(_NormalSAO, sampler_NormalSAO, config.uv0, 11).r + 2);
+    l.Albedo *= stripVal;
+    l.Normal *= stripVal;
 
     #if _PROCEDURALTEXTURE
         ProceduralTextureDebugOutput(l, weights, config);
