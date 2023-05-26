@@ -32,6 +32,12 @@ Some features that may be included at some point:
 
 ## Changelog
 
+### Version 0.1.3
+
+- Replace broken decals shader with own implementation
+- Improve MicroSplat shader on high and ultra quality
+- Distance material resampling is now less aggressive
+
 ### Version 0.1.2
 
 - Fix issue when changing options without game loaded
