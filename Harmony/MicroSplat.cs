@@ -12,6 +12,8 @@ public class OcbMicroSplat : IModApi
 
     static string AssetBundlePath;
 
+    public static string DecalBundlePath;
+
     // Maximum textures for shader variant to load
     static int MaxTextures = 24;
 
@@ -20,6 +22,7 @@ public class OcbMicroSplat : IModApi
         Debug.Log("Loading OCB MicroSplat Patch: " + GetType().ToString());
         new Harmony(GetType().ToString()).PatchAll(Assembly.GetExecutingAssembly());
         AssetBundlePath = System.IO.Path.Combine(mod.Path, "Resources/OcbMicroSplat.unity3d");
+        DecalBundlePath = System.IO.Path.Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
     }
 
     // Our AccessTools is too old and doesn't have this
