@@ -19,8 +19,9 @@ public class OcbMicroSplat : IModApi
 
     public void InitMod(Mod mod)
     {
-        Debug.Log("Loading OCB MicroSplat Patch: " + GetType().ToString());
-        new Harmony(GetType().ToString()).PatchAll(Assembly.GetExecutingAssembly());
+		Log.Out("OCB Harmony Patch: " + GetType().ToString());
+		Harmony harmony = new Harmony(GetType().ToString());
+		harmony.PatchAll(Assembly.GetExecutingAssembly());
         AssetBundlePath = System.IO.Path.Combine(mod.Path, "Resources/OcbMicroSplat.unity3d");
         DecalBundlePath = System.IO.Path.Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
     }

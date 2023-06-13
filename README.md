@@ -1,4 +1,4 @@
-# OCB MicroSplat Shader Mod  - 7 Days to Die (A20) Addon
+# OCB MicroSplat Shader Mod  - 7 Days to Die (A21) Addon
 
 Replacing vanilla terrain MicroSplat shader with an improved version.
 
@@ -32,6 +32,10 @@ Some features that may be included at some point:
 
 ## Changelog
 
+### Version 0.2.0
+
+- Update compatibility for 7D2D A21.0(b313)
+
 ### Version 0.1.3
 
 - Replace broken decals shader with own implementation
@@ -52,7 +56,7 @@ Some features that may be included at some point:
 
 ## Compatibility
 
-I've developed and tested this Mod against version a20.7(b1).
+Developed initially for version a20.7(b1), updated through A21.0(b313).
 
 [1]: https://github.com/OCB7D2D/OcbMicroSplat
 [2]: https://github.com/OCB7D2D/OcbMicroSplat/releases

@@ -121,4 +121,16 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
 
     }
 
+    protected override string[] getCommands()
+    {
+        return new string[] {
+            "get",
+            "set"
+        };
+    }
+
+    protected override string getDescription()
+    {
+        return "Mess with microsplat shader settings";
+    }
 }
