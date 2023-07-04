@@ -91,6 +91,15 @@
   <ItemGroup>
     <Compile Include="Harmony\MicroSplatCmd.cs" />
     <Compile Include="Harmony\MicroSplat.cs" />
+    <Compile Include="Harmony\MicroSplatXmlConfig.cs" />
+    <Compile Include="Library\Configs\MicroSplatBiomeColor.cs" />
+    <Compile Include="Library\Configs\MicroSplatBiomeLayer.cs" />
+    <Compile Include="Library\Configs\MicroSplatShader.cs" />
+    <Compile Include="Library\Configs\MicroSplatTexture.cs" />
+    <Compile Include="Library\Configs\MicroSplatTextures.cs" />
+    <Compile Include="Library\Configs\MicroSplatVoxel.cs" />
+    <Compile Include="Library\Configs\MicroSplatVoxels.cs" />
+    <Compile Include="Library\Configs\MicroSplatWorld.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ModInfo.xml" />

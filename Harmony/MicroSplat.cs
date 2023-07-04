@@ -14,6 +14,9 @@ public class OcbMicroSplat : IModApi
 
     public static string DecalBundlePath;
 
+    public static MicroSplatXmlConfig Config
+        = new MicroSplatXmlConfig();
+
     // Maximum textures for shader variant to load
     static int MaxTextures = 24;
 
