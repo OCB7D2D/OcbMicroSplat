@@ -6,12 +6,12 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
 {
 
     private static string info = "microsplat";
-    public override string[] GetCommands()
+    protected override string[] getCommands()
     {
         return new string[2] { info, "msplat" };
     }
 
-    public override string GetDescription()
+    protected override string getDescription()
     {
         return "Adjust settings for MicroSplat shaders";
     }
@@ -121,16 +121,4 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
 
     }
 
-    protected override string[] getCommands()
-    {
-        return new string[] {
-            "get",
-            "set"
-        };
-    }
-
-    protected override string getDescription()
-    {
-        return "Mess with microsplat shader settings";
-    }
 }
