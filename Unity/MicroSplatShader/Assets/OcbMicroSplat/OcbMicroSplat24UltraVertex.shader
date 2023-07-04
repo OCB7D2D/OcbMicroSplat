@@ -85,13 +85,8 @@ Shader "OcbMicroSplat24UltraVertex"
          Tags { "LightMode" = "ForwardBase" }
 
          CGPROGRAM
-         // compile directives
-         #pragma vertex Vert
-         #pragma fragment Frag
 
-         #pragma target 3.0
-         #pragma multi_compile_instancing
-         #pragma multi_compile_local __ _ALPHATEST_ON
+         #include "Settings/Pragmas.cginc"
          #pragma multi_compile_fog
          #pragma multi_compile_fwdbase
          #include "HLSLSupport.cginc"
@@ -100,7 +95,6 @@ Shader "OcbMicroSplat24UltraVertex"
 
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
-         // -------- variant for: <when no other keywords are defined>
 
          #define _VERTEX7D2D 1
 
@@ -119,7 +113,7 @@ Shader "OcbMicroSplat24UltraVertex"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Vertex/ForwardBase.cginc"
+         #include "Includes/Shader/ForwardBase.cginc"
 
          ENDCG
       }
@@ -133,14 +127,8 @@ Shader "OcbMicroSplat24UltraVertex"
 
          CGPROGRAM
 
-         #pragma vertex Vert
-         #pragma fragment Frag
-
-         // compile directives
-         #pragma target 3.0
-         #pragma multi_compile_instancing
+         #include "Settings/Pragmas.cginc"
          #pragma multi_compile_fog
-         #pragma multi_compile_local __ _ALPHATEST_ON
          #pragma multi_compile_fwdadd_fullshadows
          #include "HLSLSupport.cginc"
 
@@ -166,7 +154,7 @@ Shader "OcbMicroSplat24UltraVertex"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Vertex/ForwardAdd.cginc"
+         #include "Includes/Shader/ForwardAdd.cginc"
 
          ENDCG
 
@@ -180,17 +168,12 @@ Shader "OcbMicroSplat24UltraVertex"
 
          CGPROGRAM
 
-         #pragma vertex Vert
-         #pragma fragment Frag
-
-         // compile directives
-         #pragma target 3.0
-         #pragma multi_compile_instancing
-         #pragma exclude_renderers nomrt
-         #pragma multi_compile_local __ _ALPHATEST_ON
+         #include "Settings/Pragmas.cginc"
+         #pragma multi_compile_fog
          #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma multi_compile_prepassfinal
          #include "HLSLSupport.cginc"
+
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
          #include "UnityCG.cginc"
@@ -214,7 +197,7 @@ Shader "OcbMicroSplat24UltraVertex"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Vertex/Deferred.cginc"
+         #include "Includes/Shader/Deferred.cginc"
 
          ENDCG
 
@@ -227,15 +210,11 @@ Shader "OcbMicroSplat24UltraVertex"
 
          CGPROGRAM
 
-         #pragma vertex Vert
-         #pragma fragment Frag
-         // compile directives
-         #pragma target 3.0
-         #pragma multi_compile_instancing
+         #include "Settings/Pragmas.cginc"
          #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma multi_compile_shadowcaster
-         #pragma multi_compile_local __ _ALPHATEST_ON
          #include "HLSLSupport.cginc"
+
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
 
@@ -262,7 +241,7 @@ Shader "OcbMicroSplat24UltraVertex"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Vertex/ShadowCaster.cginc"
+         #include "Includes/Shader/ShadowCaster.cginc"
 
          ENDCG
 
@@ -277,17 +256,11 @@ Shader "OcbMicroSplat24UltraVertex"
 
          CGPROGRAM
 
-         #pragma vertex Vert
-         #pragma fragment Frag
-
-         // compile directives
-         #pragma target 3.0
-         #pragma multi_compile_instancing
-         #pragma multi_compile_local __ _ALPHATEST_ON
+         #include "Settings/Pragmas.cginc"
          #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma shader_feature EDITOR_VISUALIZATION
-
          #include "HLSLSupport.cginc"
+
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
 
@@ -312,7 +285,7 @@ Shader "OcbMicroSplat24UltraVertex"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Vertex/Meta.cginc"
+         #include "Includes/Shader/Meta.cginc"
 
          ENDCG
 

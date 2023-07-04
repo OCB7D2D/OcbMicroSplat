@@ -11,7 +11,7 @@
 ////////////////////////////////////////
 
 
-Shader "OcbMicroSplat24UltraDistant"
+Shader "OcbMicroSplat24LowDistant"
 {
 
    Properties
@@ -29,7 +29,7 @@ Shader "OcbMicroSplat24UltraDistant"
       _UVScale("UV Scales", Vector) = (45, 45, 0, 0)
 
       // for Unity 2020.3 bug
-      _MainTex("Unity Bug", 2D) = "white" {}
+      // _MainTex("Unity Bug", 2D) = "white" {}
       [NoScaleOffset]_SmoothAO ("Smooth AO Array", 2DArray) = "black" {}
 
       // terrain
@@ -85,13 +85,8 @@ Shader "OcbMicroSplat24UltraDistant"
          Tags { "LightMode" = "ForwardBase" }
 
          CGPROGRAM
-         // compile directives
-         #pragma vertex Vert
-         #pragma fragment Frag
-
-         #pragma target 3.0
-         #pragma multi_compile_instancing
-         #pragma multi_compile_local __ _ALPHATEST_ON
+         
+         #include "Settings/Pragmas.cginc"
          #pragma multi_compile_fog
          #pragma multi_compile_fwdbase
          #include "HLSLSupport.cginc"
@@ -100,13 +95,12 @@ Shader "OcbMicroSplat24UltraDistant"
 
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
-         // -------- variant for: <when no other keywords are defined>
 
          #define _DISTANT7D2D 1
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max24Textures.cginc"
-         #include "Settings/QualityUltra.cginc"
+         #include "Settings/QualityLow.cginc"
 
          #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
@@ -119,7 +113,7 @@ Shader "OcbMicroSplat24UltraDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Distant/ForwardBase.cginc"
+         #include "Includes/Shader/ForwardBase.cginc"
 
          ENDCG
       }
@@ -133,14 +127,8 @@ Shader "OcbMicroSplat24UltraDistant"
 
          CGPROGRAM
 
-         #pragma vertex Vert
-         #pragma fragment Frag
-
-         // compile directives
-         #pragma target 3.0
-         #pragma multi_compile_instancing
+         #include "Settings/Pragmas.cginc"
          #pragma multi_compile_fog
-         #pragma multi_compile_local __ _ALPHATEST_ON
          #pragma multi_compile_fwdadd_fullshadows
          #include "HLSLSupport.cginc"
 
@@ -153,7 +141,7 @@ Shader "OcbMicroSplat24UltraDistant"
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max24Textures.cginc"
-         #include "Settings/QualityUltra.cginc"
+         #include "Settings/QualityLow.cginc"
 
          #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
@@ -166,7 +154,7 @@ Shader "OcbMicroSplat24UltraDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Distant/ForwardAdd.cginc"
+         #include "Includes/Shader/ForwardAdd.cginc"
 
          ENDCG
 
@@ -180,17 +168,12 @@ Shader "OcbMicroSplat24UltraDistant"
 
          CGPROGRAM
 
-         #pragma vertex Vert
-         #pragma fragment Frag
-
-         // compile directives
-         #pragma target 3.0
-         #pragma multi_compile_instancing
-         #pragma exclude_renderers nomrt
-         #pragma multi_compile_local __ _ALPHATEST_ON
+         #include "Settings/Pragmas.cginc"
+         #pragma multi_compile_fog
          #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma multi_compile_prepassfinal
          #include "HLSLSupport.cginc"
+
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
          #include "UnityCG.cginc"
@@ -201,7 +184,7 @@ Shader "OcbMicroSplat24UltraDistant"
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max24Textures.cginc"
-         #include "Settings/QualityUltra.cginc"
+         #include "Settings/QualityLow.cginc"
 
          #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
@@ -214,7 +197,7 @@ Shader "OcbMicroSplat24UltraDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Distant/Deferred.cginc"
+         #include "Includes/Shader/Deferred.cginc"
 
          ENDCG
 
@@ -227,15 +210,11 @@ Shader "OcbMicroSplat24UltraDistant"
 
          CGPROGRAM
 
-         #pragma vertex Vert
-         #pragma fragment Frag
-         // compile directives
-         #pragma target 3.0
-         #pragma multi_compile_instancing
+         #include "Settings/Pragmas.cginc"
          #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma multi_compile_shadowcaster
-         #pragma multi_compile_local __ _ALPHATEST_ON
          #include "HLSLSupport.cginc"
+
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
 
@@ -249,7 +228,7 @@ Shader "OcbMicroSplat24UltraDistant"
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max24Textures.cginc"
-         #include "Settings/QualityUltra.cginc"
+         #include "Settings/QualityLow.cginc"
 
          #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
@@ -262,7 +241,7 @@ Shader "OcbMicroSplat24UltraDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Distant/ShadowCaster.cginc"
+         #include "Includes/Shader/ShadowCaster.cginc"
 
          ENDCG
 
@@ -277,17 +256,11 @@ Shader "OcbMicroSplat24UltraDistant"
 
          CGPROGRAM
 
-         #pragma vertex Vert
-         #pragma fragment Frag
-
-         // compile directives
-         #pragma target 3.0
-         #pragma multi_compile_instancing
-         #pragma multi_compile_local __ _ALPHATEST_ON
+         #include "Settings/Pragmas.cginc"
          #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma shader_feature EDITOR_VISUALIZATION
-
          #include "HLSLSupport.cginc"
+
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
 
@@ -299,7 +272,7 @@ Shader "OcbMicroSplat24UltraDistant"
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max24Textures.cginc"
-         #include "Settings/QualityUltra.cginc"
+         #include "Settings/QualityLow.cginc"
 
          #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
@@ -312,7 +285,7 @@ Shader "OcbMicroSplat24UltraDistant"
          // of the patchy one Unity provides being inlined/emulated in HDRP/URP. Strangely, PSSL and XBoxOne libraries are not
          // included in the standard SRP code, but they are in tons of Unity own projects on the web, so I grabbed them from there.
 
-         #include "Includes/Distant/Meta.cginc"
+         #include "Includes/Shader/Meta.cginc"
 
          ENDCG
 
