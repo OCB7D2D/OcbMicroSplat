@@ -100,6 +100,14 @@
     <Compile Include="Library\Configs\MicroSplatVoxel.cs" />
     <Compile Include="Library\Configs\MicroSplatVoxels.cs" />
     <Compile Include="Library\Configs\MicroSplatWorld.cs" />
+    <Compile Include="Library\Textures\MicroSplatDump.cs" />
+    <Compile Include="Library\Textures\MicroSplatTextureUtils.cs" />
+    <Compile Include="Library\Textures\OcbTextureDumper.cs" />
+    <Compile Include="Library\Textures\OcbTextureUtils.cs" />
+    <Compile Include="Library\Utils\HarmonyFieldProxy.cs" />
+    <Compile Include="Library\Utils\HarmonyPropertyProxy.cs" />
+    <Compile Include="Library\Utils\HarmonyUtils.cs" />
+    <Compile Include="Library\Utils\ModXmlPatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ModInfo.xml" />
