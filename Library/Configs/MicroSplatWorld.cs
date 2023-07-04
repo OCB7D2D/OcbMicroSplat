@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -64,6 +64,11 @@ public class MicroSplatWorld
     // Parsing a `biome-color` element in `biome-config`
     public void ParseBiomeColor(XElement xml)
     {
+        Log.Out("++++++++++++++++++++++++++++++++++");
+        Log.Out("++++++++++++++++++++++++++++++++++");
+        Log.Out("Parse Biome Color");
+        Log.Out("++++++++++++++++++++++++++++++++++");
+        Log.Out("++++++++++++++++++++++++++++++++++");
         if (!xml.HasAttribute("name")) throw new Exception(
             $"Mandatory attribute `name` missing on {xml.Name}");
         string name = xml.GetAttribute("name");
@@ -72,6 +77,7 @@ public class MicroSplatWorld
         Log.Out("New biome color {0} at index {1}", name, index);
         if (!BiomeColors.TryGetValue(index, out MicroSplatBiomeColor config))
             BiomeColors.Add(index, config = new MicroSplatBiomeColor());
+        Log.Out("Added new biome color {0}", config);
         config.Parse(xml);
     }
 
@@ -110,13 +116,13 @@ public class MicroSplatWorld
         if (!filters.Contains("*") && !filters.Contains(level)) return;
         foreach (XElement node in xml.Elements())
         {
-            if (node.Name.Equals("microsplat-patch"))
+            if (node.Name == "microsplat-patch")
                 ParseMicroSplatPatch(node);
-            else if (node.Name.Equals("biome-color"))
+            else if (node.Name == "biome-color")
                 ParseBiomeColor(node);
-            else if (node.Name.Equals("biome-layers"))
+            else if (node.Name == "biome-layers")
                 ParseBiomeLayers(node);
-            else if (node.Name.Equals("biome-layer"))
+            else if (node.Name == "biome-layer")
                 ParseBiomeLayer(node);
         }
 

@@ -13,12 +13,27 @@ public class MicroSplatTextures
     public readonly Dictionary<string, MicroSplatTexture> Textures
         = new Dictionary<string, MicroSplatTexture>();
 
+    // Reference to blocks that need their TerrainIndex updated
+    // We don't know the actual slot index until world is loaded
+    public readonly Dictionary<string, List<string>> Blocks
+        = new Dictionary<string, List<string>>();
+
     // ####################################################################
     // ####################################################################
 
     public MicroSplatTextures()
     {
         Reset();
+    }
+
+    // ####################################################################
+    // ####################################################################
+
+    public void RegisterTerrainBlock(string index, string block)
+    {
+        if (!Blocks.TryGetValue(index, out List<string> blocks))
+            blocks = Blocks[index] = new List<string>();
+        blocks.Add(block);
     }
 
     // ####################################################################
@@ -39,6 +54,7 @@ public class MicroSplatTextures
 
     public void Reset()
     {
+        Blocks.Clear();
         Textures.Clear();
         // Initialize empty config for existing textures
         // You may also update these, but not remove them

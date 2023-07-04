@@ -157,12 +157,14 @@ public class MicroSplatShader
         // Try to load the shader assets
         LoadAsset(PathShaderDetail, ref ShaderDetail, false);
         LoadAsset(PathShaderDistant, ref ShaderDistant, false);
-        // Give some debug messages to the console to check
-        Log.Out("Loaded detail shader: {0}", ShaderDetail?.name);
-        Log.Out("Loaded distance shader: {0}", ShaderDistant?.name);
-        // Use the new loaded shaders for terrain
-        terrain.material.shader = ShaderDetail;
-        terrain.materialDistant.shader = ShaderDistant;
+        // Give error messages to the console if loading failed
+        if (ShaderDetail == null) Log.Error("Could not load custom detail shader: {0}/{1}",
+            PathShaderDetail.BundlePath, PathShaderDetail.AssetName);
+        if (ShaderDistant == null) Log.Error("Could not load custom distant shader: {0}/{1}",
+            PathShaderDistant.BundlePath, PathShaderDistant.AssetName);
+        // Use the new loaded shaders for terrain if found in resources
+        if (ShaderDetail != null) terrain.material.shader = ShaderDetail;
+        if (ShaderDistant != null) terrain.materialDistant.shader = ShaderDistant;
     }
 
     // ####################################################################

@@ -82,9 +82,8 @@ public class MicroSplatTexture
 
     public void Parse(XElement xml)
     {
-        foreach (XElement child in xml.Elements())
+        foreach (XElement child in xml.Elements("property"))
         {
-            if (!child.Name.Equals("property")) continue;
             if (!child.HasAttribute("name")) throw new Exception(
                 $"Mandatory attribute `name` missing on {child.Name}");
             if (!child.HasAttribute("value")) throw new Exception(

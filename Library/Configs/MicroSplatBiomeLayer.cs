@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using UnityEngine;
 
 public class MicroSplatBiomeLayer
 {
@@ -45,7 +45,8 @@ public class MicroSplatBiomeLayer
             if (texcfg == null) continue;
             texcfg.IsUsedByBiome = true;
             int index = cfg.LayerIndex;
-            while (index >= layers.Count) layers.Add(new MicroSplatProceduralTextureConfig.Layer());
+            while (index >= layers.Count) layers.Add(
+                new MicroSplatProceduralTextureConfig.Layer());
             var layer = layers[index];
             var props = cfg.Props;
             layer.textureIndex = texcfg.SlotIdx;
@@ -82,9 +83,8 @@ public class MicroSplatBiomeLayer
         foreach (XElement outer in xml.Elements())
         {
             frames = new List<Keyframe>();
-            foreach (XElement child in outer.Elements())
+            foreach (XElement child in outer.Elements("keyframe"))
             {
-                if (!child.Name.Equals("keyframe")) continue;
                 Keyframe frame = new Keyframe();
                 if (child.HasAttribute("time")) frame.time =
                     StringParsers.ParseFloat(child.GetAttribute("time"));

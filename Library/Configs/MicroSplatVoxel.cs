@@ -53,9 +53,8 @@ public class MicroSplatVoxel
                 .ParseVector2(xml.GetAttribute("uv3"));
         if (xml.HasAttribute("uv4")) uv4 = StringParsers
                 .ParseVector2(xml.GetAttribute("uv4"));
-        foreach (XElement child in xml.Elements())
+        foreach (XElement child in xml.Elements("texture"))
         {
-            if (!child.Name.Equals("texture")) continue;
             if (!child.HasAttribute("name")) throw new Exception(
                 $"Mandatory attribute `name` missing on {child.Name}");
             if (!child.HasAttribute("weight")) throw new Exception(
