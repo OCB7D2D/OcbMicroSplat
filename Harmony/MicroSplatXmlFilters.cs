@@ -52,7 +52,7 @@ public static class MicroSplatXmlFilters
         {
             string mapName = GamePrefs.GetString(EnumGamePrefs.GameWorld)?.Trim();
             var elements = _xmlFile.XmlDoc.Root.Elements("block");
-            foreach (XElement block in elements)
+            foreach (XElement block in elements.ToList())
             {
                 ParseHardCodedVoxelUsages(block, OcbMicroSplat
                     .Config.MicroSplatTexturesConfigs);
@@ -78,8 +78,8 @@ public static class MicroSplatXmlFilters
         static void Prefix(XDocument _xml)
         {
             string mapName = GamePrefs.GetString(EnumGamePrefs.GameWorld)?.Trim();
-            var elements = _xml.Root.Elements(); // "biome"
-            foreach (XElement biome in elements)
+            foreach (XElement root in _xml.Root.Elements()) // "biome"
+            foreach (XElement biome in root.Elements().ToList())
             {
                 if (!biome.HasAttribute("map-only")) continue;
                 var filters = biome.GetAttribute("map-only").Split(

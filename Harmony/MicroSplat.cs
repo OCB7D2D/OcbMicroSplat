@@ -153,7 +153,7 @@ public class OcbMicroSplat : IModApi
             // Skip all items that have an index
             if (texture.SrcIdx != -1)
             {
-                texture.IsUsedByVoxel = true;
+                // texture.IsUsedByVoxel = true;
                 Log.Out("Known {0} at {1} ({2})",
                     kv.Key, texture.SlotIdx,
                     texture.GetUseString());

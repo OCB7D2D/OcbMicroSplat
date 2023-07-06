@@ -57,10 +57,8 @@ public class MicroSplatVoxels
             foreach (var kv in voxel.Value.textures)
             {
                 var texture = OcbMicroSplat.Config.GetTextureConfig(kv.Key);
-                if (texture == null) Log.Error("Couldn't find MicroSplat {0}", kv.Key); 
+                if (texture == null) Log.Error("Couldn't find MicroSplat {0}", kv.Key);
                 else if (!textures.Contains(texture)) textures.Add(texture);
-                // A Voxel must be references to count as "used"
-                if (texture != null) texture.IsUsedByVoxel = true;
             }
         }
     }
