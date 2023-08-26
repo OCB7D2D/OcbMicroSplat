@@ -113,6 +113,9 @@ public static class MicroSplatTextureUtils
         int dstidx, DataLoader.DataPathIdentifier path)
     {
         var tex = LoadTexture(path, out int srcidx);
+        if (tex == null) Log.Error(
+            "Error loading {1} from {0}",
+            path.BundlePath, path.AssetName);
         PatchMicroSplatTexture(cmds, dst, dstidx, tex, srcidx);
     }
 
@@ -216,7 +219,9 @@ public static class MicroSplatTextureUtils
             array.mipmapCount);
         // Keep readable state same as original
         if (!array.isReadable) tex.Apply(false, true);
-        tex.filterMode = array.filterMode;
+        // Log.Out("- filterMode mod was {0}, now {1}", tex.filterMode, array.filterMode);
+        // Log.Out("- mipMapBias mod was {0}, now {1}", tex.mipMapBias, array.mipMapBias);
+        // Log.Out("- anisoLevel mod was {0}, now {1}", tex.anisoLevel, array.anisoLevel);
         if (!tex.name.Contains("extended_"))
             tex.name = "extended_" + array.name;
         // Copy old textures to new copy (any better way?)
@@ -227,6 +232,13 @@ public static class MicroSplatTextureUtils
             Log.Out(" copy {0}[{1}] to resized[{2}]",
                 array.name, copy.SrcIdx, copy.SlotIdx);
         }
+        // Copy settings from old array
+        tex.filterMode = array.filterMode;
+        tex.mipMapBias = array.mipMapBias;
+        tex.anisoLevel = array.anisoLevel;
+        tex.wrapModeU = array.wrapModeU;
+        tex.wrapModeV = array.wrapModeV;
+        tex.wrapModeW = array.wrapModeW;
         // Optionally destroy the original object
         if (destroy) UnityEngine.Object.Destroy(array);
         // Return the copy

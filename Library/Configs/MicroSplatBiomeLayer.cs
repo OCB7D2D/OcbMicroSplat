@@ -1,12 +1,17 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using UnityEngine;
 
 public class MicroSplatBiomeLayer
 {
 
     // ####################################################################
     // ####################################################################
+
+    // Optional name for referencing
+    // Allows to overwrite configs
+    // Mainly for WYSIWYG helper
+    public string Name = "Layer";
 
     // Assumption is that layers configs are specific for a map.
     // Therefore we know all the layers involved and can address
@@ -36,7 +41,6 @@ public class MicroSplatBiomeLayer
 
     private static void PatchMicroSplatLayers(List<MicroSplatProceduralTextureConfig.Layer> layers, MicroSplatWorld config)
     {
-        Log.Out("+++ Patching Biome Layers {0}", config.BiomeLayers.Count);
         if (config.BiomeLayers.Count == 0) return;
         foreach (MicroSplatBiomeLayer cfg in config.BiomeLayers)
         {
@@ -45,7 +49,8 @@ public class MicroSplatBiomeLayer
             if (texcfg == null) continue;
             texcfg.IsUsedByBiome = true;
             int index = cfg.LayerIndex;
-            while (index >= layers.Count) layers.Add(new MicroSplatProceduralTextureConfig.Layer());
+            while (index >= layers.Count) layers.Add(
+                new MicroSplatProceduralTextureConfig.Layer());
             var layer = layers[index];
             var props = cfg.Props;
             layer.textureIndex = texcfg.SlotIdx;
@@ -79,12 +84,11 @@ public class MicroSplatBiomeLayer
     private static List<Keyframe> ParseBiomeLayer(XElement xml,
         string name, List<Keyframe> frames = null)
     {
-        foreach (XElement outer in xml.Elements())
+        foreach (XElement outer in xml.Elements(name))
         {
             frames = new List<Keyframe>();
-            foreach (XElement child in outer.Elements())
+            foreach (XElement child in outer.Elements("keyframe"))
             {
-                if (!child.Name.Equals("keyframe")) continue;
                 Keyframe frame = new Keyframe();
                 if (child.HasAttribute("time")) frame.time =
                     StringParsers.ParseFloat(child.GetAttribute("time"));
@@ -113,6 +117,7 @@ public class MicroSplatBiomeLayer
         if (idx < 0) throw new System.Exception(
             "Invalid index for Biome Layer");
         Props = new DynamicProperties();
+        Name = $"Layer{idx}";
     }
 
     // ####################################################################
@@ -121,6 +126,7 @@ public class MicroSplatBiomeLayer
     public void Parse(XElement xml)
     {
         Props = MicroSplatXmlConfig.GetDynamicProperties(xml, Props);
+        if (xml.HasAttribute("name")) Name = xml.GetAttribute("name");
         Heights = ParseBiomeLayer(xml, "height-keyframes", Heights);
         Slopes = ParseBiomeLayer(xml, "slope-keyframes", Slopes);
         // ParseBiomeLayer(xml, "cavity-keyframes", Cavities);

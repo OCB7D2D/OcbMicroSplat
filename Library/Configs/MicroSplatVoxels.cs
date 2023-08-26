@@ -52,17 +52,13 @@ public class MicroSplatVoxels
 
     public void GatherVoxelTextures(List<MicroSplatTexture> textures)
     {
-        Log.Out("+++ GATHER {0}", Voxels.Count);
         foreach (var voxel in Voxels)
         {
             foreach (var kv in voxel.Value.textures)
             {
-                Log.Out("Find texture {0}", kv.Key, kv.Value);
                 var texture = OcbMicroSplat.Config.GetTextureConfig(kv.Key);
-                if (texture == null) Log.Error("Couldn't find MicroSplat {0}", kv.Key); 
+                if (texture == null) Log.Error("Couldn't find MicroSplat {0}", kv.Key);
                 else if (!textures.Contains(texture)) textures.Add(texture);
-                // A Voxel must be references to count as "used"
-                if (texture != null) texture.IsUsedByVoxel = true;
             }
         }
     }

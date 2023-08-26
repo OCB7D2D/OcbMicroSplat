@@ -25,8 +25,8 @@ SOFTWARE.
 using HarmonyLib;
 using System.Collections;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Reflection;
+using System.Reflection.Emit;
 
 public static class HarmonyUtils
 {

@@ -79,6 +79,19 @@ public static class OcbTextureDumper
         return pixels;
     }
 
+    // MicroSplat stores the roughness in the albedo channel
+    // public static Color[] ExtractEmissionFromTexture(Color[] pixels)
+    // {
+    //     for (int i = pixels.Length - 1; i >= 0; i--)
+    //     {
+    //         pixels[i].r = pixels[i].b;
+    //         pixels[i].g = pixels[i].b;
+    //         pixels[i].b = pixels[i].b;
+    //         pixels[i].a = 1;
+    //     }
+    //     return pixels;
+    // }
+
     // MicroSplat stores the ambient occlusion in the alpha channel
     public static Color[] ExtractAmbientOcclusionFromTexture(Color[] pixels)
     {

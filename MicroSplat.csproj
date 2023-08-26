@@ -39,6 +39,9 @@
     </PostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="mscorlib">
+      <HintPath>$(PATH_7D2D_MANAGED)\mscorlib.dll</HintPath>
+    </Reference>
     <Reference Include="0Harmony">
       <HintPath>$(PATH_7D2D_MANAGED)\0Harmony.dll</HintPath>
     </Reference>
@@ -89,9 +92,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Harmony\MicroSplatBiomeColors.cs" />
     <Compile Include="Harmony\MicroSplatCmd.cs" />
     <Compile Include="Harmony\MicroSplat.cs" />
+    <Compile Include="Harmony\MicroSplatVoxels.cs" />
     <Compile Include="Harmony\MicroSplatXmlConfig.cs" />
+    <Compile Include="Harmony\MicroSplatXmlFilters.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeColor.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeLayer.cs" />
     <Compile Include="Library\Configs\MicroSplatShader.cs" />
@@ -110,6 +116,8 @@
     <Compile Include="Library\Utils\ModXmlPatcher.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\blocks.xml" />
+    <Content Include="Config\worldglobal.xml" />
     <Content Include="ModInfo.xml" />
     <Content Include="README.md" />
   </ItemGroup>

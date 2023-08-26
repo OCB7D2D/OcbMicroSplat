@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using UnityEngine;
 using static StringParsers;
+using static UnityDistantTerrain;
 
 public class MicroSplatShader
 {
@@ -157,12 +158,16 @@ public class MicroSplatShader
         // Try to load the shader assets
         LoadAsset(PathShaderDetail, ref ShaderDetail, false);
         LoadAsset(PathShaderDistant, ref ShaderDistant, false);
-        // Give some debug messages to the console to check
-        Log.Out("Loaded detail shader: {0}", ShaderDetail?.name);
-        Log.Out("Loaded distance shader: {0}", ShaderDistant?.name);
-        // Use the new loaded shaders for terrain
-        terrain.material.shader = ShaderDetail;
-        terrain.materialDistant.shader = ShaderDistant;
+        // Give error messages to the console if loading failed
+        if (ShaderDetail == null) Log.Error("Could not load custom detail shader: {0}/{1}",
+            PathShaderDetail.BundlePath, PathShaderDetail.AssetName);
+        if (ShaderDistant == null) Log.Error("Could not load custom distant shader: {0}/{1}",
+            PathShaderDistant.BundlePath, PathShaderDistant.AssetName);
+        // Use the new loaded shaders for terrain if found in resources
+        if (ShaderDetail != null && terrain.material != null)
+            terrain.material.shader = ShaderDetail;
+        if (ShaderDistant != null && terrain.materialDistant != null)
+            terrain.materialDistant.shader = ShaderDistant;
     }
 
     // ####################################################################
@@ -170,6 +175,7 @@ public class MicroSplatShader
 
     private void InitMicroSplatMaterial(Material mat)
     {
+        if (mat == null) return;
         mat.SetTexture("_NoiseHeight", TexNoisePerlin);
         mat.SetVector("_NoiseHeightData", NoiseHeightData);
         mat.SetVector("_WorldHeightRange", WorldHeightRange);
@@ -189,6 +195,8 @@ public class MicroSplatShader
         mat.SetVector("_DistanceNoiseScaleStrengthFade", DistanceNoiseScaleStrengthFade);
         mat.SetFloat("_TriplanarContrast", TriplanarContrast);
         mat.SetVector("_TriplanarUVScale", TriplanarUVScale);
+        var config = OcbMicroSplat.Config.MicroSplatWorldConfig;
+        mat.SetInt("_PCLayerCount", config.BiomeLayers.Count);
     }
 
     public void WorldChanged(MeshDescription terrain)

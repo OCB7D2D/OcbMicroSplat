@@ -16,17 +16,17 @@ public class MicroSplatXmlConfig
     // ####################################################################
     // ####################################################################
 
-    private void Parse(XElement xml)
+    private void Parse(XElement root)
     {
-        foreach (XElement child in xml.Elements())
+        foreach (XElement child in root.Elements())
         {
-            if (child.Name.Equals("microsplat-shader"))
+            if (child.Name == "microsplat-shader")
                 OcbMicroSplat.Config.TerrainShaderConfig.Parse(child);
-            else if (child.Name.Equals("biomes-config"))
+            else if (child.Name == "biomes-config")
                 OcbMicroSplat.Config.MicroSplatWorldConfig.Parse(child);
-            else if (child.Name.Equals("microsplat-texture"))
+            else if (child.Name == "microsplat-texture")
                 OcbMicroSplat.Config.MicroSplatTexturesConfigs.Parse(child);
-            else if (child.Name.Equals("microsplat-voxel"))
+            else if (child.Name == "microsplat-voxel")
                 OcbMicroSplat.Config.MicroSplatVoxelConfigs.Parse(child);
         }
     }
@@ -70,15 +70,11 @@ public class MicroSplatXmlConfig
     // ####################################################################
     // ####################################################################
 
-    static public DynamicProperties GetDynamicProperties(XElement xml,
-        DynamicProperties props = null)
+    static public DynamicProperties GetDynamicProperties(
+        XElement root, DynamicProperties props = null)
     {
         if (props == null) props = new DynamicProperties();
-        foreach (XElement childNode in xml.Elements())
-        {
-            if (childNode.Name.Equals("property") == false) continue;
-            props.Add(childNode);
-        }
+        foreach (var el in root.Elements("property")) props.Add(el);
         return props;
     }
 

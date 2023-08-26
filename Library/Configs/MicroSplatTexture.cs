@@ -49,7 +49,9 @@ public class MicroSplatTexture
     public bool IsUsedByVoxel = false;
     public bool IsUsedBySplat = false;
 
+    // Per texture shader settings
     public UnityEngine.Vector2 SplatUVScale;
+    public float Metallic = 0f;
 
     // Config for MicroSplat assets
     public ResourceAssetUrl Diffuse = null;
@@ -82,9 +84,8 @@ public class MicroSplatTexture
 
     public void Parse(XElement xml)
     {
-        foreach (XElement child in xml.Elements())
+        foreach (XElement child in xml.Elements("property"))
         {
-            if (!child.Name.Equals("property")) continue;
             if (!child.HasAttribute("name")) throw new Exception(
                 $"Mandatory attribute `name` missing on {child.Name}");
             if (!child.HasAttribute("value")) throw new Exception(
@@ -96,6 +97,7 @@ public class MicroSplatTexture
             else if (name == "Specular") Specular = new ResourceAssetUrl(value);
             else if (name == "SwitchNormal") SwitchNormal = bool.Parse(value);
             else if (name == "SplatUVScale") SplatUVScale = ParseVector2(value);
+            else if (name == "Metallic") Metallic = float.Parse(value);
         }
     }
 
