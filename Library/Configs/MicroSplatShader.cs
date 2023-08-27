@@ -1,7 +1,6 @@
 ﻿using System.Xml.Linq;
 using UnityEngine;
 using static StringParsers;
-using static UnityDistantTerrain;
 
 public class MicroSplatShader
 {
@@ -28,6 +27,8 @@ public class MicroSplatShader
 
     private DataLoader.DataPathIdentifier PathShaderDetail;
     private DataLoader.DataPathIdentifier PathShaderDistant;
+    private DataLoader.DataPathIdentifier MetalShaderDetail;
+    private DataLoader.DataPathIdentifier MetalShaderDistant;
     private DataLoader.DataPathIdentifier PathTexNoiseDetail;
     private DataLoader.DataPathIdentifier PathTexNoiseDistant;
     private DataLoader.DataPathIdentifier PathTexNoisePerlin;
@@ -151,13 +152,13 @@ public class MicroSplatShader
 
     public void LoadTerrainShaders(MeshDescription terrain)
     {
+        bool IsMetal = SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal;
         if (TerQuality == GamePrefs.GetInt(EnumGamePrefs.OptionsGfxTerrainQuality)) return;
         TerQuality = GamePrefs.GetInt(EnumGamePrefs.OptionsGfxTerrainQuality);
-        Shader ShaderDetail = null;
-        Shader ShaderDistant = null;
-        // Try to load the shader assets
-        LoadAsset(PathShaderDetail, ref ShaderDetail, false);
-        LoadAsset(PathShaderDistant, ref ShaderDistant, false);
+        Shader ShaderDetail = null; Shader ShaderDistant = null;
+        // Try to load the shader assets (may load from platform specific asset bundle)
+        LoadAsset(IsMetal ? MetalShaderDetail : PathShaderDetail, ref ShaderDetail, false);
+        LoadAsset(IsMetal ? MetalShaderDistant : PathShaderDistant, ref ShaderDistant, false);
         // Give error messages to the console if loading failed
         if (ShaderDetail == null) Log.Error("Could not load custom detail shader: {0}/{1}",
             PathShaderDetail.BundlePath, PathShaderDetail.AssetName);
@@ -225,6 +226,8 @@ public class MicroSplatShader
         var props = MicroSplatXmlConfig.GetDynamicProperties(child);
         PathShaderDetail = GetPath(props, "ShaderDetail");
         PathShaderDistant = GetPath(props, "ShaderDistant");
+        MetalShaderDetail = GetPath(props, "MetalShaderDetail");
+        MetalShaderDistant = GetPath(props, "MetalShaderDistant");
         PathTexNoisePerlin = GetPath(props, "NoisePerlin");
         PathTexNoiseDetail = GetPath(props, "NoiseDetail");
         PathTexNoiseDistant = GetPath(props, "NoiseDistant");

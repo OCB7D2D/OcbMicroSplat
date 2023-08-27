@@ -98,6 +98,7 @@
     <Compile Include="Harmony\MicroSplatVoxels.cs" />
     <Compile Include="Harmony\MicroSplatXmlConfig.cs" />
     <Compile Include="Harmony\MicroSplatXmlFilters.cs" />
+    <Compile Include="Harmony\OcbDecalShader.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeColor.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeLayer.cs" />
     <Compile Include="Library\Configs\MicroSplatShader.cs" />

@@ -12,6 +12,7 @@ public class OcbMicroSplat : IModApi
         = new MicroSplatXmlConfig();
 
     public static string DecalBundlePath;
+    public static string DecalShaderBundle;
 
     // ####################################################################
     // ####################################################################
@@ -23,7 +24,10 @@ public class OcbMicroSplat : IModApi
         Log.Error("This is a test version of OcbMicroSplat!");
         Log.Error("Do not redistribute or use in production!");
         // AssetBundlePath = System.IO.Path.Combine(mod.Path, "Resources/OcbMicroSplat.unity3d");
-        DecalBundlePath = System.IO.Path.Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
+        DecalShaderBundle = DecalBundlePath = System.IO.Path
+            .Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
+        if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)
+            DecalShaderBundle = System.IO.Path.Combine(mod.Path, "Resources/OcbDecalShader.metal.unity3d");
         GameManager.Instance.OnWorldChanged += new GameManager.OnWorldChangedEvent(HandleWorldChanged);
     }
 
