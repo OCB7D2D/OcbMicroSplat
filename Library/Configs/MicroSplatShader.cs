@@ -63,11 +63,11 @@ public class MicroSplatShader
     // ####################################################################
 
     private DataLoader.DataPathIdentifier GetPath(
-        DynamicProperties props, string name)
+        DynamicProperties props, string name, string def = null)
     {
         if (props.Values.TryGetString(name, out var path))
             return DataLoader.ParseDataPathIdentifier(path);
-        return DataLoader.ParseDataPathIdentifier(null);
+        return DataLoader.ParseDataPathIdentifier(def);
     }
 
     public static Vector4 ParseVector4(string _input)
@@ -224,16 +224,16 @@ public class MicroSplatShader
     public void Parse(XElement child)
     {
         var props = MicroSplatXmlConfig.GetDynamicProperties(child);
-        PathShaderDetail = GetPath(props, "ShaderDetail");
-        PathShaderDistant = GetPath(props, "ShaderDistant");
-        MetalShaderDetail = GetPath(props, "MetalShaderDetail");
-        MetalShaderDistant = GetPath(props, "MetalShaderDistant");
-        PathTexNoisePerlin = GetPath(props, "NoisePerlin");
-        PathTexNoiseDetail = GetPath(props, "NoiseDetail");
-        PathTexNoiseDistant = GetPath(props, "NoiseDistant");
-        PathTexNoiseNormal1 = GetPath(props, "NoiseNormal1");
-        PathTexNoiseNormal2 = GetPath(props, "NoiseNormal2");
-        PathTexNoiseNormal3 = GetPath(props, "NoiseNormal3");
+        PathShaderDetail = GetPath(props, "ShaderDetail", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex");
+        PathShaderDistant = GetPath(props, "ShaderDistant", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant");
+        MetalShaderDetail = GetPath(props, "MetalShaderDetail", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex");
+        MetalShaderDistant = GetPath(props, "MetalShaderDistant", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant");
+        PathTexNoisePerlin = GetPath(props, "NoisePerlin", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_perlin");
+        PathTexNoiseDetail = GetPath(props, "NoiseDetail", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise");
+        PathTexNoiseDistant = GetPath(props, "NoiseDistant", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise");
+        PathTexNoiseNormal1 = GetPath(props, "NoiseNormal1", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_01");
+        PathTexNoiseNormal2 = GetPath(props, "NoiseNormal2", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02");
+        PathTexNoiseNormal3 = GetPath(props, "NoiseNormal3", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03");
         props.ParseVec("NoiseHeightData", ref NoiseHeightData);
         props.ParseVec("WorldHeightRange", ref WorldHeightRange);
         props.ParseVec("NoiseNormal1Params", ref NoiseNormal1Params);
