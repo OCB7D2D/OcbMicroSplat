@@ -131,25 +131,25 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
 
     void DumpeShaderConfig(Material mat)
     {
-        Log.Out("NoiseHeight: {0}", mat.GetTexture("_NoiseHeight"));
-        Log.Out("NoiseHeightData: {0}", mat.GetVector("_NoiseHeightData"));
-        Log.Out("WorldHeightRange: {0}", mat.GetVector("_WorldHeightRange"));
-        Log.Out("DistanceResampleAlbedoStrength: {0}", mat.GetFloat("_DistanceResampleAlbedoStrength"));
-        Log.Out("DistanceResampleNormalStrength: {0}", mat.GetFloat("_DistanceResampleNormalStrength"));
-        Log.Out("DistanceResampleMaterialStrength: {0}", mat.GetFloat("_DistanceResampleMaterialStrength"));
-        Log.Out("NormalNoise: {0}", mat.GetTexture("_NormalNoise"));
-        Log.Out("NormalNoise2: {0}", mat.GetTexture("_NormalNoise2"));
-        Log.Out("NormalNoise3: {0}", mat.GetTexture("_NormalNoise3"));
-        Log.Out("NormalNoiseScaleStrength: {0}", mat.GetVector("_NormalNoiseScaleStrength"));
-        Log.Out("NormalNoiseScaleStrength2: {0}", mat.GetVector("_NormalNoiseScaleStrength2"));
-        Log.Out("NormalNoiseScaleStrength3: {0}", mat.GetVector("_NormalNoiseScaleStrength3"));
-        Log.Out("DetailNoise: {0}", mat.GetTexture("_DetailNoise"));
-        Log.Out("DistanceNoise: {0}", mat.GetTexture("_DistanceNoise"));
-        Log.Out("ResampleDistanceParams: {0}", mat.GetVector("_ResampleDistanceParams"));
-        Log.Out("DetailNoiseScaleStrengthFade: {0}", mat.GetVector("_DetailNoiseScaleStrengthFade"));
-        Log.Out("DistanceNoiseScaleStrengthFade: {0}", mat.GetVector("_DistanceNoiseScaleStrengthFade"));
-        Log.Out("TriplanarContrast: {0}", mat.GetFloat("_TriplanarContrast"));
-        Log.Out("TriplanarUVScale: {0}", mat.GetVector("_TriplanarUVScale"));
+        if (mat.HasTexture("_NoiseHeight")) Log.Out("NoiseHeight: {0}", mat.GetTexture("_NoiseHeight"));
+        if (mat.HasVector("_NoiseHeightData")) Log.Out("NoiseHeightData: {0}", mat.GetVector("_NoiseHeightData"));
+        if (mat.HasVector("_WorldHeightRange")) Log.Out("WorldHeightRange: {0}", mat.GetVector("_WorldHeightRange"));
+        if (mat.HasFloat("_DistanceResampleAlbedoStrength")) Log.Out("DistanceResampleAlbedoStrength: {0}", mat.GetFloat("_DistanceResampleAlbedoStrength"));
+        if (mat.HasFloat("_DistanceResampleNormalStrength")) Log.Out("DistanceResampleNormalStrength: {0}", mat.GetFloat("_DistanceResampleNormalStrength"));
+        if (mat.HasFloat("_DistanceResampleMaterialStrength")) Log.Out("DistanceResampleMaterialStrength: {0}", mat.GetFloat("_DistanceResampleMaterialStrength"));
+        if (mat.HasTexture("_NormalNoise")) Log.Out("NormalNoise: {0}", mat.GetTexture("_NormalNoise"));
+        if (mat.HasTexture("_NormalNoise2")) Log.Out("NormalNoise2: {0}", mat.GetTexture("_NormalNoise2"));
+        if (mat.HasTexture("_NormalNoise3")) Log.Out("NormalNoise3: {0}", mat.GetTexture("_NormalNoise3"));
+        if (mat.HasVector("_NormalNoiseScaleStrength")) Log.Out("NormalNoiseScaleStrength: {0}", mat.GetVector("_NormalNoiseScaleStrength"));
+        if (mat.HasVector("_NormalNoiseScaleStrength2")) Log.Out("NormalNoiseScaleStrength2: {0}", mat.GetVector("_NormalNoiseScaleStrength2"));
+        if (mat.HasVector("_NormalNoiseScaleStrength3")) Log.Out("NormalNoiseScaleStrength3: {0}", mat.GetVector("_NormalNoiseScaleStrength3"));
+        if (mat.HasTexture("_DetailNoise")) Log.Out("DetailNoise: {0}", mat.GetTexture("_DetailNoise"));
+        if (mat.HasTexture("_DistanceNoise")) Log.Out("DistanceNoise: {0}", mat.GetTexture("_DistanceNoise"));
+        if (mat.HasVector("_ResampleDistanceParams")) Log.Out("ResampleDistanceParams: {0}", mat.GetVector("_ResampleDistanceParams"));
+        if (mat.HasVector("_DetailNoiseScaleStrengthFade")) Log.Out("DetailNoiseScaleStrengthFade: {0}", mat.GetVector("_DetailNoiseScaleStrengthFade"));
+        if (mat.HasVector("_DistanceNoiseScaleStrengthFade")) Log.Out("DistanceNoiseScaleStrengthFade: {0}", mat.GetVector("_DistanceNoiseScaleStrengthFade"));
+        if (mat.HasFloat("_TriplanarContrast")) Log.Out("TriplanarContrast: {0}", mat.GetFloat("_TriplanarContrast"));
+        if (mat.HasVector("_TriplanarUVScale")) Log.Out("TriplanarUVScale: {0}", mat.GetVector("_TriplanarUVScale"));
     }
 
     public override void Execute(List<string> _params, CommandSenderInfo _senderInfo)
@@ -174,6 +174,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                         watch.ElapsedMilliseconds / 1000f);
                     return;
                 case "shader":
+                    Log.Out("Inspect shader {0}",
+                        mesh.material.shader);
                     DumpeShaderConfig(mesh.material);
                     return;
                 case "layers":

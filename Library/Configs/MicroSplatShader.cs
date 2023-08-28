@@ -10,8 +10,6 @@ public class MicroSplatShader
 
     public int MaxTextures = 24;
 
-    public int TerQuality = -1;
-
     // ####################################################################
     // ####################################################################
 
@@ -152,11 +150,9 @@ public class MicroSplatShader
 
     public void LoadTerrainShaders(MeshDescription terrain)
     {
-        bool IsMetal = SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal;
-        if (TerQuality == GamePrefs.GetInt(EnumGamePrefs.OptionsGfxTerrainQuality)) return;
-        TerQuality = GamePrefs.GetInt(EnumGamePrefs.OptionsGfxTerrainQuality);
         Shader ShaderDetail = null; Shader ShaderDistant = null;
         // Try to load the shader assets (may load from platform specific asset bundle)
+        bool IsMetal = SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal;
         LoadAsset(IsMetal ? MetalShaderDetail : PathShaderDetail, ref ShaderDetail, false);
         LoadAsset(IsMetal ? MetalShaderDistant : PathShaderDistant, ref ShaderDistant, false);
         // Give error messages to the console if loading failed
