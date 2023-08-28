@@ -1,0 +1,66 @@
+<configs>
+
+  <append xpath="/worldglobal">
+
+    <microsplat-shader>
+
+      <!-- you may define your own shader if wanted, but we don't really recommend to mess with this directly -->
+      <property name="ShaderDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex"/>
+      <property name="ShaderDistant" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant"/>
+      <!-- metal means the mac graphics api, which requires a platform specific bundle (can't be bundles into one unfortunately) -->
+      <property name="MetalShaderDetail" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex"/>
+      <property name="MetalShaderDistant" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant"/>
+
+      <property name="NoisePerlin" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_perlin"/>
+      <property name="NoiseDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise"/>
+      <property name="NoiseDistant" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise"/>
+      <property name="NoiseNormal1" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_01"/>
+      <property name="NoiseNormal2" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02"/>
+      <property name="NoiseNormal3" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03"/>
+
+      <property name="NoiseHeightData" value="0.5, 0.275"/>
+      <property name="WorldHeightRange" value="0, 500"/>
+
+      <property name="DistanceResampleAlbedoStrength" value="0.85"/>
+      <property name="DistanceResampleNormalStrength" value="0.65"/>
+      <property name="DistanceResampleMaterialStrength" value="0.35"/>
+
+      <property name="NoiseNormal1Params" value="0.6, 0.725"/>
+      <property name="NoiseNormal2Params" value="0.325, 0.75"/>
+      <property name="NoiseNormal3Params" value="0.135, 0.6"/>
+
+      <property name="ResampleDistanceParams" value="0.25, 0.5, 100"/>
+
+      <property name="DetailNoiseScaleStrengthFade" value="4, 0.4, 75"/>
+      <property name="DistanceNoiseScaleStrengthFade" value="0.25, 0.5, 100, 500"/>
+
+      <property name="TriplanarContrast" value="8"/>
+      <property name="TriplanarUVScale" value="1, 1, 0, 0"/>
+
+      <!-- Below are the default shader settings (looks weird)
+
+      <property name="NoiseHeightData" value="1.0, 0.15"/>
+      <property name="WorldHeightRange" value="0.0, 250"/>
+
+      <property name="NoiseNormal1Params" value="10.0, 0.5"/>
+      <property name="NoiseNormal2Params" value="80.0, 1.0"/>
+      <property name="NoiseNormal3Params" value="8.0, 0.5"/>
+
+      <property name="DistanceResampleAlbedoStrength" value="1.0"/>
+      <property name="DistanceResampleNormalStrength" value="1.0"/>
+      <property name="DistanceResampleMaterialStrength" value="0.35"/>
+
+      <property name="ResampleDistanceParams" value="0.08, 50.0, 100.0"/>
+
+      <property name="DetailNoiseScaleStrengthFade" value="4.0, 0.5, 5.0"/>
+      <property name="DistanceNoiseScaleStrengthFade" value="100, 2, 10, 50"/>
+
+      <property name="TriplanarContrast" value="8"/>
+      <property name="TriplanarUVScale" value="1, 1, 0, 0"/>
+      -->
+
+    </microsplat-shader>
+
+  </append>
+
+</configs>

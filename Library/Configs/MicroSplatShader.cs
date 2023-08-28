@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 using UnityEngine;
 using static StringParsers;
 
@@ -39,22 +39,22 @@ public class MicroSplatShader
     // ####################################################################
     // ####################################################################
 
-    private Vector2 WorldHeightRange = new Vector2(0, 250f);
-    private Vector2 NoiseHeightData = new Vector2(1, 0.15f);
+    private Vector2 NoiseHeightData = new Vector2(0.5f, 0.275f);
+    private Vector2 WorldHeightRange = new Vector2(0.0f, 500f);
 
-    private Vector2 NoiseNormal1Params = new Vector2(0.113f, 0.223f);
-    private Vector2 NoiseNormal2Params = new Vector2(0.096f, 0.197f);
-    private Vector2 NoiseNormal3Params = new Vector2(0.081f, 0.173f);
+    private Vector2 NoiseNormal1Params = new Vector2(0.6f, 0.725f);
+    private Vector2 NoiseNormal2Params = new Vector2(0.325f, 0.75f);
+    private Vector2 NoiseNormal3Params = new Vector2(0.1350f, 0.6f);
 
-    private float DistanceResampleAlbedoStrength = 1;
-    private float DistanceResampleNormalStrength = 1;
-    private float DistanceResampleMaterialStrength = 1;
+    private float DistanceResampleAlbedoStrength = 0.85f;
+    private float DistanceResampleNormalStrength = 0.65f;
+    private float DistanceResampleMaterialStrength = 0.35f;
 
     private Vector3 ResampleDistanceParams = new Vector4(0.25f, 0.5f, 100);
     // Interestingly detail noise is really just a vec3 and distance vec4
     // Distance has an additional factor stored in the `w` component
-    private Vector3 DetailNoiseScaleStrengthFade = new Vector4(4, 0.5f, 5);
-    private Vector4 DistanceNoiseScaleStrengthFade = new Vector4(0.25f, 0.5f, 100, 250);
+    private Vector3 DetailNoiseScaleStrengthFade = new Vector4(4.0f, 0.5f, 75.0f);
+    private Vector4 DistanceNoiseScaleStrengthFade = new Vector4(0.25f, 0.5f, 100f, 500f);
 
     private float TriplanarContrast = 8;
     private Vector4 TriplanarUVScale = new Vector4(1, 1, 1, 1);
