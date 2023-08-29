@@ -1,6 +1,7 @@
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Reflection;
 using UnityEngine;
 using static MicroSplatPropData;
@@ -42,6 +43,7 @@ public class OcbMicroSplat : IModApi
         var terrain = MeshDescription.meshes[MeshDescription.MESH_TERRAIN];
         PrepareMicroSplatPatches(_world); // Do all the preparation once
         Config.TerrainShaderConfig.WorldChanged(terrain);
+        Config.MicroSplatVoxelConfigs.WorldChanged(terrain);
     }
 
     // ####################################################################
@@ -168,10 +170,10 @@ public class OcbMicroSplat : IModApi
             if (cfg != null) cfg.IsUsedByBiome = true;
         }
 
-        foreach (var voxel in Config.GetAllVoxelTextures())
+        foreach (var texture in Config.GetAllVoxelTextures())
         {
-            Log.Out("Using voxel {0}", voxel);
-            voxel.IsUsedByVoxel = true;
+            Log.Out("Using voxel {0}", texture);
+            texture.IsUsedByVoxel = true;
         }
 
         // Mark texture flag `IsUseByBiome` for in-use textures
@@ -266,7 +268,11 @@ public class OcbMicroSplat : IModApi
 
             // Update terrain indexes for registered blocks that need updating
             if (Config.MicroSplatTexturesConfigs.Blocks.TryGetValue(kv.Key, out var blocks))
-                foreach (var name in blocks) Block.GetBlockByName(name).TerrainTAIndex = kv.Value.SlotIdx;
+                foreach (var name in blocks)
+                {
+                    var block = Block.GetBlockByName(name);
+                    block.TerrainTAIndex = kv.Value.SlotIdx;
+                }
 
         }
 
@@ -286,7 +292,6 @@ public class OcbMicroSplat : IModApi
         // -- Get all textures used in blocks
         // Get all textures used in used voxels
     }
-
 
     // ####################################################################
     // ####################################################################

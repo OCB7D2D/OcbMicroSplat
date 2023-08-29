@@ -45,7 +45,8 @@ public static class HarmonyMicroSplatVoxels
                 // Get regular offset into our voxel config array
                 var vid = texID - MicroSplatVoxels.VoxelIndexOffset;
                 var voxel = OcbMicroSplat.Config.GetVoxelConfig(vid);
-                if (voxel == null) Log.Out("Found no voxel config");
+                if (voxel == null) Log.Warning(
+                    "Found no voxel config for {0}", vid);
                 if (voxel == null) return true;
                 _bTopSoil = false;
                 _color = voxel.color;
@@ -97,6 +98,7 @@ public static class HarmonyMicroSplatVoxels
         static void Postfix(Block __result)
         {
             // Evacuate for the two freed slots for use by new custom biomes
+            // IDs are still needed if used from withing the MicroSplat maps
             if (__result.TerrainTAIndex == 1) __result.TerrainTAIndex = 19;
             else if (__result.TerrainTAIndex == 3) __result.TerrainTAIndex = 20;
         }
