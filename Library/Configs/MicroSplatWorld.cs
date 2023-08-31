@@ -123,6 +123,7 @@ public class MicroSplatWorld
                 ParseMicroSplatPatch(node);
             else if (node.Name == "biome-color")
                 ParseBiomeColor(node);
+            // Only used to reset existings so far
             else if (node.Name == "biome-layers")
                 ParseBiomeLayers(node);
             else if (node.Name == "biome-layer")

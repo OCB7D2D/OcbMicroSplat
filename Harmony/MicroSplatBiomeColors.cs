@@ -5,42 +5,6 @@ using System.Reflection.Emit;
 using System.Xml.Linq;
 using UnityEngine;
 
-[HarmonyPatch(typeof(WorldBiomes), "readXML")]
-static class WorldBiomesReadXmlPatch
-{
-    // ####################################################################
-    // ####################################################################
-
-    static void Prefix(XDocument _xml)
-    {
-        if (GameManager.IsDedicatedServer) return; // Nothing to do here
-        if (BiomeDefinition.nameToId == null) BiomeDefinition
-            .nameToId = new Dictionary<string, byte>();
-        // Parse the vanilla biome mapping configs (to extend up on it)
-        // You may also use this to hard-code a specific biome id for all maps
-        foreach (XElement xmlElement in _xml.Root.Elements("biomemap"))
-        {
-            if (BiomeDefinition.nameToId.ContainsKey(xmlElement.GetAttribute("name"))) continue;
-            BiomeDefinition.nameToId.Add(xmlElement.GetAttribute("name"), byte.Parse(xmlElement.GetAttribute("id")));
-            Log.Out("Parsed Biome definition {0} => {1}", xmlElement.GetAttribute("name"), xmlElement.GetAttribute("id"));
-        }
-        byte CustomBiomeIndex = 24; // ToDo: maybe make it more dynamic?
-        foreach (XElement biomeElement in _xml.Root.Elements("biome"))
-        {
-            string name = biomeElement.GetAttribute("name");
-            if (string.IsNullOrEmpty(name)) continue;
-            if (BiomeDefinition.nameToId.ContainsKey(name)) continue;
-            BiomeDefinition.nameToId.Add(name, CustomBiomeIndex);
-            Log.Out("New Biome {0} at {1}", name, CustomBiomeIndex);
-            CustomBiomeIndex += 1;
-        }
-    }
-
-    // ####################################################################
-    // ####################################################################
-
-}
-
 [HarmonyPatch]
 static class GenerateWorldFromRawInitPatch
 {
