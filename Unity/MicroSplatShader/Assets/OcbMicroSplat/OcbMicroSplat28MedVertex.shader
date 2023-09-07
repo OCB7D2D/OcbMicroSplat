@@ -46,6 +46,8 @@ Shader "OcbMicroSplat28MedVertex"
 
       _DistanceResampleAlbedoStrength("Resampled Albedo Strength", Range(0.1, 1.0)) = 1
       _DistanceResampleNormalStrength("Resampled Normal Strength", Range(0.1, 1.3)) = 1
+      _DistanceResampleMaterialStrength("Resampled Material Strength", Range(0.1, 1.3)) = 0.25
+
       // terrain
       [NoScaleOffset]_NormalNoise("Normal Noise", 2D) = "bump" {}
       _NormalNoiseScaleStrength("Normal Scale", Vector) = (8, 0.5, 0, 0)
@@ -89,7 +91,6 @@ Shader "OcbMicroSplat28MedVertex"
          #include "Settings/Pragmas.cginc"
          #pragma multi_compile_fog
          #pragma multi_compile_fwdbase
-         #include "HLSLSupport.cginc"
 
          #define _PASSFORWARD 1
 
@@ -101,8 +102,6 @@ Shader "OcbMicroSplat28MedVertex"
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max28Textures.cginc"
          #include "Settings/QualityMed.cginc"
-
-         #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
          #define _STANDARD 1
 
@@ -130,20 +129,17 @@ Shader "OcbMicroSplat28MedVertex"
          #include "Settings/Pragmas.cginc"
          #pragma multi_compile_fog
          #pragma multi_compile_fwdadd_fullshadows
-         #include "HLSLSupport.cginc"
+
+         #define _PASSFORWARD 1
 
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
-
-         #define _PASSFORWARD 1
 
          #define _VERTEX7D2D 1
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max28Textures.cginc"
          #include "Settings/QualityMed.cginc"
-
-         #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
          #define _STANDARD 1
 
@@ -170,23 +166,19 @@ Shader "OcbMicroSplat28MedVertex"
 
          #include "Settings/Pragmas.cginc"
          #pragma multi_compile_fog
-         #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma multi_compile_prepassfinal
-         #include "HLSLSupport.cginc"
+
+         #define _PASSGBUFFER 1
 
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
          #include "UnityCG.cginc"
-
-         #define _PASSGBUFFER 1
 
          #define _VERTEX7D2D 1
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max28Textures.cginc"
          #include "Settings/QualityMed.cginc"
-
-         #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
          #define _STANDARD 1
 
@@ -211,9 +203,9 @@ Shader "OcbMicroSplat28MedVertex"
          CGPROGRAM
 
          #include "Settings/Pragmas.cginc"
-         #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma multi_compile_shadowcaster
-         #include "HLSLSupport.cginc"
+
+         #define _PASSSHADOW 1
 
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
@@ -222,15 +214,11 @@ Shader "OcbMicroSplat28MedVertex"
          #include "Lighting.cginc"
          #include "UnityPBSLighting.cginc"
 
-         #define _PASSSHADOW 1
-
          #define _VERTEX7D2D 1
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max28Textures.cginc"
          #include "Settings/QualityMed.cginc"
-
-         #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
          #define _STANDARD 1
 
@@ -257,24 +245,20 @@ Shader "OcbMicroSplat28MedVertex"
          CGPROGRAM
 
          #include "Settings/Pragmas.cginc"
-         #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
          #pragma shader_feature EDITOR_VISUALIZATION
-         #include "HLSLSupport.cginc"
+
+         #define _PASSMETA 1
 
          #include "UnityShaderVariables.cginc"
          #include "UnityShaderUtilities.cginc"
 
          #include "UnityCG.cginc"
 
-         #define _PASSMETA 1
-
          #define _VERTEX7D2D 1
 
          #include "Settings/BaseSettings.cginc"
          #include "Settings/Max28Textures.cginc"
          #include "Settings/QualityMed.cginc"
-
-         #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
 
          #define _STANDARD 1
 
