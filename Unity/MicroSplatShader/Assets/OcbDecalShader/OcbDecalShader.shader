@@ -17,7 +17,7 @@ Shader "OcbDecalShader"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "Queue" = "Geometry" }
+        Tags { "RenderType" = "Opaque" "Queue" = "Geometry" }
         LOD 200
 
         CGPROGRAM
@@ -32,8 +32,8 @@ Shader "OcbDecalShader"
         // Force the hardware tier variants
         // Don't rely on unity project setting
         // https://docs.unity3d.com/Manual/SL-ShaderCompilationAPIs.html
-        #pragma only_renderers d3d9 d3d11 gles3 metal glcore vulkan
-        #pragma exclude_renderers gles ps4 xboxone switch ps5
+        // #pragma only_renderers d3d9 d3d11 gles3 metal glcore vulkan
+        // #pragma exclude_renderers gles ps4 xboxone switch ps5
 
         sampler2D _MainTex;
         sampler2D _BumpMap;
