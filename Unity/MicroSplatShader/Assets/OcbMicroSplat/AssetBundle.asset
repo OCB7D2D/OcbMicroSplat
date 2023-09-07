@@ -29,6 +29,23 @@ MonoBehaviour:
   WantVulkan: 1
   WantMetal: 1
   SeparateShaders: 1
+  ShowShaderStripping: 0
+  StripMetaPass: 1
+  StripForwardBasePass: 1
+  StripForwardAddPass: 1
+  StripDeferredPass: 0
+  StripShadowCasterPass: 0
+  StripFogNone: 0
+  StripFogLinear: 1
+  StripFogExp: 1
+  StripFogExp2: 1
+  StripInstancing: 0
+  StripLightmapPlain: 1
+  StripLightmapDirCombined: 1
+  StripLightmapDynamicPlain: 1
+  StripLightmapDynamicDirCombined: 1
+  StripLightmapShadowMask: 1
+  StripLightmapSubtractive: 1
   Objects:
   - {fileID: 2800000, guid: 8911a74aa4ce00143bffb4cb832f8d11, type: 3}
   - {fileID: 2800000, guid: d258ce422a9e817439d89de9d3c6eb97, type: 3}
