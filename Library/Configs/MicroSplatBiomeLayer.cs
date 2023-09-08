@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -39,6 +40,15 @@ public class MicroSplatBiomeLayer
         PatchMicroSplatLayers(layers, OcbMicroSplat.Config.MicroSplatWorldConfig);
     }
 
+    // Ensure we start with sensible defaults
+    private static MicroSplatProceduralTextureConfig.Layer CreateLayer()
+    {
+        var layer = new MicroSplatProceduralTextureConfig.Layer();
+        layer.biomeWeights = Vector4.zero;
+        layer.biomeWeights2 = Vector4.zero;
+        return layer;
+    }
+
     private static void PatchMicroSplatLayers(List<MicroSplatProceduralTextureConfig.Layer> layers, MicroSplatWorld config)
     {
         if (config.BiomeLayers.Count == 0) return;
@@ -46,14 +56,15 @@ public class MicroSplatBiomeLayer
         {
             var texture = cfg.Props.GetString("microsplat-texture");
             var texcfg = OcbMicroSplat.Config.GetTextureConfig(texture);
-            if (texcfg == null) continue;
-            texcfg.IsUsedByBiome = true;
             int index = cfg.LayerIndex;
-            while (index >= layers.Count) layers.Add(
-                new MicroSplatProceduralTextureConfig.Layer());
+            while (index >= layers.Count) layers.Add(CreateLayer());
             var layer = layers[index];
             var props = cfg.Props;
-            layer.textureIndex = texcfg.SlotIdx;
+            if (texcfg != null)
+            {
+                texcfg.IsUsedByBiome = true;
+                layer.textureIndex = texcfg.SlotIdx;
+            }
             props.ParseFloat("weight", ref layer.weight);
             props.ParseBool("noise-active", ref layer.noiseActive);
             props.ParseFloat("noise-frequency", ref layer.noiseFrequency);
@@ -68,15 +79,23 @@ public class MicroSplatBiomeLayer
             props.ParseEnum("erosion-curve-mode", ref layer.erosionCurveMode);
             props.ParseEnum("cavity-curve-mode", ref layer.cavityCurveMode);
             // props.ParseInt("microsplat-index", ref layer.textureIndex);
-            if (props.Contains("biome-weight-1")) layer.biomeWeights =
-                StringParsers.ParseColor(props.GetString("biome-weight-1"));
-            if (props.Contains("biome-weight-2")) layer.biomeWeights2 =
-                StringParsers.ParseColor(props.GetString("biome-weight-2"));
+            if (props.Contains("biome-weights-a")) layer.biomeWeights =
+                StringParsers.ParseColor(props.GetString("biome-weights-a"));
+            if (props.Contains("biome-weights-b")) layer.biomeWeights2 =
+                StringParsers.ParseColor(props.GetString("biome-weights-b"));
+            // Allow to set weights for only a certain biome
+            props.ParseFloat($"biome-weight-1", ref layer.biomeWeights.x);
+            props.ParseFloat($"biome-weight-2", ref layer.biomeWeights.y);
+            props.ParseFloat($"biome-weight-3", ref layer.biomeWeights.z);
+            props.ParseFloat($"biome-weight-4", ref layer.biomeWeights.w);
+            props.ParseFloat($"biome-weight-5", ref layer.biomeWeights2.x);
+            props.ParseFloat($"biome-weight-6", ref layer.biomeWeights2.y);
+            props.ParseFloat($"biome-weight-7", ref layer.biomeWeights2.z);
+            props.ParseFloat($"biome-weight-8", ref layer.biomeWeights2.w);
             if (cfg.Heights != null) layer.heightCurve.keys = cfg.Heights.ToArray();
             if (cfg.Slopes != null) layer.slopeCurve.keys = cfg.Slopes.ToArray();
         }
     }
-
 
     // ####################################################################
     // ####################################################################

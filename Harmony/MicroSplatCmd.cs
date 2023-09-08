@@ -152,6 +152,17 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
         if (mat.HasVector("_TriplanarUVScale")) Log.Out("TriplanarUVScale: {0}", mat.GetVector("_TriplanarUVScale"));
     }
 
+    private static string CleanList(object val)
+    {
+        if (val == null) return "";
+        var str = val.ToString();
+        if (str.Length == 0) return "";
+        if (str[str.Length - 1] == ')')
+            str = str.Remove(str.Length - 1, 1);
+        if (str[0] == '(') str = str.Remove(0, 1);
+        return str;
+    }
+
     public override void Execute(List<string> _params, CommandSenderInfo _senderInfo)
     {
 
@@ -208,12 +219,12 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     var data = VoxelMeshTerrainProcData.Get(null);
                     var layer = data.layers[idx];
                     Log.Out("<property name=\"weight\" value=\"{0}\"/>", layer.weight);
-                    Log.Out("<property name=\"biome-weight-1\" value=\"{0}\"/>", layer.biomeWeights);
-                    Log.Out("<property name=\"biome-weight-2\" value=\"{0}\"/>", layer.biomeWeights2);
+                    Log.Out("<property name=\"biome-weights-a\" value=\"{0}\"/>", CleanList(layer.biomeWeights));
+                    Log.Out("<property name=\"biome-weights-b\" value=\"{0}\"/>", CleanList(layer.biomeWeights2));
                     Log.Out("<property name=\"noise-active\" value=\"{0}\"/>", layer.noiseActive);
                     Log.Out("<property name=\"noise-frequency\" value=\"{0}\"/>", layer.noiseFrequency);
                     Log.Out("<property name=\"noise-offset\" value=\"{0}\"/>", layer.noiseOffset);
-                    Log.Out("<property name=\"noise-range\" value=\"{0}\"/>", layer.noiseRange);
+                    Log.Out("<property name=\"noise-range\" value=\"{0}\"/>", CleanList(layer.noiseRange));
                     Log.Out("<property name=\"microsplat-index\" value=\"{0}\"/>", layer.textureIndex);
                     Log.Out("<property name=\"slope-active\" value=\"{0}\"/>", layer.slopeActive);
                     Log.Out("<property name=\"slope-curve-mode\" value=\"{0}\"/>", layer.slopeCurveMode);
@@ -312,8 +323,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                         case "cavity-curve-mode": layer.cavityCurveMode = EnumUtils.Parse(_params[3],
                             MicroSplatProceduralTextureConfig.Layer.CurveMode.Curve); break;
                         case "microsplat-index": layer.textureIndex = int.Parse(_params[3]); break;
-                        case "biome-weight-1": layer.biomeWeights = ParseVector4(_params[3]); break;
-                        case "biome-weight-2": layer.biomeWeights2 = ParseVector4(_params[3]); break;
+                        case "biome-weights-a": layer.biomeWeights = ParseVector4(_params[3]); break;
+                        case "biome-weights-b": layer.biomeWeights2 = ParseVector4(_params[3]); break;
                         case "slope-keyframes": layer.slopeCurve = ParseAnimationKeys(_params[3]); break;
                         case "height-keyframes": layer.heightCurve = ParseAnimationKeys(_params[3]); break;
                         case "erosion-keyframes": layer.erosionMapCurve = ParseAnimationKeys(_params[3]); break;
