@@ -87,6 +87,12 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(PATH_7D2D_MANAGED)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>$(PATH_7D2D_MANAGED)\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>$(PATH_7D2D_MANAGED)\Unity.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>$(PATH_7D2D_MANAGED)\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
@@ -99,6 +105,7 @@
     <Compile Include="Harmony\MicroSplatXmlConfig.cs" />
     <Compile Include="Harmony\MicroSplatXmlFilters.cs" />
     <Compile Include="Harmony\OcbDecalShader.cs" />
+    <Compile Include="Harmony\SkipTexturesRelease.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeColor.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeLayer.cs" />
     <Compile Include="Library\Configs\MicroSplatShader.cs" />

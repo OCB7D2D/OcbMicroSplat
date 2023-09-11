@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -31,6 +30,8 @@ public class MicroSplatBiomeLayer
 
     public string MicroSplatName => Props?.GetString("microsplat-texture");
 
+    // ####################################################################
+    // ####################################################################
 
     // Patch MicroSplat textures according to xml config
     public static void PatchMicroSplatLayers(List<MicroSplatProceduralTextureConfig.Layer> layers)

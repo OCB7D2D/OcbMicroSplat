@@ -107,6 +107,7 @@ public class MicroSplatShader
         {
             string name = string.Format(path.AssetName, GetShaderQuality(), MaxTextures);
             if (asset != null && asset.name == name) return; // Still valid?
+            Log.Out("Loading {0}?{1}", System.IO.Path.GetFileName(path.BundlePath), name);
             AssetBundleManager.Instance.LoadAssetBundle(path.BundlePath);
             asset = AssetBundleManager.Instance.Get<T>(path.BundlePath, name);
             if (asset == null) Log.Warning("Failed to load {0}", name);
@@ -153,9 +154,7 @@ public class MicroSplatShader
         Shader ShaderDetail = null; Shader ShaderDistant = null;
         // Try to load the shader assets (may load from platform specific asset bundle)
         bool IsMetal = SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal;
-        Log.Out("Loading {0}", IsMetal ? MetalShaderDetail : PathShaderDetail);
         LoadAsset(IsMetal ? MetalShaderDetail : PathShaderDetail, ref ShaderDetail, false);
-        Log.Out("Loading {0}", IsMetal ? MetalShaderDistant : PathShaderDistant);
         LoadAsset(IsMetal ? MetalShaderDistant : PathShaderDistant, ref ShaderDistant, false);
         // Give error messages to the console if loading failed
         if (ShaderDetail == null) Log.Error("Could not load custom detail shader: {0}/{1}",
@@ -200,9 +199,11 @@ public class MicroSplatShader
 
     public void WorldChanged(MeshDescription terrain)
     {
+        #if DEBUG
         Log.Out("=============================================");
         Log.Out($"Load/enable custom microsplat shaders ({MaxTextures})");
         Log.Out("=============================================");
+        #endif
         // Play safe, just in case
         if (terrain == null) return;
         // Load quality terrain shader

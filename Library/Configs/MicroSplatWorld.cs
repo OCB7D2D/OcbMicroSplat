@@ -69,7 +69,9 @@ public class MicroSplatWorld
         string name = xml.GetAttribute("name");
         if (!BiomeDefinition.nameToId.TryGetValue(name, out byte index))
             throw new Exception($"Biome definition missing for {name}");
-        Log.Out("New biome color {0} at index {1}", name, index);
+        #if DEBUG
+        Log.Out("Registered biome color {0} with index {1}", name, index);
+        #endif
         if (!BiomeColors.TryGetValue(index, out MicroSplatBiomeColor config))
             BiomeColors.Add(index, config = new MicroSplatBiomeColor());
         config.Parse(xml);
@@ -123,7 +125,7 @@ public class MicroSplatWorld
                 ParseMicroSplatPatch(node);
             else if (node.Name == "biome-color")
                 ParseBiomeColor(node);
-            // Only used to reset existings so far
+            // Only used to reset vanilla so far
             else if (node.Name == "biome-layers")
                 ParseBiomeLayers(node);
             else if (node.Name == "biome-layer")

@@ -103,7 +103,6 @@ public static class MicroSplatTextureUtils
             for (int m = 0; m < dst.mipmapCount; m++) cmds.
                 CopyTexture(src, srcidx, m + offset, dst, dstidx, m);
         }
-
         Log.Out(" apply {0}[{1}] to {2}[{3}]",
             src.name, srcidx, dst.name, dstidx);
     }
@@ -175,7 +174,9 @@ public static class MicroSplatTextureUtils
         cmds.SetExecutionFlags(CommandBufferExecutionFlags.AsyncCompute);
         Log.Out("Extend microsplat texture arrays to size {0} (from {1})", size, albedos.depth);
         albedos = ResizeTextureArray(cmds, albedos, size, patches, false, false);
+        #if DEBUG
         Log.Out("Apply indexed textures (overwrite existing slots)");
+        #endif
         foreach (var indexed in OcbMicroSplat.Config.MicroSplatWorldConfig.TexPatches)
         {
             if (indexed.Value.Diffuse != null) PatchMicroSplatTexture(cmds,
@@ -185,7 +186,9 @@ public static class MicroSplatTextureUtils
             if (indexed.Value.Specular != null) PatchMicroSplatTexture(cmds,
                 speculars, indexed.Key, indexed.Value.Specular.Path);
         }
+        #if DEBUG
         Log.Out("Apply custom textures (as needed by world's xml config)");
+        #endif
         foreach (var patch in patches) if (patch.Diffuse != null && patch.Diffuse.Path.AssetName != null)
             PatchMicroSplatTexture(cmds, albedos, patch.SlotIdx, patch.Diffuse.Path);
         normals = ResizeTextureArray(cmds, normals, size, patches, true, false);
@@ -194,7 +197,9 @@ public static class MicroSplatTextureUtils
         speculars = ResizeTextureArray(cmds, speculars, size, patches, false, false);
         foreach (var patch in patches) if (patch.Specular != null && patch.Specular.Path.AssetName != null)
             PatchMicroSplatTexture(cmds, speculars, patch.SlotIdx, patch.Specular.Path);
+        #if DEBUG
         Log.Out("Execute command buffer (applying all copy requests async)");
+        #endif
         Graphics.ExecuteCommandBufferAsync(cmds, ComputeQueueType.Default);
         TexQuality = GamePrefs.GetInt(EnumGamePrefs.OptionsGfxTexQuality);
         terrain.TexDiffuse = atlas.diffuseTexture = albedos;
@@ -202,8 +207,9 @@ public static class MicroSplatTextureUtils
         terrain.TexSpecular = atlas.specularTexture = speculars;
         // Update materials to use new texture arrays
         terrain.ReloadTextureArrays(true);
+        #if DEBUG
         Log.Out("MicroSplat patching finished");
-
+        #endif
     }
 
     // ####################################################################
@@ -212,16 +218,13 @@ public static class MicroSplatTextureUtils
     public static Texture2DArray ResizeTextureArray(CommandBuffer cmds, Texture2DArray array, int size,
         List<MicroSplatTexture> patches, bool linear = true, bool destroy = false)
     {
-        // if (array.depth == size) return array;
+        if (array.depth == size) return array;
         // Create a copy and add space for more textures
         var tex = new Texture2DArray(array.width, array.height,
             size, array.graphicsFormat, TextureCreationFlags.MipChain,
             array.mipmapCount);
         // Keep readable state same as original
         if (!array.isReadable) tex.Apply(false, true);
-        // Log.Out("- filterMode mod was {0}, now {1}", tex.filterMode, array.filterMode);
-        // Log.Out("- mipMapBias mod was {0}, now {1}", tex.mipMapBias, array.mipMapBias);
-        // Log.Out("- anisoLevel mod was {0}, now {1}", tex.anisoLevel, array.anisoLevel);
         if (!tex.name.Contains("extended_"))
             tex.name = "extended_" + array.name;
         // Copy old textures to new copy (any better way?)
@@ -229,8 +232,8 @@ public static class MicroSplatTextureUtils
         {
             if (copy.SrcIdx == -1) continue; // No source slot
             cmds.CopyTexture(array, copy.SrcIdx, tex, copy.SlotIdx);
-            Log.Out(" copy {0}[{1}] to resized[{2}]",
-                array.name, copy.SrcIdx, copy.SlotIdx);
+            Log.Out(" copy {0}[{1}] to {2}[{3}]",
+                array.name, copy.SrcIdx, tex.name, copy.SlotIdx);
         }
         // Copy settings from old array
         tex.filterMode = array.filterMode;

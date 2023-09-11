@@ -90,7 +90,8 @@ public static class MicroSplatDump
             DumpTexure(string.Format("{0}/world.biome.mask.2.png", path), cpr.procBiomeMask2);
             for (int i = 0; i < cpr.splats.Length; i++)
             {
-                DumpTexure(string.Format("{0}/world.splat.rgba.{1}.png", path, i), cpr.splats[i]);
+                DumpTexure(string.Format("{0}/world.splat.rgba.{1}.png", path, i),
+                    cpr.splats[i], true, null);
                 DumpTexure(string.Format("{0}/world.splat.{1}.r.png", path, i),
                     cpr.splats[i], true, ExtractRedChannel);
                 DumpTexure(string.Format("{0}/world.splat.{1}.g.png", path, i),

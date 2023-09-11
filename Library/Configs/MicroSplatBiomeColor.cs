@@ -22,7 +22,6 @@ public class MicroSplatBiomeColor
             $"Mandatory attribute `color2` missing on {xml.Name}");
         Color1 = StringParsers.ParseColor(xml.GetAttribute("color1"));
         Color2 = StringParsers.ParseColor(xml.GetAttribute("color2"));
-        // Log.Out("Color1 {0} Color2 {1}", Color1, Color2);
     }
 
     // ####################################################################

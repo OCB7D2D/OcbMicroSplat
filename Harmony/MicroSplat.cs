@@ -20,11 +20,12 @@ public class OcbMicroSplat : IModApi
 
     public void InitMod(Mod mod)
     {
-        Debug.Log("Loading OCB MicroSplat Patch: " + GetType().ToString());
-        new Harmony(GetType().ToString()).PatchAll(Assembly.GetExecutingAssembly());
-        Log.Error("This is a test version of OcbMicroSplat!");
-        Log.Error("Do not redistribute or use in production!");
-        // AssetBundlePath = System.IO.Path.Combine(mod.Path, "Resources/OcbMicroSplat.unity3d");
+        // if (GameManager.IsDedicatedServer) return;
+        Log.Out("OCB Harmony Patch: " + GetType().ToString());
+        Harmony harmony = new Harmony(GetType().ToString());
+        harmony.PatchAll(Assembly.GetExecutingAssembly());
+        // Log.Error("This is a test version of OcbMicroSplat!");
+        // Log.Error("Do not redistribute or use in production!");
         DecalShaderBundle = DecalBundlePath = System.IO.Path
             .Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
         if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)
@@ -91,13 +92,6 @@ public class OcbMicroSplat : IModApi
         return prop.values[y * 32 + x][channel];
     }
 
-    public Vector2 GetValue2(MicroSplatPropData prop, int x, int y, int channel)
-    {
-        Color color = prop.values[y * 32 + x];
-        if (channel == 0) return new Vector2(color.r, color.g);
-        else return new Vector2(color.b, color.a);
-    }
-
     public float GetPropFloat(MicroSplatPropData prop, int textureIndex, PerTexFloat channel)
     {
         float num = (float)channel / 4f; int num2 = (int)num;
@@ -105,12 +99,18 @@ public class OcbMicroSplat : IModApi
         return GetPropValue(prop, textureIndex, num2, channel2);
     }
 
+    public Vector2 GetPropVector2(MicroSplatPropData prop, int x, int y, int channel)
+    {
+        Color color = prop.values[y * 32 + x];
+        if (channel == 0) return new Vector2(color.r, color.g);
+        else return new Vector2(color.b, color.a);
+    }
+
     public Vector2 GetPropVector2(MicroSplatPropData prop, int textureIndex, PerTexVector2 channel)
     {
-        float num = (float)channel / 4f;
-        int num2 = (int)num;
-        int channel2 = Mathf.RoundToInt((num - (float)num2) * 4f);
-        return GetValue2(prop, textureIndex, num2, channel2);
+        float num = (float)channel * 0.25f;
+        return GetPropVector2(prop, textureIndex, (int)num,
+            Mathf.RoundToInt((num - (int)num) * 4f));
     }
 
     public void PrepareMicroSplatPatches(World world)
@@ -119,9 +119,11 @@ public class OcbMicroSplat : IModApi
         if (GameManager.IsDedicatedServer) return; // Nothing to do here
         if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return;
 
+        #if DEBUG
         Log.Out("#############################################");
         Log.Out("Prepare MicroSplat Patches");
         Log.Out("#############################################");
+        #endif
 
         patches.Clear();
 
@@ -153,7 +155,6 @@ public class OcbMicroSplat : IModApi
             if (!(Config.GetTextureConfig($"microsplat{i}") is MicroSplatTexture cfg)) continue;
             cfg.SplatUVScale = GetPropVector2(msPropData, i, PerTexVector2.SplatUVScale);
             cfg.Metallic = GetPropFloat(msPropData, i, PerTexFloat.Metallic);
-            // Log.Error(">>>>>>>>>>>>> Preserve {0} {1}", cfg.SplatUVScale, cfg.Metallic);
         }
 
         // Evacuate a few save slots, as indexes 0 to 3 can only
@@ -172,7 +173,9 @@ public class OcbMicroSplat : IModApi
 
         foreach (var texture in Config.GetAllVoxelTextures())
         {
+            #if DEBUG
             Log.Out("Using voxel {0}", texture);
+            #endif
             texture.IsUsedByVoxel = true;
         }
 
@@ -220,10 +223,11 @@ public class OcbMicroSplat : IModApi
             // Skip all items that have an index
             if (texture.SrcIdx != -1)
             {
-                // texture.IsUsedByVoxel = true;
+                #if DEBUG
                 Log.Out("Known {0} at {1} ({2})",
                     kv.Key, texture.SlotIdx,
                     texture.GetUseString());
+                #endif
                 msPropData.SetValue(texture.SlotIdx,
                     PerTexVector2.SplatUVScale,
                     texture.SplatUVScale);
@@ -248,15 +252,19 @@ public class OcbMicroSplat : IModApi
             // Skip unused ones
             else
             {
-                Log.Out("Skips {0} at {1} ({2})",
+                #if DEBUG
+                Log.Out("Skip {0} at {1} ({2})",
                     kv.Key, texture.SlotIdx,
                     texture.GetUseString());
+                #endif
                 continue;
             }
             // Apply given textures to slot
+            #if DEBUG
             Log.Out("Apply {0} at {1} ({2})",
                 kv.Key, texture.SlotIdx,
                 texture.GetUseString());
+            #endif
             // Update the UvScale property
             // ToDo: Add more per-tex stuff?
             msPropData.SetValue(texture.SlotIdx,
@@ -268,12 +276,13 @@ public class OcbMicroSplat : IModApi
 
             // Update terrain indexes for registered blocks that need updating
             if (Config.MicroSplatTexturesConfigs.Blocks.TryGetValue(kv.Key, out var blocks))
+            {
                 foreach (var name in blocks)
                 {
                     var block = Block.GetBlockByName(name);
                     block.TerrainTAIndex = kv.Value.SlotIdx;
                 }
-
+            }
         }
 
         MicroSplatBiomeLayer.PatchMicroSplatLayers(msProcData.layers);
@@ -285,12 +294,11 @@ public class OcbMicroSplat : IModApi
             if (occupied[n]) max = Mathf.Max(max, n);
         Config.SetMaxTexturesCount(max);
 
+        #if DEBUG
         Log.Out("#############################################");
         Log.Out("#############################################");
+        #endif
 
-        // Get all voxels used in blocks
-        // -- Get all textures used in blocks
-        // Get all textures used in used voxels
     }
 
     // ####################################################################
@@ -329,9 +337,11 @@ public class OcbMicroSplat : IModApi
             ref Texture2D ___msProcCurveTex, ref Texture2D ___msProcParamTex)
         {
 
+            #if DEBUG
             Log.Out("#############################################");
             Log.Out("Apply MicroSplat patches on load/change");
             Log.Out("#############################################");
+            #endif
 
             if (GameManager.IsDedicatedServer) return false; // Nothing to do here
             if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return false;
@@ -341,9 +351,7 @@ public class OcbMicroSplat : IModApi
                 ___msPropData = msPropData;
                 ___msProcData = msProcData;
                 var mesh = MeshDescription.meshes[MeshDescription.MESH_TERRAIN];
-                Log.Out("Before apply micro splat textures");
                 MicroSplatTextureUtils.ApplyMicroSplatTextures(mesh, patches);
-                Log.Out("After apply micro splat textures");
                 ___msProcCurveTex = ___msProcData.GetCurveTexture();
                 ___msProcParamTex = ___msProcData.GetParamTexture();
                 ___msPropTex = ___msPropData.GetTexture();
@@ -356,9 +364,10 @@ public class OcbMicroSplat : IModApi
                 Application.Quit();
             }
 
-
+            #if DEBUG
             Log.Out("#############################################");
             Log.Out("#############################################");
+            #endif
 
             return false;
         }

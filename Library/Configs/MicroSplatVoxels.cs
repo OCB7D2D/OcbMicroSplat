@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -77,39 +76,15 @@ public class MicroSplatVoxels
     // ####################################################################
     // ####################################################################
 
-    public class ResetQualitySettings : IDisposable
-    {
-        readonly int masterTextureLimit = 0;
-        readonly int mipmapsReduction = 0;
-        readonly bool streamingMips = false;
-        readonly float mipSlope = 0.6776996f;
-        public ResetQualitySettings()
-        {
-            masterTextureLimit = QualitySettings.masterTextureLimit;
-            streamingMips = QualitySettings.streamingMipmapsActive;
-            mipmapsReduction = QualitySettings.streamingMipmapsMaxLevelReduction;
-            mipSlope = Shader.GetGlobalFloat("_MipSlope");
-            QualitySettings.masterTextureLimit = 0;
-            QualitySettings.streamingMipmapsActive = false;
-            QualitySettings.streamingMipmapsMaxLevelReduction = 0;
-            Shader.SetGlobalFloat("_MipSlope", 0.6776996f);
-        }
-        public void Dispose()
-        {
-            QualitySettings.masterTextureLimit = masterTextureLimit;
-            QualitySettings.streamingMipmapsActive = streamingMips;
-            QualitySettings.streamingMipmapsMaxLevelReduction = mipmapsReduction;
-            Shader.SetGlobalFloat("_MipSlope", mipSlope);
-        }
-    }
-
     // Do the actual patching
     public void WorldChanged(MeshDescription terrain)
     {
-        Log.Out("=============================================");
         if (!(terrain.textureAtlas is TextureAtlasTerrain atlas)) return;
+        #if DEBUG
+        Log.Out("=============================================");
         Log.Out($"Patch into old terrain texture atlas");
         Log.Out("=============================================");
+        #endif
         // using (ResetQualitySettings reset = new ResetQualitySettings())
         foreach (var kvv in Voxels)
         {
@@ -130,9 +105,9 @@ public class MicroSplatVoxels
             var cfg = OcbMicroSplat.Config.GetTextureConfig(texture);
             // Patch the different texture into the old atlas
             // This is idempotent, worst case texture isn't used
-            PatchVoxelTexture(cfg.Diffuse, ref atlas.diffuse[idx], atlas.diffuse[1]);
-            PatchVoxelTexture(cfg.Normal, ref atlas.normal[idx], atlas.normal[1]);
-            PatchVoxelTexture(cfg.Specular, ref atlas.specular[idx], atlas.specular[0]);
+            PatchVoxelTexture(cfg.Diffuse, ref atlas.diffuse[idx], voxel.Name);
+            PatchVoxelTexture(cfg.Normal, ref atlas.normal[idx], voxel.Name);
+            PatchVoxelTexture(cfg.Specular, ref atlas.specular[idx], voxel.Name);
             // Extend the UV map for e.g. falling blocks
             atlas.uvMapping[idx] = new UVRectTiling()
             {
@@ -146,12 +121,13 @@ public class MicroSplatVoxels
                 color = new Color(1, 0, 1),
             };
         }
+        #if DEBUG
         Log.Out("Finished patching old terrain atlas");
+        #endif
     }
 
-    private static void PatchVoxelTexture(ResourceAssetUrl asset, ref Texture2D value, Texture2D tmpl)
+    private static void PatchVoxelTexture(ResourceAssetUrl asset, ref Texture2D value, string name)
     {
-        Log.Out("Loading {0}", asset.Path.AssetName);
         Texture tex = MicroSplatTextureUtils.LoadTexture(
             asset.Path, out int srcidx);
         if (tex == null) Log.Error(
@@ -163,6 +139,7 @@ public class MicroSplatVoxels
         {
             var copy = new Texture2D(arr.width, arr.height, arr.graphicsFormat, arr.mipmapCount,
                 UnityEngine.Experimental.Rendering.TextureCreationFlags.MipChain);
+            if (!string.IsNullOrEmpty(name)) copy.name = "custom_" + name;
             Graphics.CopyTexture(tex, srcidx, copy, 0);
             value = copy;
         }

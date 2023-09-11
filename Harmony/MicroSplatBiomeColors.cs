@@ -81,12 +81,8 @@ static class GenerateWorldFromRawInitPatch
                     "ExecutePatched"));
                 return codes;
             }
-
-
-            // cols1 = field;
             break;
         }
-
         return codes;
     }
 
