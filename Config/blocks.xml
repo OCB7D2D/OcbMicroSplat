@@ -1,19 +1,17 @@
 <configs>
-
-  <append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Iron')]">
-    <property name="TerrainIndex" value="17"/>
-  </append>
-  <append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Lead')]">
-    <property name="TerrainIndex" value="22"/>
-  </append>
-  <append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Coal')]">
-    <property name="TerrainIndex" value="15"/>
-  </append>
-  <append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Potassium')]">
-    <property name="TerrainIndex" value="18"/>
-  </append>
-  <append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Oil')]">
-    <property name="TerrainIndex" value="21"/>
-  </append>
-
+	<append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Iron')]">
+		<property name="TerrainIndex" value="17"/>
+	</append>
+	<append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Lead')]">
+		<property name="TerrainIndex" value="22"/>
+	</append>
+	<append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Coal')]">
+		<property name="TerrainIndex" value="15"/>
+	</append>
+	<append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Potassium')]">
+		<property name="TerrainIndex" value="18"/>
+	</append>
+	<append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Oil')]">
+		<property name="TerrainIndex" value="21"/>
+	</append>
 </configs>
