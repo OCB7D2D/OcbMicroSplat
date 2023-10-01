@@ -250,6 +250,10 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 
 ## Changelog
 
+### Version 0.5.0
+
+- First version including all advanced features
+
 ### Version 0.2.0
 
 - Update compatibility for 7D2D A21.0(b313)

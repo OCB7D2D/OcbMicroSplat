@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xml>
   <Name value="OcbMicroSplat" />
-  <DisplayName value="OCB MicroSplat Terrain Shaders" />
+  <DisplayName value="OCB MicroSplat Terrain Shaders for custom ores and biomes" />
   <Description value="Replace vanilla MicroSplat shader for better visual fidelity." />
   <Website value="https://github.com/OCB7D2D/OcbMicroSplat" />
   <Author value="ocbMaurice" />
-  <Version value="0.2.0"/>
+  <Version value="0.5.0" />
 </xml>
