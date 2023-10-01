@@ -36,6 +36,8 @@ public static class HarmonyMicroSplatVoxels
         {
             // Allow blend for new biomes
             if (_bTopSoil) return true;
+            // Nothing to be done on dedicated servers
+            if (GameManager.IsDedicatedServer) return true;
             // This might be our fantasy ID, intercept and correct
             var texID = VoxelMeshTerrain.DecodeMainTexId(_fullTexId);
             // Apply custom voxel configuration (best way)
