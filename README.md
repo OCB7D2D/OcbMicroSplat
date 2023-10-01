@@ -118,7 +118,7 @@ Later in the `biome-layer` config you can reference it:
     <property name="microsplat-texture" value="custom3"/>
 ```
 
-ToDoc:
+To Document:
 
 - SwitchNormal
 - SplatUVScale
@@ -150,7 +150,7 @@ Output above can be summarized as (`#XY` suffix is the texture index):
 - Biome 2 uses layer 2 and 3
 - Biome 3 uses layer 4 and 5
 - Biome 4 uses layer 6 and 7
-- Biome 6 uses layer 8,9,10 and 11
+- Biome 5 uses layer 8,9,10 and 11
 
 If you want to re-use a vanilla layer for your own custom biome, you
 really just need to adjust the `biome-weight-x` option. This will
@@ -244,6 +244,10 @@ Check xml config and unity projects for these mods:
 - https://github.com/OCB7D2D/OcbMicroSplatSnow (Extend existing Biome)
 - https://github.com/OCB7D2D/OcbMicroSplatRoads (Replace Textures)
 
+### Helper Mods to adjust some settings in-game
+
+Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
+
 ## Changelog
 
 ### Version 0.2.0
@@ -273,7 +277,7 @@ Check xml config and unity projects for these mods:
 
 ## Compatibility
 
-Developed initially for version a20.7(b1), updated through A21.0(b313).
+Developed initially for a20.7(b1), updated through A21.2(b14).
 
 [1]: https://github.com/OCB7D2D/OcbMicroSplat
 [2]: https://github.com/OCB7D2D/OcbMicroSplat/releases
