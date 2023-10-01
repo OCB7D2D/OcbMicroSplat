@@ -1,3 +1,4 @@
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -163,6 +164,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
         return str;
     }
 
+    private static bool IsEnabled = true;
+
     public override void Execute(List<string> _params, CommandSenderInfo _senderInfo)
     {
 
@@ -199,6 +202,68 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                                 layer.biomeWeights, layer.biomeWeights2,
                                 layer.textureIndex);
                         }
+                    }
+                    return;
+                case "toggle":
+                    if (IsEnabled)
+                    {
+                        _params[0] = "off";
+                        Execute(_params, _senderInfo);
+                        IsEnabled = false;
+                    }
+                    else
+                    {
+                        _params[0] = "on";
+                        Execute(_params, _senderInfo);
+                        IsEnabled = true;
+                    }
+                    return;
+                case "off":
+                    AccessTools.Method(typeof(VoxelMeshTerrain),
+                        "InitMicroSplat").Invoke(null, null);
+                    string textureAtlasClass = mesh.TextureAtlasClass;
+                    Type type = Type.GetType(textureAtlasClass + ",Assembly-CSharp");
+                    TextureAtlas instance = (TextureAtlas)Activator.CreateInstance(type);
+                    HarmonyFieldProxy<MeshDescriptionCollection> Collection = new HarmonyFieldProxy
+                        <MeshDescriptionCollection>(typeof(WorldStaticData), "meshDescCol");
+                    var meshDescCol = Collection.Get(null);
+                    instance.LoadTextureAtlas(MeshDescription.MESH_TERRAIN, meshDescCol, true);
+                    mesh.Init(MeshDescription.MESH_TERRAIN, instance);
+                    LoadManager.AddressableRequestTask<Material> assetRequestTask = LoadManager.
+                        LoadAssetFromAddressables<Material>("TerrainTextures",
+                        "Microsplat/MicroSplatTerrainInGame.mat", _loadSync: true);
+                    var material = UnityEngine.Object.Instantiate<Material>(assetRequestTask.Asset);
+                    mesh.materials = new Material[1];
+                    mesh.materials[0] = material;
+                    mesh.materials[0].name = "Near Terrain";
+                    mesh.materials[0].SetFloat("_ShaderMode", 2f);
+                    mesh.materialDistant = new Material(mesh.materials[0]);
+                    mesh.materialDistant.SetFloat("_ShaderMode", 1f);
+                    mesh.materialDistant.name = "Distant Terrain";
+                    mesh.ReloadTextureArrays(true);
+                    assetRequestTask.Release();
+                    foreach (var mat in UnityEngine.Object.FindObjectsOfType<Material>())
+                    {
+                        if (mat.name == "Distant Terrain") mat.shader = mesh.materialDistant.shader;
+                        else if (mat.name == "Near Terrain") mat.shader = mesh.materials[0].shader;
+                    }
+                    return;
+                case "on":
+                    OcbMicroSplat.Config.TerrainShaderConfig.LoadTerrainShaders(mesh);
+                    var data = VoxelMeshTerrainProcData.Get(null);
+                    var curveTex = data.GetCurveTexture();
+                    var paramTex = data.GetParamTexture();
+                    VoxelMeshTerrainProcCurveTex.Set(null, curveTex);
+                    VoxelMeshTerrainProcParamTex.Set(null, paramTex);
+                    mesh.material.SetTexture("_ProcTexCurves", curveTex);
+                    mesh.material.SetTexture("_ProcTexParams", paramTex);
+                    mesh.materialDistant.SetTexture("_ProcTexCurves", curveTex);
+                    mesh.materialDistant.SetTexture("_ProcTexParams", paramTex);
+                    OcbMicroSplat.Config.TerrainShaderConfig.WorldChanged(mesh);
+                    foreach (var mat in UnityEngine.Object.FindObjectsOfType<Material>())
+                    {
+                        if (mat.name == "Distant Terrain") mat.shader = mesh.materialDistant.shader;
+                        else if (mat.name == "Near Terrain") mat.shader = mesh.materials[0].shader;
                     }
                     return;
             }

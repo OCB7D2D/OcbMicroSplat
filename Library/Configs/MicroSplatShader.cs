@@ -171,7 +171,7 @@ public class MicroSplatShader
     // ####################################################################
     // ####################################################################
 
-    private void InitMicroSplatMaterial(Material mat)
+    public void InitMicroSplatMaterial(Material mat)
     {
         if (mat == null) return;
         mat.SetTexture("_NoiseHeight", TexNoisePerlin);
