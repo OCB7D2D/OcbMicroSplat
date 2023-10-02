@@ -40,17 +40,6 @@ public class MicroSplatXmlConfig
     // ####################################################################
     // ####################################################################
 
-    public List<MicroSplatTexture> GetAllVoxelTextures(
-        List<MicroSplatTexture> textures = null)
-    {
-        if (textures == null) textures = new List<MicroSplatTexture>();
-        MicroSplatVoxelConfigs.GatherVoxelTextures(textures);
-        return textures;
-    }
-
-    // ####################################################################
-    // ####################################################################
-
     public MicroSplatTexture GetTextureConfig(string name)
     {
         if (MicroSplatTexturesConfigs.Textures.TryGetValue(

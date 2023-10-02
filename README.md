@@ -250,9 +250,22 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 
 ## Changelog
 
+### Version 0.5.1
+
+- Fix issue with custom voxel blocks swapping textures
+- Fix transpiler patch not working sometimes (DF)
+
 ### Version 0.5.0
 
-- First version including all advanced features
+- Add new advanced MicroSplat features
+- Add simple templating for XML includes
+- Fix topsoil previews to use proper texture
+- Fix textures of falling blocks by patching old atlas
+- Fix shader not being assigned after world reload
+- Add per texture smoothness flag to shader options
+- Update asset bundle to strip more shaders variants
+- Adjust biome-weight XML API for biome-layer
+- Implement loading of metal shaders for MacOSX
 
 ### Version 0.2.0
 

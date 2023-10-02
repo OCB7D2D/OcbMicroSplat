@@ -76,7 +76,8 @@ public static class HarmonyMicroSplatVoxels
                 MicroSplatVoxel voxel = OcbMicroSplat.Config.GetOrCreateVoxelConfig(name);
                 if (!voxel.blocks.Contains(__instance)) voxel.blocks.Add(__instance);
                 #if DEBUG
-                Log.Out("Discovered voxel usage in block {0} (voxel id {1})", name, voxel.Index);
+                Log.Out("Discovered voxel {0} in block {1} (voxel id {2}/{3})",
+                    name, __instance.GetBlockName(), voxel.Index, voxel.GetTexId());
                 #endif
                 __instance.SetSideTextureId(voxel.GetTexId());
             }

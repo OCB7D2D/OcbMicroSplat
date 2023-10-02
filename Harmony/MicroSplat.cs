@@ -1,7 +1,6 @@
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Reflection;
 using UnityEngine;
 using static MicroSplatPropData;
@@ -24,8 +23,10 @@ public class OcbMicroSplat : IModApi
         Log.Out("OCB Harmony Patch: " + GetType().ToString());
         Harmony harmony = new Harmony(GetType().ToString());
         harmony.PatchAll(Assembly.GetExecutingAssembly());
-        // Log.Error("This is a test version of OcbMicroSplat!");
-        // Log.Error("Do not redistribute or use in production!");
+        #if DEBUG
+        Log.Error("This is a test version of OcbMicroSplat!");
+        Log.Error("Do not redistribute or use in production!");
+        #endif
         DecalShaderBundle = DecalBundlePath = System.IO.Path
             .Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
         if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)
@@ -171,13 +172,8 @@ public class OcbMicroSplat : IModApi
             if (cfg != null) cfg.IsUsedByBiome = true;
         }
 
-        foreach (var texture in Config.GetAllVoxelTextures())
-        {
-            #if DEBUG
-            Log.Out("Using voxel {0}", texture);
-            #endif
-            texture.IsUsedByVoxel = true;
-        }
+        // Mark all voxel textures that are used by voxels
+        Config.MicroSplatVoxelConfigs.MarkVoxelTextures();
 
         // Mark texture flag `IsUseByBiome` for in-use textures
         var config = Config.MicroSplatWorldConfig;
