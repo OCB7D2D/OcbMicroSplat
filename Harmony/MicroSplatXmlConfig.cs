@@ -13,6 +13,10 @@ public class MicroSplatXmlConfig
     public readonly MicroSplatVoxels MicroSplatVoxelConfigs = new MicroSplatVoxels();
     public readonly MicroSplatWorld MicroSplatWorldConfig = new MicroSplatWorld();
 
+    // Properties that configure MicroSplat shader
+    public readonly DynamicProperties ShaderProps
+        = new DynamicProperties();
+
     // ####################################################################
     // ####################################################################
 
@@ -75,9 +79,11 @@ public class MicroSplatXmlConfig
     {
         static void Prefix(XmlFile _xmlFile)
         {
+            OcbMicroSplat.Config.ShaderProps.Clear();
             OcbMicroSplat.Config.MicroSplatWorldConfig.Reset();
             if (GameManager.IsDedicatedServer) return; // Nothing to do here
             if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return;
+            MicroSplatXmlFilters.FilterMapOnlyNodes(_xmlFile.XmlDoc.Root);
             OcbMicroSplat.Config.Parse(_xmlFile.XmlDoc.Root);
         }
     }

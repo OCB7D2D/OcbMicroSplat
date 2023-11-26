@@ -1,6 +1,6 @@
 <configs>
 	<append xpath="/worldglobal">
-		<microsplat-shader>
+		<microsplat-shader map-only="*">
 			<!-- you may define your own shader if wanted, but we don't really recommend to mess with this directly -->
 			<property name="ShaderDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex"/>
 			<property name="ShaderDistant" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant"/>

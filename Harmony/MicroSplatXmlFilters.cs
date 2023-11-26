@@ -97,4 +97,26 @@ public static class MicroSplatXmlFilters
     // ####################################################################
     // ####################################################################
 
+    public static void FilterMapOnlyNodes(XElement root)
+    {
+        string mapName = GamePrefs.GetString(
+            EnumGamePrefs.GameWorld)?.Trim();
+        foreach (XElement node in root.Elements())
+        {
+            if (!node.HasAttribute("map-only")) continue;
+            var filters = node.GetAttribute("map-only").Split(
+                new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(value => value.Trim());
+            if (filters.Contains(mapName)) continue;
+            if (filters.Contains("*")) continue;
+            Log.Out("Filter out {0} (for {1})",
+                node.Name, node.GetAttribute("map-only"));
+            node.Remove();
+        }
+
+    }
+
+    // ####################################################################
+    // ####################################################################
+
 }
