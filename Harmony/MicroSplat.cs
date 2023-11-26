@@ -155,6 +155,7 @@ public class OcbMicroSplat : IModApi
         {
             if (!(Config.GetTextureConfig($"microsplat{i}") is MicroSplatTexture cfg)) continue;
             cfg.SplatUVScale = GetPropVector2(msPropData, i, PerTexVector2.SplatUVScale);
+            cfg.SplatUVOffset = GetPropVector2(msPropData, i, PerTexVector2.SplatUVOffset);
             cfg.Metallic = GetPropFloat(msPropData, i, PerTexFloat.Metallic);
         }
 
@@ -208,6 +209,9 @@ public class OcbMicroSplat : IModApi
                 PerTexVector2.SplatUVScale,
                 tex.Value.SplatUVScale);
             msPropData.SetValue(tex.Key,
+                PerTexVector2.SplatUVOffset,
+                tex.Value.SplatUVOffset);
+            msPropData.SetValue(tex.Key,
                 PerTexFloat.Metallic,
                 tex.Value.Metallic);
         }
@@ -227,6 +231,9 @@ public class OcbMicroSplat : IModApi
                 msPropData.SetValue(texture.SlotIdx,
                     PerTexVector2.SplatUVScale,
                     texture.SplatUVScale);
+                msPropData.SetValue(texture.SlotIdx,
+                    PerTexVector2.SplatUVOffset,
+                    texture.SplatUVOffset);
                 msPropData.SetValue(texture.SlotIdx,
                     PerTexFloat.Metallic,
                     texture.Metallic);
@@ -266,6 +273,9 @@ public class OcbMicroSplat : IModApi
             msPropData.SetValue(texture.SlotIdx,
                 PerTexVector2.SplatUVScale,
                 texture.SplatUVScale);
+            msPropData.SetValue(texture.SlotIdx,
+                PerTexVector2.SplatUVOffset,
+                texture.SplatUVOffset);
             msPropData.SetValue(texture.SlotIdx,
                 PerTexFloat.Metallic,
                 texture.Metallic);
