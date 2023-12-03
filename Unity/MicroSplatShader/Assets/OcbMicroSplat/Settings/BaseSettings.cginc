@@ -13,3 +13,8 @@
 #define _PCNOISETRIPLANAR 1
 #define _PERTEXMETALLIC 1
 #define _PERTEXSMOOTHSTR 1
+
+//#define _TRIPLANARUSEFACENORMALS 1
+//#define _TRIPLANARLOCALSPACE 1
+//#define _TriplanarFaceBlend 1
+//#define _FORCELOCALSPACE 1
