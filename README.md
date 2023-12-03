@@ -250,6 +250,12 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 
 ## Changelog
 
+### Version 0.5.2
+
+- Fix weird vertex normals edge-case
+- Add map filter for microsplat shader configs
+- Add `SplatUVOffset` (per texture) setting
+
 ### Version 0.5.1
 
 - Fix issue with custom voxel blocks swapping textures
