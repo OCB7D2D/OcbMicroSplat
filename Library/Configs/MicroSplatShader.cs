@@ -151,6 +151,8 @@ public class MicroSplatShader
 
     public void LoadTerrainShaders(MeshDescription terrain)
     {
+        // Skip using our shader e.g. in prefab editor
+        if (GameManager.IsSplatMapAvailable() == false) return;
         Shader ShaderDetail = null; Shader ShaderDistant = null;
         // Try to load the shader assets (may load from platform specific asset bundle)
         bool IsMetal = SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal;

@@ -250,6 +250,10 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 
 ## Changelog
 
+### Version 0.5.3
+
+- Disabled custom shader in prefab editor
+
 ### Version 0.5.2
 
 - Fix weird vertex normals edge-case
