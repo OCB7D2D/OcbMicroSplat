@@ -1,0 +1,3 @@
+[submodule "Unity/MicroSplatShader/Assets/OcbMicroSplat"]
+	path = Unity/MicroSplatShader/Assets/OcbMicroSplat
+	url = https://github.com/OCB7D2D/OcbMicroSplatShader
