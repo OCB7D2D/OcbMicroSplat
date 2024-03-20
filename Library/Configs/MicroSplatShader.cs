@@ -40,9 +40,9 @@ public class MicroSplatShader
     private Vector2 NoiseHeightData = new Vector2(0.5f, 0.275f);
     private Vector2 WorldHeightRange = new Vector2(0.0f, 500f);
 
-    private Vector2 NoiseNormal1Params = new Vector2(0.6f, 0.725f);
-    private Vector2 NoiseNormal2Params = new Vector2(0.325f, 0.75f);
-    private Vector2 NoiseNormal3Params = new Vector2(0.1350f, 0.6f);
+    private Vector2 NoiseNormal1Params = new Vector2(0.6f, 0.225f);
+    private Vector2 NoiseNormal2Params = new Vector2(0.325f, 0.175f);
+    private Vector2 NoiseNormal3Params = new Vector2(0.1350f, 0.125f);
 
     private float DistanceResampleAlbedoStrength = 0.85f;
     private float DistanceResampleNormalStrength = 0.65f;
