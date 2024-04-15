@@ -19,7 +19,7 @@ public class FixMeshGeneratorNormals
             density = chunk.GetDensity(_x & 15, _y, _z & 15);
             if (density == 0)
             {
-                Log.Warning("Density is zero??");
+                // Log.Warning("Density is zero??");
                 density = 1;
             }
         }

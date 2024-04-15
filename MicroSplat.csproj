@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Harmony\FixMeshGeneratorNormals.cs" />
     <Compile Include="Harmony\MicroSplatBiomeColors.cs" />
     <Compile Include="Harmony\MicroSplatCmd.cs" />
     <Compile Include="Harmony\MicroSplat.cs" />

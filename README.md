@@ -250,6 +250,10 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 
 ## Changelog
 
+### Version 0.7.1
+
+- Remove superfluous debug message
+
 ### Version 0.7.0
 
 - Add geometry/vertex tessellation
