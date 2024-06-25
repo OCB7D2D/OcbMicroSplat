@@ -250,6 +250,11 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 
 ## Changelog
 
+### Version 0.8.0
+
+- Add UI option for terrain tessellation
+- Add separate tessellation shader variant
+
 ### Version 0.7.1
 
 - Remove superfluous debug message
