@@ -71,7 +71,7 @@ public static class HarmonyMicroSplatVoxels
     {
         static void Postfix(Block __instance)
         {
-            if (__instance.Properties.Values.TryGetString("MicroSplatVoxel", out string name))
+            if (__instance.Properties.Values.TryGetValue("MicroSplatVoxel", out string name))
             {
                 MicroSplatVoxel voxel = OcbMicroSplat.Config.GetOrCreateVoxelConfig(name);
                 if (!voxel.blocks.Contains(__instance)) voxel.blocks.Add(__instance);

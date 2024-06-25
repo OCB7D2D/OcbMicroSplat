@@ -67,7 +67,7 @@ public class MicroSplatShader
     private DataLoader.DataPathIdentifier GetPath(
         DynamicProperties props, string name, string def = null)
     {
-        if (props.Values.TryGetString(name, out var path))
+        if (props.Values.TryGetValue(name, out var path))
             return DataLoader.ParseDataPathIdentifier(path);
         return DataLoader.ParseDataPathIdentifier(def);
     }
@@ -84,7 +84,7 @@ public class MicroSplatShader
 
     private void ParseVector4(DynamicProperties props, string _propName, ref Vector4 vector)
     {
-        if (props.Values.TryGetString(_propName, out var _value)) vector = ParseVector4(_value);
+        if (props.Values.TryGetValue(_propName, out var _value)) vector = ParseVector4(_value);
     }
 
     // ####################################################################
