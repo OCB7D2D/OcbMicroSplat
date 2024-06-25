@@ -19,7 +19,7 @@ public class OcbMicroSplat : IModApi
 
     public void InitMod(Mod mod)
     {
-        // if (GameManager.IsDedicatedServer) return;
+        if (GameManager.IsDedicatedServer) return;
         Log.Out("OCB Harmony Patch: " + GetType().ToString());
         Harmony harmony = new Harmony(GetType().ToString());
         harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -27,6 +27,8 @@ public class OcbMicroSplat : IModApi
         Log.Error("This is a test version of OcbMicroSplat!");
         Log.Error("Do not redistribute or use in production!");
         #endif
+        if (!PlayerPrefs.HasKey("TerrainTessellation"))
+            PlayerPrefs.SetInt("TerrainTessellation", 2);
         DecalShaderBundle = DecalBundlePath = System.IO.Path
             .Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
         if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)

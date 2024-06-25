@@ -52,13 +52,6 @@ public class FixMeshGeneratorNormals
         normalUnscaled.x = (float)(densityRight - densityLeft);
         normalUnscaled.y = (float)(densityAbove - densityBelow);
         normalUnscaled.z = (float)(densityFront - densityBack);
-        if (normalUnscaled.magnitude == 0)
-        {
-            //Log.Out("Found issue x {0} {1}", densityLeft, densityRight);
-            //Log.Out("Found issue y {0} {1}", densityBelow, densityAbove);
-            //Log.Out("Found issue z {0} {1}", densityBack, densityFront);
-            //Log.Out("Center density is {0}", getDensity(___chunksCache, x, _y1, z));
-        }
         return normalUnscaled;
     }
 

@@ -4,9 +4,13 @@
 			<!-- you may define your own shader if wanted, but we don't really recommend to mess with this directly -->
 			<property name="ShaderDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex"/>
 			<property name="ShaderDistant" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant"/>
+			<property name="ShaderDetailTess" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}VertexTess"/>
+			<property name="ShaderDistantTess" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}DistantTess"/>
 			<!-- metal means the mac graphics api, which requires a platform specific bundle (can't be bundles into one unfortunately) -->
 			<property name="MetalShaderDetail" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex"/>
 			<property name="MetalShaderDistant" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant"/>
+			<property name="MetalShaderDetailTess" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}VertexTess"/>
+			<property name="MetalShaderDistantTess" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}DistantTess"/>
 
 			<property name="NoisePerlin" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_perlin"/>
 			<property name="NoiseDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise"/>

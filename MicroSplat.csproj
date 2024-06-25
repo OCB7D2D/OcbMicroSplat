@@ -107,6 +107,7 @@
     <Compile Include="Harmony\MicroSplatXmlFilters.cs" />
     <Compile Include="Harmony\OcbDecalShader.cs" />
     <Compile Include="Harmony\SkipTexturesRelease.cs" />
+    <Compile Include="Harmony\TessellationOption.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeColor.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeLayer.cs" />
     <Compile Include="Library\Configs\MicroSplatShader.cs" />
@@ -126,7 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\blocks.xml" />
+    <Content Include="Config\Localization.txt" />
     <Content Include="Config\worldglobal.xml" />
+    <Content Include="Config\XUi_Menu\windows.xml" />
     <Content Include="ModInfo.xml" />
     <Content Include="README.md" />
   </ItemGroup>

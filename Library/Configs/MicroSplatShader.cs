@@ -27,6 +27,10 @@ public class MicroSplatShader
     private DataLoader.DataPathIdentifier PathShaderDistant;
     private DataLoader.DataPathIdentifier MetalShaderDetail;
     private DataLoader.DataPathIdentifier MetalShaderDistant;
+    private DataLoader.DataPathIdentifier PathShaderDetailTess;
+    private DataLoader.DataPathIdentifier PathShaderDistantTess;
+    private DataLoader.DataPathIdentifier MetalShaderDetailTess;
+    private DataLoader.DataPathIdentifier MetalShaderDistantTess;
     private DataLoader.DataPathIdentifier PathTexNoiseDetail;
     private DataLoader.DataPathIdentifier PathTexNoiseDistant;
     private DataLoader.DataPathIdentifier PathTexNoisePerlin;
@@ -156,8 +160,13 @@ public class MicroSplatShader
         Shader ShaderDetail = null; Shader ShaderDistant = null;
         // Try to load the shader assets (may load from platform specific asset bundle)
         bool IsMetal = SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal;
-        LoadAsset(IsMetal ? MetalShaderDetail : PathShaderDetail, ref ShaderDetail, false);
-        LoadAsset(IsMetal ? MetalShaderDistant : PathShaderDistant, ref ShaderDistant, false);
+        if (PlayerPrefs.GetInt("TerrainTessellation") > 0) {
+            LoadAsset(IsMetal ? MetalShaderDetailTess : PathShaderDetailTess, ref ShaderDetail, false);
+            LoadAsset(IsMetal ? MetalShaderDistantTess : PathShaderDistantTess, ref ShaderDistant, false);
+        } else {
+            LoadAsset(IsMetal ? MetalShaderDetail : PathShaderDetail, ref ShaderDetail, false);
+            LoadAsset(IsMetal ? MetalShaderDistant : PathShaderDistant, ref ShaderDistant, false);
+        }
         // Give error messages to the console if loading failed
         if (ShaderDetail == null) Log.Error("Could not load custom detail shader: {0}/{1}",
             PathShaderDetail.BundlePath, PathShaderDetail.AssetName);
@@ -168,6 +177,7 @@ public class MicroSplatShader
             terrain.material.shader = ShaderDetail;
         if (ShaderDistant != null && terrain.materialDistant != null)
             terrain.materialDistant.shader = ShaderDistant;
+        TessellationOption.ApplyTerrainOptions();
     }
 
     // ####################################################################
@@ -229,6 +239,10 @@ public class MicroSplatShader
         PathShaderDistant = GetPath(props, "ShaderDistant", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant");
         MetalShaderDetail = GetPath(props, "MetalShaderDetail", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex");
         MetalShaderDistant = GetPath(props, "MetalShaderDistant", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant");
+        PathShaderDetailTess = GetPath(props, "ShaderDetailTess", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}VertexTess");
+        PathShaderDistantTess = GetPath(props, "ShaderDistantTess", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}DistantTess");
+        MetalShaderDetailTess = GetPath(props, "MetalShaderDetailTess", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}VertexTess");
+        MetalShaderDistantTess = GetPath(props, "MetalShaderDistantTess", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}DistantTess");
         PathTexNoisePerlin = GetPath(props, "NoisePerlin", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_perlin");
         PathTexNoiseDetail = GetPath(props, "NoiseDetail", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise");
         PathTexNoiseDistant = GetPath(props, "NoiseDistant", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise");
