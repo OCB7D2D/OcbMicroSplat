@@ -4,6 +4,8 @@ Replacing vanilla terrain MicroSplat shader with an improved version.
 
 You need to disable EAC to use this mod!
 
+[![GitHub CI Compile Status][6]][5]
+
 ## Description
 
 It is still the same base [MicroSplat][4] shader, but I've added e.g.
@@ -12,7 +14,7 @@ allow me to open up the shader to use 32 textures instead of 24.
 Currently 3 different performance/quality settings are included,
 which are automatically switched with the in-game terrain quality.
 
-## Download
+## Download and Install
 
 End-Users are encouraged to download my mods from [NexusMods][3].  
 Every download there helps me to buy stuff for mod development.
@@ -253,6 +255,7 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 ### Version 0.9.0
 
 - First compatibility with V1.0 (exp)
+- Potential fix for texture load issue
 
 ### Version 0.8.0
 
@@ -324,3 +327,5 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 [2]: https://github.com/OCB7D2D/OcbMicroSplat/releases
 [3]: https://www.nexusmods.com/7daystodie/mods/2873
 [4]: https://assetstore.unity.com/packages/tools/terrain/microsplat-96478
+[5]: https://github.com/OCB7D2D/OcbMicroSplat/actions/workflows/ci.yml
+[6]: https://github.com/OCB7D2D/OcbMicroSplat/actions/workflows/ci.yml/badge.svg

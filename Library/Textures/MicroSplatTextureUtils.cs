@@ -174,6 +174,8 @@ public static class MicroSplatTextureUtils
         cmds.SetExecutionFlags(CommandBufferExecutionFlags.AsyncCompute);
         Log.Out("Extend microsplat texture arrays to size {0} (from {1})", size, albedos.depth);
         albedos = ResizeTextureArray(cmds, albedos, size, patches, false, false);
+        normals = ResizeTextureArray(cmds, normals, size, patches, true, false);
+        speculars = ResizeTextureArray(cmds, speculars, size, patches, false, false);
         #if DEBUG
         Log.Out("Apply indexed textures (overwrite existing slots)");
         #endif
@@ -191,10 +193,8 @@ public static class MicroSplatTextureUtils
         #endif
         foreach (var patch in patches) if (patch.Diffuse != null && patch.Diffuse.Path.AssetName != null)
             PatchMicroSplatTexture(cmds, albedos, patch.SlotIdx, patch.Diffuse.Path);
-        normals = ResizeTextureArray(cmds, normals, size, patches, true, false);
         foreach (var patch in patches) if (patch.Normal != null && patch.Normal.Path.AssetName != null)
             PatchMicroSplatNormal(cmds, normals, patch.SlotIdx, patch.Normal.Path, patch.SwitchNormal);
-        speculars = ResizeTextureArray(cmds, speculars, size, patches, false, false);
         foreach (var patch in patches) if (patch.Specular != null && patch.Specular.Path.AssetName != null)
             PatchMicroSplatTexture(cmds, speculars, patch.SlotIdx, patch.Specular.Path);
         #if DEBUG
