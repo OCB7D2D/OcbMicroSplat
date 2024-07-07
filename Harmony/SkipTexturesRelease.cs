@@ -23,7 +23,8 @@ public static class SkipTexturesRelease
     {
         static bool Prefix(Object assetToUnload)
         {
-            if (assetToUnload?.name == null) return true;
+            if (assetToUnload == null) return true;
+            if (assetToUnload.name == null) return true;
             if (assetToUnload.name.StartsWith("custom_")) return false;
             if (assetToUnload.name.StartsWith("extended_")) return false;
             return true; // Run the original function
@@ -39,7 +40,8 @@ public static class SkipTexturesRelease
 
         static void ReleaseTexture(Texture2D texture)
         {
-            if (texture?.name == null) return;
+            if (texture == null) return;
+            if (texture.name == null) return;
             if (texture.name.StartsWith("custom_")) return;
             if (texture.name.StartsWith("extended_")) return;
             Addressables.Release(texture);
