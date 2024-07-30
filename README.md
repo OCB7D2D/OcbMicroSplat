@@ -1,4 +1,4 @@
-# OCB MicroSplat Shader Mod - 7 Days to Die (V1.0 exp) Addon
+# OCB MicroSplat Shader Mod - 7 Days to Die (V1.0) Addon
 
 Replacing vanilla terrain MicroSplat shader with an improved version.
 
@@ -21,6 +21,31 @@ Every download there helps me to buy stuff for mod development.
 
 Otherwise please use one of the [official releases][2] here.  
 Only clone or download the repo if you know what you do!
+
+## Creating texture atlas for MicroSplat
+
+In order to use this mod, you need to pass it the required textures
+in a compatible format. To ease this process, I've created a unity
+tool that should help with that. Export the resulting texture2d
+arrays and reference them in the worldglobal.xml. You may check
+the [OcbMicroSplatOreVoxel][7] demo for a fully working example.
+
+<img src="Screens/unity-array-packer.png" alt="Unity Helper" height="480"/>
+
+Package: https://github.com/OCB7D2D/UnityMicroSplatArrayPacker.git#upm@master
+
+### Demo Mods for advanced features
+
+Check xml config and unity projects for these mods:
+
+- https://github.com/OCB7D2D/OcbMicroSplatOreVoxels (Custom Ores)
+- https://github.com/OCB7D2D/OcbMicroSplatTestBiomes (Custom Biomes)
+- https://github.com/OCB7D2D/OcbMicroSplatSnow (Extend existing Biome)
+- https://github.com/OCB7D2D/OcbMicroSplatRoads (Replace Textures)
+
+### Helper Mods to adjust some settings in-game
+
+Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 
 ## MicroSplat Explanation for interested Modders
 
@@ -237,20 +262,15 @@ Given that this info is hold at the vertex level, custom ores/voxels
 are only rendered at detail terrain and not for distant terrain. That's
 just how the shader works and certainly a good tradeoff for performance.
 
-### Demo Mods for advanced features
-
-Check xml config and unity projects for these mods:
-
-- https://github.com/OCB7D2D/OcbMicroSplatOreVoxels (Custom Ores)
-- https://github.com/OCB7D2D/OcbMicroSplatTestBiomes (Custom Biomes)
-- https://github.com/OCB7D2D/OcbMicroSplatSnow (Extend existing Biome)
-- https://github.com/OCB7D2D/OcbMicroSplatRoads (Replace Textures)
-
-### Helper Mods to adjust some settings in-game
-
-Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
-
 ## Changelog
+
+### Version 0.9.1
+
+- Fix XML-Patcher for V1 compatibility
+- Add emission and metallic texture support
+- Remove obsolete metallic-per-texture setting
+- Fix potential NRE when unloading textures
+- Verified compatibility with V1.0 (b333)
 
 ### Version 0.9.0
 
@@ -329,3 +349,4 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 [4]: https://assetstore.unity.com/packages/tools/terrain/microsplat-96478
 [5]: https://github.com/OCB7D2D/OcbMicroSplat/actions/workflows/ci.yml
 [6]: https://github.com/OCB7D2D/OcbMicroSplat/actions/workflows/ci.yml/badge.svg
+[7]: https://github.com/OCB7D2D/OcbMicroSplatOreVoxels
