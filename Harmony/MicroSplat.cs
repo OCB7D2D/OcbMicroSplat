@@ -158,7 +158,7 @@ public class OcbMicroSplat : IModApi
             if (!(Config.GetTextureConfig($"microsplat{i}") is MicroSplatTexture cfg)) continue;
             cfg.SplatUVScale = GetPropVector2(msPropData, i, PerTexVector2.SplatUVScale);
             cfg.SplatUVOffset = GetPropVector2(msPropData, i, PerTexVector2.SplatUVOffset);
-            cfg.Metallic = GetPropFloat(msPropData, i, PerTexFloat.Metallic);
+            // cfg.Metallic = GetPropFloat(msPropData, i, PerTexFloat.Metallic);
         }
 
         // Evacuate a few save slots, as indexes 0 to 3 can only
@@ -213,9 +213,9 @@ public class OcbMicroSplat : IModApi
             msPropData.SetValue(tex.Key,
                 PerTexVector2.SplatUVOffset,
                 tex.Value.SplatUVOffset);
-            msPropData.SetValue(tex.Key,
-                PerTexFloat.Metallic,
-                tex.Value.Metallic);
+            // msPropData.SetValue(tex.Key,
+            //     PerTexFloat.Metallic,
+            //     tex.Value.Metallic);
         }
 
         // Process all textures that are registered for in-use
@@ -236,9 +236,9 @@ public class OcbMicroSplat : IModApi
                 msPropData.SetValue(texture.SlotIdx,
                     PerTexVector2.SplatUVOffset,
                     texture.SplatUVOffset);
-                msPropData.SetValue(texture.SlotIdx,
-                    PerTexFloat.Metallic,
-                    texture.Metallic);
+                // msPropData.SetValue(texture.SlotIdx,
+                //     PerTexFloat.Metallic,
+                //     texture.Metallic);
                 continue;
             }
             // Texture is only used as biome, so it can stay below index 12
@@ -278,9 +278,9 @@ public class OcbMicroSplat : IModApi
             msPropData.SetValue(texture.SlotIdx,
                 PerTexVector2.SplatUVOffset,
                 texture.SplatUVOffset);
-            msPropData.SetValue(texture.SlotIdx,
-                PerTexFloat.Metallic,
-                texture.Metallic);
+            // msPropData.SetValue(texture.SlotIdx,
+            //     PerTexFloat.Metallic,
+            //     texture.Metallic);
 
             // Update terrain indexes for registered blocks that need updating
             if (Config.MicroSplatTexturesConfigs.Blocks.TryGetValue(kv.Key, out var blocks))

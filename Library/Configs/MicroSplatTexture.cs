@@ -52,7 +52,7 @@ public class MicroSplatTexture
     // Per texture shader settings
     public UnityEngine.Vector2 SplatUVScale;
     public UnityEngine.Vector2 SplatUVOffset;
-    public float Metallic = 0f;
+    // public float Metallic = 0f;
 
     // Config for MicroSplat assets
     public ResourceAssetUrl Diffuse = null;
@@ -99,7 +99,7 @@ public class MicroSplatTexture
             else if (name == "SwitchNormal") SwitchNormal = bool.Parse(value);
             else if (name == "SplatUVScale") SplatUVScale = ParseVector2(value);
             else if (name == "SplatUVOffset") SplatUVOffset = ParseVector2(value);
-            else if (name == "Metallic") Metallic = float.Parse(value);
+            // else if (name == "Metallic") Metallic = float.Parse(value);
         }
     }
 
