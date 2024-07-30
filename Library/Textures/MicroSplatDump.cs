@@ -38,6 +38,9 @@ public static class MicroSplatDump
             for (int i = 0; i < t2occl.depth; i++) DumpTexure(
                 string.Format("{0}/array.{1}.roughness.png", path, i),
                 t2occl, i, true, ExtractRoughnessFromTexture);
+            for (int i = 0; i < t2occl.depth; i++) DumpTexure(
+                string.Format("{0}/array.{1}.metallic.png", path, i),
+                t2occl, i, true, ExtractBlueFromTexture);
             // for (int i = 0; i < t2occl.depth; i++) DumpTexure(
             //     string.Format("{0}/array.{1}.emissive.png", path, i),
             //     t2occl, i, true, ExtractEmissionFromTexture);

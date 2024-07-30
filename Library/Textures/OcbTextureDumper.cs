@@ -105,6 +105,29 @@ public static class OcbTextureDumper
         return pixels;
     }
 
+
+    // Extract color channel from pixels
+    public static Color[] ExtractColorFromTexture(Color[] pixels, int channel)
+    {
+        for (int i = pixels.Length - 1; i >= 0; i--)
+        {
+            pixels[i].r = pixels[i][channel];
+            pixels[i].g = pixels[i][channel];
+            pixels[i].b = pixels[i][channel];
+            pixels[i].a = 1;
+        }
+        return pixels;
+    }
+
+    public static Color[] ExtractRedFromTexture(Color[] pixels)
+        => ExtractColorFromTexture(pixels, 0);
+    public static Color[] ExtractGreenFromTexture(Color[] pixels)
+        => ExtractColorFromTexture(pixels, 1);
+    public static Color[] ExtractBlueFromTexture(Color[] pixels)
+        => ExtractColorFromTexture(pixels, 2);
+    public static Color[] ExtractAlphaFromTexture(Color[] pixels)
+        => ExtractColorFromTexture(pixels, 3);
+
     // MicroSplat stores the height in the albedo alpha channel
     public static Color[] ExtractHeightFromAlbedoTexture(Color[] pixels)
     {
