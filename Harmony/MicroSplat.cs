@@ -8,6 +8,8 @@ using static MicroSplatPropData;
 public class OcbMicroSplat : IModApi
 {
 
+    public static OcbMicroSplat Instance = null;
+
     public static MicroSplatXmlConfig Config
         = new MicroSplatXmlConfig();
 
@@ -33,7 +35,35 @@ public class OcbMicroSplat : IModApi
             .Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
         if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)
             DecalShaderBundle = System.IO.Path.Combine(mod.Path, "Resources/OcbDecalShader.metal.unity3d");
-        GameManager.Instance.OnWorldChanged += new GameManager.OnWorldChangedEvent(HandleWorldChanged);
+        Instance = this; // Remember static instance to use by patch below
+    }
+
+    // ####################################################################
+    // ####################################################################
+
+    // Call `HandleWorldChanged` after splatmaps are processed
+    [HarmonyPatch(typeof(WorldBiomeProviderFromImage), MethodType.Constructor,
+        new System.Type[] { typeof(string), typeof(WorldBiomes), typeof(int)})]
+    public class VoxelMeshTerrain_GetColorForTextureId22
+    {
+        public static void Prefix(WorldBiomeProviderFromImage __instance)
+        => Instance.HandleWorldChanged(GameManager.Instance.World);
+    }
+
+    // ####################################################################
+    // ####################################################################
+
+    // Cleanup static data when world is unloaded
+    [HarmonyPatch(typeof(GameManager), "SaveAndCleanupWorld")]
+    public class GameManager_SaveAndCleanupWorld
+    {
+        static void Postfix()
+        {
+            // Reset static flags to re-init MicroSplat
+            MicroSplatTextureUtils.TexQuality = -1;
+            VoxelMeshTerrain.isInitStatic = false;
+            Config = new MicroSplatXmlConfig();
+        }
     }
 
     // ####################################################################
