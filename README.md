@@ -264,6 +264,12 @@ just how the shader works and certainly a good tradeoff for performance.
 
 ## Changelog
 
+### Version 0.9.2
+
+- Properly hook world load and unload events for MicroSplat
+- Revert to previous transpiler patch (fix `Log.Out` issue)
+- Add warning if processed splatmaps are not found
+
 ### Version 0.9.1
 
 - Fix XML-Patcher for V1 compatibility
