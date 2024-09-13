@@ -254,7 +254,12 @@ public static class MicroSplatTextureUtils
     public static Color GetChannelUsage(string path)
     {
         Color usage = new Color(0, 0, 0, 0);
-        if (!System.IO.File.Exists(path)) return usage;
+        string fname = System.IO.Path.GetFileName(path);
+        if (!System.IO.File.Exists(path))
+        {
+            Log.Error("SplatMap {0} not found", fname);
+            return usage; // Will produce visual glitch
+        }
         Texture2D tex = TextureUtils.LoadTexture(path);
         if (tex.isReadable == false) throw new Exception(
             "Can only get channel usage from readable textures");
@@ -265,6 +270,8 @@ public static class MicroSplatTextureUtils
             usage.b = Mathf.Max(usage.b, pixel.b);
             usage.a = Mathf.Max(usage.a, pixel.a);
         }
+        Log.Out("SplatMap {0} usage: {1}/{2}/{3}/{4}",
+            fname, usage.r, usage.g, usage.b, usage.a);
         return usage;
     }
 
