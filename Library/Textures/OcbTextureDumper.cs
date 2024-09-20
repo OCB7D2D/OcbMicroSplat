@@ -62,6 +62,35 @@ public static class OcbTextureDumper
         bool linear = true, Func<Color[], Color[]> converter = null)
             => DumpTexure(path, (Texture)arr, idx, linear, converter);
 
+    // Dump generic `Texture` to disk at given `path`
+    private static void DumpTexure2(string path, Texture src1, Texture src2, int idx = 0,
+        bool linear = true, Func<Color[], Color[], Color[]> converter = null)
+    {
+        if (src1 == null || src2 == null) return;
+        Texture2D tex1 = TextureFromGPU(src1, idx, linear);
+        Texture2D tex2 = TextureFromGPU(src2, idx, linear);
+        if (converter != null)
+        {
+            var pixels1 = tex1.GetPixels(0);
+            var pixels2 = tex2.GetPixels(0);
+            var pixels = converter(pixels1, pixels2);
+            tex1.SetPixels(pixels);
+            tex1.Apply(true, false);
+        }
+        byte[] bytes = tex1.EncodeToPNG();
+        File.WriteAllBytes(path, bytes);
+    }
+
+    // Dump `Texture2D` to disk at given `path`
+    public static void DumpTexure2(string path, Texture2D src1, Texture2D src2,
+        bool linear = true, Func<Color[], Color[], Color[]> converter = null)
+            => DumpTexure2(path, src1, src2, 0, linear, converter);
+
+    // Dump `Texture2DArray[idx]` to disk at given `path`
+    public static void DumpTexure2(string path, Texture2DArray arr1, Texture2DArray arr2,
+        int idx, bool linear = true, Func<Color[], Color[], Color[]> converter = null)
+            => DumpTexure2(path, (Texture)arr1, (Texture)arr2, idx, linear, converter);
+
     // ####################################################################
     // Converter helpers for various texture formats
     // ####################################################################
@@ -137,6 +166,21 @@ public static class OcbTextureDumper
             pixels[i].g = pixels[i].a;
             pixels[i].b = pixels[i].a;
             pixels[i].a = 1;
+        }
+        return pixels;
+    }
+
+    // Emission is stored in
+    public static Color[] ExtractEmissionFromTexture(Color[] pixels1, Color[] pixels2)
+    {
+        if (pixels1.Length != pixels2.Length) return null;
+        Color[] pixels = new Color[pixels1.Length];
+        for (int i = pixels1.Length - 1; i >= 0; i--)
+        {
+            pixels[i].r = pixels1[i].a;
+            pixels[i].g = pixels1[i].b;
+            pixels[i].b = pixels2[i].r;
+            pixels[i].a = pixels2[i].b;
         }
         return pixels;
     }

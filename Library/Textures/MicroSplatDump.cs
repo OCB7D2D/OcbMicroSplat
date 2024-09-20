@@ -41,10 +41,21 @@ public static class MicroSplatDump
             for (int i = 0; i < t2occl.depth; i++) DumpTexure(
                 string.Format("{0}/array.{1}.metallic.png", path, i),
                 t2occl, i, true, ExtractBlueFromTexture);
-            // for (int i = 0; i < t2occl.depth; i++) DumpTexure(
-            //     string.Format("{0}/array.{1}.emissive.png", path, i),
-            //     t2occl, i, true, ExtractEmissionFromTexture);
         }
+
+        if (mesh.TexDiffuse is Texture2DArray t2diffx)
+        {
+            if (atlas.normalTexture is Texture2DArray t2normx)
+            {
+                int len = Mathf.Min(t2diffx.depth, t2normx.depth);
+                for (int i = 0; i < len; i++) DumpTexure2(
+                    string.Format("{0}/array.{1}.emissive.png", path, i),
+                    t2diffx, t2normx, i, true, ExtractEmissionFromTexture);
+            }
+
+        }
+
+
     }
 
     // ####################################################################
