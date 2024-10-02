@@ -264,6 +264,10 @@ just how the shader works and certainly a good tradeoff for performance.
 
 ## Changelog
 
+### Version 0.9.3
+
+- Recompile for 7D2D V1.1 stable
+
 ### Version 0.9.2
 
 - Properly hook world load and unload events for MicroSplat
