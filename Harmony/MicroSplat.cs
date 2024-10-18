@@ -375,13 +375,16 @@ public class OcbMicroSplat : IModApi
             ref Texture2D ___msProcCurveTex, ref Texture2D ___msProcParamTex)
         {
 
+            bool isPrefabEditor = PrefabEditModeManager.Instance?.IsActive() ?? false;
+
             #if DEBUG
             Log.Out("#############################################");
-            Log.Out("Apply MicroSplat patches on load/change");
+            if (!isPrefabEditor) Log.Out("Apply MicroSplat patches on load/change"); 
+            else Log.Out("Skipping MicroSplat patches for prefab editor");
             Log.Out("#############################################");
             #endif
 
-            if (GameManager.IsDedicatedServer) return false; // Nothing to do here
+            if (isPrefabEditor || GameManager.IsDedicatedServer) return false;
             if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return false;
 
             try
