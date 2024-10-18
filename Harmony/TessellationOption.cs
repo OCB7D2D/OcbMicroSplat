@@ -46,6 +46,7 @@ public class TessellationOption
                 mesh.materialDistant.SetFloat("_Tess", 256.0f);
                 break;
         }
+        mesh.material.SetFloat("_Phong", 0.725f);
     }
 
     // Our combo box (should only even have one)
