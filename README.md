@@ -264,6 +264,11 @@ just how the shader works and certainly a good tradeoff for performance.
 
 ## Changelog
 
+### Version 0.9.4
+
+- Adjust phong factor for tessellation
+- Add potential fix for prefab editor
+
 ### Version 0.9.3
 
 - Recompile for 7D2D V1.1 stable
