@@ -1,6 +1,6 @@
 <configs>
-<remove xpath="/windows/window[@name='optionsVideo']//rect[@tab_key='xuiOptionsVideoQuality']//videooption[@name='Occlusion']/following-sibling::rect"/>
-  <insertafter xpath="/windows/window[@name='optionsVideo']//rect[@tab_key='xuiOptionsVideoQuality']//videooption[@name='TerrainQuality']">
-    <videooption name="TerrainTessellation" type="ComboBoxList`1[System.String]" values="Off,Lowest,Low,Medium,High,Ultra,Ultra+" localization_prefix="xuiOptionsVideoPresets" value_wrap="false" />
-  </insertafter>
+	<remove xpath="/windows/window[@name='optionsVideo']//rect[@tab_key='xuiOptionsVideoQuality']//videooption[@name='Occlusion']/following-sibling::rect"/>
+	<insertafter xpath="/windows/window[@name='optionsVideo']//rect[@tab_key='xuiOptionsVideoQuality']//videooption[@name='TerrainQuality']">
+		<videooption name="TerrainTessellation" type="ComboBoxList`1[System.String]" values="Off,Lowest,Low,Medium,High,Ultra,Ultra+" localization_prefix="xuiOptionsVideoPresets" value_wrap="false"/>
+	</insertafter>
 </configs>

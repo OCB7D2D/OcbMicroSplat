@@ -266,6 +266,11 @@ just how the shader works and certainly a good tradeoff for performance.
 
 ### Version 0.9.4
 
+- Fix sub-biomes with custom textures
+- Add fix for loading very large maps 
+
+### Version 0.9.4
+
 - Adjust phong factor for tessellation
 - Add potential fix for prefab editor
 
