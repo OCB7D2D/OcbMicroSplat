@@ -34,8 +34,6 @@ public static class HarmonyMicroSplatVoxels
             ref Vector2 _uv, ref Vector2 _uv2,
             ref Vector2 _uv3, ref Vector2 _uv4)
         {
-            // Allow blend for new biomes
-            if (_bTopSoil) return true;
             // Nothing to be done on dedicated servers
             if (GameManager.IsDedicatedServer) return true;
             // This might be our fantasy ID, intercept and correct
