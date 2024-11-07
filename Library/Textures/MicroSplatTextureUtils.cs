@@ -263,12 +263,27 @@ public static class MicroSplatTextureUtils
         Texture2D tex = TextureUtils.LoadTexture(path);
         if (tex.isReadable == false) throw new Exception(
             "Can only get channel usage from readable textures");
-        foreach (var pixel in tex.GetPixels())
+        // Optimize for expected format (allow 16k maps)
+        if (tex.format == TextureFormat.ARGB32)
         {
-            usage.r = Mathf.Max(usage.r, pixel.r);
-            usage.g = Mathf.Max(usage.g, pixel.g);
-            usage.b = Mathf.Max(usage.b, pixel.b);
-            usage.a = Mathf.Max(usage.a, pixel.a);
+            byte[] raw = tex.GetRawTextureData();
+            for (int i = 0; i < raw.Length; i += 4)
+            {
+                usage.r = Mathf.Max(usage.r, raw[i + 1] / 255f);
+                usage.g = Mathf.Max(usage.g, raw[i + 2] / 255f);
+                usage.b = Mathf.Max(usage.b, raw[i + 3] / 255f);
+                usage.a = Mathf.Max(usage.a, raw[i + 0] / 255f);
+            }
+        }
+        else
+        {
+            foreach (var pixel in tex.GetPixels())
+            {
+                usage.r = Mathf.Max(usage.r, pixel.r);
+                usage.g = Mathf.Max(usage.g, pixel.g);
+                usage.b = Mathf.Max(usage.b, pixel.b);
+                usage.a = Mathf.Max(usage.a, pixel.a);
+            }
         }
         Log.Out("SplatMap {0} usage: {1}/{2}/{3}/{4}",
             fname, usage.r, usage.g, usage.b, usage.a);
