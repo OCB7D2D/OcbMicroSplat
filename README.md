@@ -264,10 +264,11 @@ just how the shader works and certainly a good tradeoff for performance.
 
 ## Changelog
 
-### Version 0.9.4
+### Version 0.9.5
 
 - Fix sub-biomes with custom textures
 - Add fix for loading very large maps 
+- Recompile for 7D2D V1.2 stable
 
 ### Version 0.9.4
 
