@@ -264,6 +264,10 @@ just how the shader works and certainly a good tradeoff for performance.
 
 ## Changelog
 
+### Version 1.0.0
+
+- Recompile for 7D2D V2.0 stable
+
 ### Version 0.9.5
 
 - Fix sub-biomes with custom textures

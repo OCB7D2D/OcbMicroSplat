@@ -44,7 +44,7 @@ public class OcbMicroSplat : IModApi
     // Call `HandleWorldChanged` after splatmaps are processed
     [HarmonyPatch(typeof(WorldBiomeProviderFromImage), MethodType.Constructor,
         new System.Type[] { typeof(string), typeof(WorldBiomes), typeof(int)})]
-    public class VoxelMeshTerrain_GetColorForTextureId22
+    public class WorldBiomeProviderFromImage_Ctor
     {
         public static void Prefix(WorldBiomeProviderFromImage __instance)
         => Instance.HandleWorldChanged(GameManager.Instance.World);

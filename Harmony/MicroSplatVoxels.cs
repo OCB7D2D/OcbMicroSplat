@@ -24,20 +24,17 @@ public static class HarmonyMicroSplatVoxels
             // Pretty unreliable, but works as long as source doesn't change
             return AccessTools.GetDeclaredMethods(typeof(VoxelMeshTerrain))
                 .Find(x => x.Name == "GetColorForTextureId"
-                    && x.GetParameters().Length == 8);
+                    && x.GetParameters().Length == 2);
         }
 
         static bool Prefix(
-            VoxelMeshTerrain __instance,
-            int _subMeshIdx, ref int _fullTexId,
-            ref bool _bTopSoil, ref Color _color,
-            ref Vector2 _uv, ref Vector2 _uv2,
-            ref Vector2 _uv3, ref Vector2 _uv4)
+            VoxelMeshTerrain __instance, int _subMeshIdx,
+            ref Transvoxel.BuildVertex _data)
         {
             // Nothing to be done on dedicated servers
             if (GameManager.IsDedicatedServer) return true;
             // This might be our fantasy ID, intercept and correct
-            var texID = VoxelMeshTerrain.DecodeMainTexId(_fullTexId);
+            var texID = VoxelMeshTerrain.DecodeMainTexId(_data.texture);
             // Apply custom voxel configuration (best way)
             if (texID >= MicroSplatVoxels.VoxelIndexOffset &&
                 texID < MicroSplatVoxels.VoxelIndexOffsetEnd)
@@ -48,10 +45,10 @@ public static class HarmonyMicroSplatVoxels
                 if (voxel == null) Log.Warning(
                     "Found no voxel config for {0}", vid);
                 if (voxel == null) return true;
-                _bTopSoil = false;
-                _color = voxel.color;
-                _uv = voxel.uv; _uv2 = voxel.uv2;
-                _uv3 = voxel.uv3; _uv4 = voxel.uv4;
+                _data.bTopSoil = false;
+                _data.color = voxel.color;
+                _data.uv = voxel.uv; _data.uv2 = voxel.uv2;
+                _data.uv3 = voxel.uv3; _data.uv4 = voxel.uv4;
                 // Log.Out("Got Voxel {0} - {1} {2} {3} {4} {5}",
                 //     texID, _color, _uv, _uv2, _uv3, _uv4);
                 return false;
@@ -77,7 +74,7 @@ public static class HarmonyMicroSplatVoxels
                 Log.Out("Discovered voxel {0} in block {1} (voxel id {2}/{3})",
                     name, __instance.GetBlockName(), voxel.Index, voxel.GetTexId());
                 #endif
-                __instance.SetSideTextureId(voxel.GetTexId());
+                __instance.SetSideTextureId(voxel.GetTexId(), 0);
             }
         }
     }
