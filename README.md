@@ -1,4 +1,4 @@
-# OCB MicroSplat Shader Mod - 7 Days to Die (V1.0) Addon
+# OCB MicroSplat Shader Mod - 7 Days to Die (V2.1) Addon
 
 Replacing vanilla terrain MicroSplat shader with an improved version.
 
