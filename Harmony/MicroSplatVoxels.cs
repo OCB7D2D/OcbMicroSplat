@@ -31,6 +31,9 @@ public static class HarmonyMicroSplatVoxels
             VoxelMeshTerrain __instance, int _subMeshIdx,
             ref Transvoxel.BuildVertex _data)
         {
+            // Disable TopSoil rendering fully?
+            // Otherwise sub-biomes will not render!
+            _data.bTopSoil = false;
             // Nothing to be done on dedicated servers
             if (GameManager.IsDedicatedServer) return true;
             // This might be our fantasy ID, intercept and correct
