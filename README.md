@@ -1,4 +1,4 @@
-# OCB MicroSplat Shader Mod - 7 Days to Die (V2.1) Addon
+# OCB MicroSplat Shader Mod - 7 Days to Die (V2.5) Addon
 
 Replacing vanilla terrain MicroSplat shader with an improved version.
 
@@ -263,6 +263,10 @@ are only rendered at detail terrain and not for distant terrain. That's
 just how the shader works and certainly a good tradeoff for performance.
 
 ## Changelog
+
+### Version 1.0.2
+
+- Recompile for 7D2D V2.5 experimental
 
 ### Version 1.0.1
 
