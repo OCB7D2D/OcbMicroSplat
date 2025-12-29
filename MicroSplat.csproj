@@ -87,6 +87,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(PATH_7D2D_MANAGED)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(PATH_7D2D_MANAGED)\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Addressables">
       <HintPath>$(PATH_7D2D_MANAGED)\Unity.Addressables.dll</HintPath>
     </Reference>
@@ -98,6 +101,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Harmony\BugfixChangeBlocks.cs" />
+    <Compile Include="Harmony\BugfixDecorateRoads.cs" />
     <Compile Include="Harmony\FixMeshGeneratorNormals.cs" />
     <Compile Include="Harmony\MicroSplatBiomeColors.cs" />
     <Compile Include="Harmony\MicroSplatCmd.cs" />
@@ -105,8 +110,9 @@
     <Compile Include="Harmony\MicroSplatVoxels.cs" />
     <Compile Include="Harmony\MicroSplatXmlConfig.cs" />
     <Compile Include="Harmony\MicroSplatXmlFilters.cs" />
+    <Compile Include="Harmony\OcbDecalShader.cs" />
     <Compile Include="Harmony\SkipTexturesRelease.cs" />
-    <Compile Include="Harmony\TessellationOption.cs" />
+    <Compile Include="Harmony\GameOptions.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeColor.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeLayer.cs" />
     <Compile Include="Library\Configs\MicroSplatShader.cs" />
@@ -119,8 +125,6 @@
     <Compile Include="Library\Textures\MicroSplatTextureUtils.cs" />
     <Compile Include="Library\Textures\OcbTextureDumper.cs" />
     <Compile Include="Library\Textures\OcbTextureUtils.cs" />
-    <Compile Include="Library\Utils\HarmonyFieldProxy.cs" />
-    <Compile Include="Library\Utils\HarmonyPropertyProxy.cs" />
     <Compile Include="Library\Utils\HarmonyUtils.cs" />
     <Compile Include="Library\Utils\ModXmlPatcher.cs" />
   </ItemGroup>

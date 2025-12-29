@@ -56,11 +56,18 @@ public class MicroSplatWorld
         if (!xml.HasAttribute("index")) throw new Exception(
             $"Mandatory attribute `index` missing on {xml.Name}");
         int index = int.Parse(xml.GetAttribute("index"));
-        if (!TexPatches.TryGetValue(index, out MicroSplatTexture config))
-            TexPatches.Add(index, config = new MicroSplatTexture());
-        config.Parse(xml);
+        if (!TexPatches.TryGetValue(index, out MicroSplatTexture patch)) {
+            TexPatches.Add(index, patch = new MicroSplatTexture());
+            // Check other array if we have existing configs
+            var name = string.Format("microsplat{0}", index);
+            var textures = OcbMicroSplat.Config.MicroSplatTexturesConfigs.Textures;
+            if (textures.TryGetValue(name, out MicroSplatTexture config))
+                patch.CopyConfigFrom(config); // Copy other configs
+        }
+        // Now parse new settings
+        patch.Parse(xml);
     }
-    
+
     // Parsing a `biome-color` element in `biome-config`
     public void ParseBiomeColor(XElement xml)
     {

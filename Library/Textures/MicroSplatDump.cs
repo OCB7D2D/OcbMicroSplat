@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEngine;
 using static OcbTextureDumper;
 
@@ -85,13 +86,6 @@ public static class MicroSplatDump
     // ####################################################################
     // ####################################################################
 
-    static readonly HarmonyFieldProxy<Texture2D> VoxelMeshTerrainPropTex =
-        new HarmonyFieldProxy<Texture2D>(typeof(VoxelMeshTerrain), "msPropTex");
-    static readonly HarmonyFieldProxy<Texture2D> VoxelMeshTerrainProcCurveTex =
-        new HarmonyFieldProxy<Texture2D>(typeof(VoxelMeshTerrain), "msProcCurveTex");
-    static readonly HarmonyFieldProxy<Texture2D> VoxelMeshTerrainProcParamTex =
-        new HarmonyFieldProxy<Texture2D>(typeof(VoxelMeshTerrain), "msProcParamTex");
-
     public static void DumpSplatMaps()
     {
         var path = "exports/splatmaps";
@@ -116,12 +110,36 @@ public static class MicroSplatDump
                     cpr.splats[i], true, ExtractAlphaChannel);
             }
         }
-        if (VoxelMeshTerrainPropTex.Get(null) is Texture2D msPropTex)
+        if (VoxelMeshTerrain.msPropTex is Texture2D msPropTex)
             DumpTexure(string.Format("{0}/mesh.prop.png", path), msPropTex);
-        if (VoxelMeshTerrainProcCurveTex.Get(null) is Texture2D msProcCurveTex)
+        if (VoxelMeshTerrain.msProcCurveTex is Texture2D msProcCurveTex)
             DumpTexure(string.Format("{0}/mesh.proc.curve.png", path), msProcCurveTex);
-        if (VoxelMeshTerrainProcParamTex.Get(null) is Texture2D msProcParamTex)
+        if (VoxelMeshTerrain.msProcParamTex is Texture2D msProcParamTex)
             DumpTexure(string.Format("{0}/mesh.proc.param.png", path), msProcParamTex);
+    }
+
+    // ####################################################################
+    // ####################################################################
+
+    public static void HeightAnalyize()
+    {
+        var mesh = MeshDescription.meshes[MeshDescription.MESH_TERRAIN];
+        TextureAtlas atlas = mesh.textureAtlas;
+        if (mesh.TexDiffuse is Texture2DArray t2diff)
+        {
+            for (int i = 0; i < t2diff.depth; i++)
+            {
+                Texture2D tex = OcbTextureUtils.TextureFromGPU(t2diff, i, true);
+                Color[] pixels = tex.GetPixels(0);
+                float sum = 0; foreach (Color col in pixels) sum += col.a;
+                Array.Sort(pixels, (Color c1, Color c2) => c1.a.CompareTo(c2.a));
+                Log.Out("{0} Height Median => {1}", i, pixels[pixels.Length / 2].a);
+                Log.Out("{0} Height Average => {1}", i, sum / pixels.Length);
+            }
+            // DumpTexure(
+            //     string.Format("{0}/array.{1}.height.png", path, i),
+            //     t2diff, i, true, ExtractHeightFromAlbedoTexture);
+        }
     }
 
     // ####################################################################

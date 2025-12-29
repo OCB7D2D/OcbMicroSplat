@@ -51,7 +51,7 @@ Download from https://github.com/OCB7D2D/OcbMicroSplatHelper/releases
 
 NOTE: Docs below are in a very poor first draft version!
 
-As we use original MicroSplat shaders you'll need to understand
+As we use original MicroSplat shaders, you'll need to understand
 how it works and how to configure it at least to some extend.
 
 https://assetstore.unity.com/packages/tools/terrain/microsplat-96478
@@ -75,33 +75,101 @@ This should explain some of the core concepts involved, like biome layers.
 
 MicroSplat shader will determine the 4 most weighted textures via various
 means (see below). Those 4 textures will then blend according to final
-weight value (can be influenced by slope or height). Additional textures
-after the 4 most weighted ones will simply be ignored. This is important
-to remember, as it can lead to sharp cuts in the blend if texture weight
-switch place in the weight order (similar to z-fighting). To avoid this
-you can try to keep potential textures to choose from low. Therefore it
-is somewhat recommended to not use more than 2 or 3 texture per biome.
+weight values (can be influenced by slope or height for biome layers).
+Additional textures after the 4 most weighted ones will simply be ignored.
+This is important to remember, as it can lead to sharp cuts in the blend
+if texture weight switch place in the weight order (similar to z-fighting).
+To avoid this you can try to keep potential textures to choose from low.
+Therefore it is somewhat recommended to not use more than 2 or 3 texture
+per biome.
 
-#### Main weight determination via splatmaps
+#### First weight determination via road splatmaps
 
-The first and most important condition where to render what texture, is
-stored and read via splatmap textures (`splat3.png` and `splat4.png`).
-These determine the 8 main potential core biomes. Every png holds four
-color channels, one for each biome, so `splat3.png` red channel is biome 1,
-while `splat4.png` blue channel is biome 7. To add more/custom biomes you
-need to assign them a certain color and prepare the splatmaps accordingly.
+First condition to determine what texture to render is done by sampling
+the "road" splatmaps. These will directly reference to texture array ids
+4 to 11 (8 textures in total).
 
-There is currently no automated way to do this beside editing the pngs
-directly. Make sure colors are all distinct. You may find help on how
-to do this on guppys discord. It's the same as editing biomes before.
+#### Second weight determination via biome masks
 
-#### What are Biome Layers
+The next important condition where to render what texture, is stored and
+read via biome mask texture `biomes.png`. Internally the game engine will
+create two splat/mask textures from this image, where each channel represents
+a specific biome. These two splatmaps are passed to the shader in order
+to sample it to find out what biome is at any given world position.
 
-The Biome layers is a core concept of MicroSplat shader you will need to
+E.g. Every internal mask has four color channels (rgba), one for each biome,
+so the red channel of `world.biome.mask.1.png` is biome 1, while for 
+`world.biome.mask.2.png` the blue channel is biome 7. The aplha channels are
+referencing biomes 4 and 8. Note that biomes do not reference microsplat
+textures directly, instead the reference a given biome config, which consists
+of multiple biome layers, where each layer can have a certain config to apply
+a specific microsplat texture (e.g. to show only on steep slopes).
+
+There is currently no automated way to edit the `biomes.png`. You need to
+do that manually (eake sure colors are all distinct). You may find help on
+how to do this on guppys discord. It's the same as editing biomes before.
+
+Note that a biome is either fully on or off, only one biome is active
+at any specific time and there is not half blending between biomes.
+
+#### Last weight determination via vertex data (UVs)
+
+First it is important to understand that 7D2D has two terrain modes,
+near and distant terrain. Pretty sure everyone has seen how near terrain
+is created on the fly when you fly around the world. What might not be so
+obvious, that it has a big impact how the terrain is rendered. Distant
+terrain is only rendered via splatmaps and biome mask. While near terrain
+also contains more detailed information about specific voxels. E.g. distant
+terrain will never show any ore voxel textures.
+
+##### Vanilla MicroSplat Textures
+
+Here is a list of all the vanilla microsplat textures, as they are
+defined in the TextureArray. It also list where these textures are
+reference from, e.g. if in a Biome Layer, "Road" Splatmap or via
+vertex configuration (ores etc.).
+
+0) Snow (Biome)
+1) Stone? (Unused)
+2) Grass (Biome)
+3) Desert Stone (Unused) => same as 20
+
+4) Asphalt Road (Splat) => same as 16
+5) Gravel Road (Splat) => same as 14
+6) Other Asphalt (Splat) => similar to 16
+7) Desert Ground (Splat, Biome)
+
+8) Destroyed Ground (Biome) => same as 23
+9) Dirt Ground (Splat) => same as 13
+10) Burnt Ground (Splat, Biome)
+11) Desert Blend A (Biome)
+
+12) Desert Blend B (Biome) // unaddressable
+13) Dirt Ground (Voxel)
+14) Gravel Road (Voxel)
+15) Coal Ore (Voxel)
+
+16) Asphalt Road (Voxel)
+17) Iron Ore (Voxel)
+18) Potassium Ore (Voxel)
+19) Rock Slope (Voxel, Biome)
+
+20) Desert Stone (Voxel, Biome)
+21) Oil Shale (Voxel)
+22) Lead Ore (Voxel)
+23) Destroyed Ground (Voxel)
+
+24 - 27) custom slots
+28 - 31) custom slots
+
+##### What are Biome Layers
+
+Biome layers are a core concept of MicroSplat shader you will need to
 understand in order to create you own custom biome configs. Here it can
 help if you first try the free MicroSplat in unity directly. The concepts
 should transfer 1to1 to the required xml config that you will need to
-provide to this mod for best results.
+provide to this mod for best results. Check the video tutorial for
+MicroSplat Procedural rendering to get an initial idea how it works.
 
 ##### How does it all work in the shader
 

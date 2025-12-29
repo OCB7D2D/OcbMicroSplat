@@ -1,4 +1,6 @@
 <configs>
+	<setattribute xpath="/blocks/block[@name = 'terrSandStone']" name="Texture">184,184,184,184,184,184</setattribute>
+
 	<append xpath="/blocks/block[starts-with(@name, 'terrOre') and contains(@name, 'Iron')]">
 		<property name="TerrainIndex" value="17"/>
 	</append>

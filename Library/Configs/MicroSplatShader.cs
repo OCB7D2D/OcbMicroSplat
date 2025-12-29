@@ -23,14 +23,10 @@ public class MicroSplatShader
     // ####################################################################
     // ####################################################################
 
-    private DataLoader.DataPathIdentifier PathShaderDetail;
-    private DataLoader.DataPathIdentifier PathShaderDistant;
-    private DataLoader.DataPathIdentifier MetalShaderDetail;
-    private DataLoader.DataPathIdentifier MetalShaderDistant;
-    private DataLoader.DataPathIdentifier PathShaderDetailTess;
-    private DataLoader.DataPathIdentifier PathShaderDistantTess;
-    private DataLoader.DataPathIdentifier MetalShaderDetailTess;
-    private DataLoader.DataPathIdentifier MetalShaderDistantTess;
+    private DataLoader.DataPathIdentifier PathShader;
+    private DataLoader.DataPathIdentifier MetalShader;
+    private DataLoader.DataPathIdentifier PathShaderTess;
+    private DataLoader.DataPathIdentifier MetalShaderTess;
     private DataLoader.DataPathIdentifier PathTexNoiseDetail;
     private DataLoader.DataPathIdentifier PathTexNoiseDistant;
     private DataLoader.DataPathIdentifier PathTexNoisePerlin;
@@ -47,6 +43,12 @@ public class MicroSplatShader
     private Vector2 NoiseNormal1Params = new Vector2(0.6f, 0.225f);
     private Vector2 NoiseNormal2Params = new Vector2(0.325f, 0.175f);
     private Vector2 NoiseNormal3Params = new Vector2(0.1350f, 0.125f);
+
+    // private Vector4 TessParams1 = new Vector4(128, 3, 15, 30);
+    private Vector4 TessParams2 = new Vector4(0.075f, 1.25f, 0.75f, 0);
+
+    private float TessPhongBias = 0.5f;
+    private float RecalcNormals = 0.25f;
 
     private float DistanceResampleAlbedoStrength = 0.85f;
     private float DistanceResampleNormalStrength = 0.65f;
@@ -103,13 +105,31 @@ public class MicroSplatShader
         }
     }
 
+    public static void UpdateShaderQuality(Material mat)
+    {
+        mat.DisableKeyword("_Q_NA");
+        mat.DisableKeyword("_Q_LOW");
+        mat.DisableKeyword("_Q_MED");
+        mat.DisableKeyword("_Q_HIGH");
+        mat.DisableKeyword("_Q_ULTRA");
+        switch (GamePrefs.GetInt(EnumGamePrefs.OptionsGfxTerrainQuality))
+        {
+            case 0: mat.EnableKeyword("_Q_NA"); return;
+            case 1: mat.EnableKeyword("_Q_LOW"); return;
+            case 2: mat.EnableKeyword("_Q_MED"); return;
+            case 3: mat.EnableKeyword("_Q_HIGH"); return;
+            case 4: mat.EnableKeyword("_Q_ULTRA"); return;
+            default: mat.EnableKeyword("_Q_NA"); return;
+        }
+    }
+
     private void LoadAsset<T>(DataLoader.DataPathIdentifier path,
         ref T asset, bool reset = true) where T : Object
     {
         if (reset) asset = null; // Reset first?
         if (!string.IsNullOrEmpty(path.AssetName))
         {
-            string name = string.Format(path.AssetName, GetShaderQuality(), MaxTextures);
+            string name = string.Format(path.AssetName, GetShaderQuality(), "Uber");
             if (asset != null && asset.name == name) return; // Still valid?
             Log.Out("Loading {0}?{1}", System.IO.Path.GetFileName(path.BundlePath), name);
             AssetBundleManager.Instance.LoadAssetBundle(path.BundlePath);
@@ -155,29 +175,27 @@ public class MicroSplatShader
 
     public void LoadTerrainShaders(MeshDescription terrain)
     {
+        Shader shader = null; DataLoader.DataPathIdentifier path;
         // Skip using our shader e.g. in prefab editor
         if (GameManager.IsSplatMapAvailable() == false) return;
-        Shader ShaderDetail = null; Shader ShaderDistant = null;
         // Try to load the shader assets (may load from platform specific asset bundle)
         bool IsMetal = SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal;
-        if (PlayerPrefs.GetInt("TerrainTessellation") > 0) {
-            LoadAsset(IsMetal ? MetalShaderDetailTess : PathShaderDetailTess, ref ShaderDetail, false);
-            LoadAsset(IsMetal ? MetalShaderDistantTess : PathShaderDistantTess, ref ShaderDistant, false);
-        } else {
-            LoadAsset(IsMetal ? MetalShaderDetail : PathShaderDetail, ref ShaderDetail, false);
-            LoadAsset(IsMetal ? MetalShaderDistant : PathShaderDistant, ref ShaderDistant, false);
-        }
+        // Get path according to target platform (mac/win/nix)
+        if (PlayerPrefs.GetInt("TerrainTessellation") > 0)
+        { path = IsMetal ? MetalShaderTess : PathShaderTess; }
+        else { path = IsMetal ? MetalShader : PathShader; }
+        // Load the asset from given bundle
+        LoadAsset(path, ref shader, false);
         // Give error messages to the console if loading failed
-        if (ShaderDetail == null) Log.Error("Could not load custom detail shader: {0}/{1}",
-            PathShaderDetail.BundlePath, PathShaderDetail.AssetName);
-        if (ShaderDistant == null) Log.Error("Could not load custom distant shader: {0}/{1}",
-            PathShaderDistant.BundlePath, PathShaderDistant.AssetName);
+        if (shader == null) Log.Error(
+            "Could not load custom shader: {0}/{1}",
+            path.BundlePath, path.AssetName);
         // Use the new loaded shaders for terrain if found in resources
-        if (ShaderDetail != null && terrain.material != null)
-            terrain.material.shader = ShaderDetail;
-        if (ShaderDistant != null && terrain.materialDistant != null)
-            terrain.materialDistant.shader = ShaderDistant;
-        TessellationOption.ApplyTerrainOptions();
+        if (shader != null && terrain.material != null)
+            terrain.material.shader = shader;
+        if (shader != null && terrain.materialDistant != null)
+            terrain.materialDistant.shader = shader;
+        GameOptions.ApplyTerrainOptions();
     }
 
     // ####################################################################
@@ -207,6 +225,29 @@ public class MicroSplatShader
         mat.SetVector("_TriplanarUVScale", TriplanarUVScale);
         var config = OcbMicroSplat.Config.MicroSplatWorldConfig;
         mat.SetInt("_PCLayerCount", config.BiomeLayers.Count);
+        // mat.SetVector("_TessParams1", TessParams1);
+        mat.SetVector("_TessParams2", TessParams2);
+        mat.SetFloat("_TessPhongBias", TessPhongBias);
+        mat.SetFloat("_RecalcNormals", RecalcNormals);
+        // Use conditional keyword for max textures
+        if (MaxTextures == 24)
+        {
+            mat.DisableKeyword("_MAX28TEXTURES");
+            mat.DisableKeyword("_MAX32TEXTURES");
+            mat.EnableKeyword("_MAX24TEXTURES");
+        }
+        else if (MaxTextures == 28)
+        {
+            mat.DisableKeyword("_MAX24TEXTURES");
+            mat.DisableKeyword("_MAX32TEXTURES");
+            mat.EnableKeyword("_MAX28TEXTURES");
+        }
+        else if (MaxTextures == 32)
+        {
+            mat.DisableKeyword("_MAX24TEXTURES");
+            mat.DisableKeyword("_MAX28TEXTURES");
+            mat.EnableKeyword("_MAX32TEXTURES");
+        }
     }
 
     public void WorldChanged(MeshDescription terrain)
@@ -235,20 +276,18 @@ public class MicroSplatShader
     public void Parse(XElement child)
     {
         var props = MicroSplatXmlConfig.GetDynamicProperties(child);
-        PathShaderDetail = GetPath(props, "ShaderDetail", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex");
-        PathShaderDistant = GetPath(props, "ShaderDistant", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant");
-        MetalShaderDetail = GetPath(props, "MetalShaderDetail", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex");
-        MetalShaderDistant = GetPath(props, "MetalShaderDistant", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant");
-        PathShaderDetailTess = GetPath(props, "ShaderDetailTess", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}VertexTess");
-        PathShaderDistantTess = GetPath(props, "ShaderDistantTess", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}DistantTess");
-        MetalShaderDetailTess = GetPath(props, "MetalShaderDetailTess", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}VertexTess");
-        MetalShaderDistantTess = GetPath(props, "MetalShaderDistantTess", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}DistantTess");
+        PathShader = GetPath(props, "Shader", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplatUber");
+        PathShaderTess = GetPath(props, "ShaderTess", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplatUberTess");
+        MetalShader = GetPath(props, "MetalShader", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplatUber");
+        MetalShaderTess = GetPath(props, "MetalTess", "#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplatUberTess");
         PathTexNoisePerlin = GetPath(props, "NoisePerlin", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_perlin");
         PathTexNoiseDetail = GetPath(props, "NoiseDetail", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise");
         PathTexNoiseDistant = GetPath(props, "NoiseDistant", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise");
         PathTexNoiseNormal1 = GetPath(props, "NoiseNormal1", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_01");
         PathTexNoiseNormal2 = GetPath(props, "NoiseNormal2", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02");
         PathTexNoiseNormal3 = GetPath(props, "NoiseNormal3", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03");
+        // ParseVector4(props, "TessParams1", ref TessParams1);
+        ParseVector4(props, "TessParams2", ref TessParams2);
         props.ParseVec("NoiseHeightData", ref NoiseHeightData);
         props.ParseVec("WorldHeightRange", ref WorldHeightRange);
         props.ParseVec("NoiseNormal1Params", ref NoiseNormal1Params);
@@ -262,6 +301,8 @@ public class MicroSplatShader
         props.ParseFloat("DistanceResampleMaterialStrength", ref DistanceResampleMaterialStrength);
         props.ParseFloat("TriplanarContrast", ref TriplanarContrast);
         ParseVector4(props, "TriplanarUVScale", ref TriplanarUVScale);
+        props.ParseFloat("TessPhongBias", ref TessPhongBias);
+        props.ParseFloat("RecalcNormals", ref RecalcNormals);
     }
 
     // ####################################################################

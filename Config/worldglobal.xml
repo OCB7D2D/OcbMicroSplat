@@ -2,15 +2,11 @@
 	<append xpath="/worldglobal">
 		<microsplat-shader map-only="*">
 			<!-- you may define your own shader if wanted, but we don't really recommend to mess with this directly -->
-			<property name="ShaderDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex"/>
-			<property name="ShaderDistant" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant"/>
-			<property name="ShaderDetailTess" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}VertexTess"/>
-			<property name="ShaderDistantTess" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}DistantTess"/>
+			<property name="Shader" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplatUber"/>
+			<property name="ShaderTess" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplatUberTess"/>
 			<!-- metal means the mac graphics api, which requires a platform specific bundle (can't be bundles into one unfortunately) -->
-			<property name="MetalShaderDetail" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Vertex"/>
-			<property name="MetalShaderDistant" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}Distant"/>
-			<property name="MetalShaderDetailTess" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}VertexTess"/>
-			<property name="MetalShaderDistantTess" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplat{1}{0}DistantTess"/>
+			<property name="MetalShader" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplatUber"/>
+			<property name="MetalShaderTess" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplatUberTess"/>
 
 			<property name="NoisePerlin" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_perlin"/>
 			<property name="NoiseDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise"/>
@@ -30,10 +26,19 @@
 			<property name="NoiseNormal2Params" value="0.325, 0.175"/>
 			<property name="NoiseNormal3Params" value="0.135, 0.125"/>
 
+			<!-- Governed via hardcoded settings to switch in the UI -->
+			<!-- tessallation, mipBias, distance fade min, max -->
+			<!-- <property name="TessParams1" value="128, 3, 15, 30"/> -->
+			<!-- displacement, shaping, upbias, (edge/unused) -->
+			<property name="TessParams2" value="1, 0.85, 0.75, 0"/>
+
+			<property name="TessPhongBias" value="0.25"/>
+			<property name="RecalcNormals" value="0.075"/>
+
 			<property name="ResampleDistanceParams" value="0.25, 0.5, 100"/>
 
-			<property name="DetailNoiseScaleStrengthFade" value="20, 0.4, 15"/>
-			<property name="DistanceNoiseScaleStrengthFade" value="0.25, 0.5, 100, 500"/>
+			<property name="DetailNoiseScaleStrengthFade" value="8, 0.4, 30"/>
+			<property name="DistanceNoiseScaleStrengthFade" value="2, 0.5, 50, 100"/>
 
 			<property name="TriplanarContrast" value="8"/>
 			<property name="TriplanarUVScale" value="1, 1, 0, 0"/>
@@ -61,5 +66,287 @@
 
 			-->
 		</microsplat-shader>
+
+		<!-- snow ground - used by biome only -->
+		<microsplat-texture name="microsplat0">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<!-- render only biome if undamaged -->
+			<property name="TopSoilVoxel" value="0,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.25"/>
+			<property name="TessDisplacementStrength" value="0.5"/>
+			<property name="TessDisplacementUpBias" value="0.5"/>
+		</microsplat-texture>
+
+		<!-- freed to be used by other biome layers -->
+		<microsplat-texture name="microsplat1">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- grass ground - used by biome only -->
+		<microsplat-texture name="microsplat2">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<!-- render only biome if undamaged -->
+			<property name="TopSoilVoxel" value="0,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.075"/>
+			<property name="TessDisplacementStrength" value="0.15"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- freed to be used by other biome layers -->
+		<microsplat-texture name="microsplat3">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- freed to be used by other biome layers -->
+		<microsplat-texture name="microsplat4">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- freed to be used by other biome layers -->
+		<microsplat-texture name="microsplat5">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- concrete seldomly used by splat1 blue channel -->
+		<!-- we remaped it to asphalt road to free up texture -->
+		<!-- seems to be used only by some very old POIs!? -->
+		<microsplat-texture name="microsplat6">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- desert ground - used by biome layers -->
+		<!-- height map seems to be inverted!? -->
+		<microsplat-texture name="microsplat7">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="0.2,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.075"/>
+			<property name="TessDisplacementStrength" value="0.175"/>
+			<property name="TessDisplacementUpBias" value="0.35"/>
+		</microsplat-texture>
+
+		<!-- no longer used by splat map -->
+		<microsplat-texture name="microsplat8">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- no longer used by splat map -->
+		<microsplat-texture name="microsplat9">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- burnt ground - by splat and biome -->
+		<microsplat-texture name="microsplat10">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.1"/>
+			<property name="TessDisplacementStrength" value="0.2"/>
+			<property name="TessDisplacementUpBias" value="0.35"/>
+		</microsplat-texture>
+
+		<!-- desert blend one - by biome layers only -->
+		<microsplat-texture name="microsplat11">
+			<property name="BlendWeight" value="2"/>
+			<property name="CurveWeight" value="0.25"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.1"/>
+			<property name="TessDisplacementStrength" value="0.3"/>
+			<property name="TessDisplacementUpBias" value="0.15"/>
+		</microsplat-texture>
+
+		<!-- desert blend two - by biome layers only -->
+		<microsplat-texture name="microsplat12">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.1"/>
+			<property name="TessDisplacementStrength" value="0.25"/>
+			<property name="TessDisplacementUpBias" value="0.15"/>
+		</microsplat-texture>
+
+		<!-- dirt ground - by splat and voxel -->
+		<!-- seldom use in splat2 green channel -->
+		<!-- remapped from that splat map channel -->
+		<microsplat-texture name="microsplat13">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<!-- dirt can show on mountain sides -->
+			<!-- most obvious in the snow biome -->
+			<property name="TopSoilVoxel" value="0.25,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0.125"/>
+		</microsplat-texture>
+
+		<!-- gravel road - by splat and voxel -->
+		<!-- heavy use in splat1 green channel -->
+		<!-- remapped from that splat map channel -->
+		<microsplat-texture name="microsplat14">
+			<property name="BlendWeight" value="0.5"/>
+			<property name="CurveWeight" value="0.25"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<!-- never blend biome over streets -->
+			<property name="TopSoilBiome" value="0.1,0"/>
+			<property name="TessDisplacementOffset" value="-0.15"/>
+			<property name="TessDisplacementStrength" value="0.2"/>
+			<property name="TessDisplacementUpBias" value="0.25"/>
+		</microsplat-texture>
+
+		<!-- coal ore - by voxel only -->
+		<microsplat-texture name="microsplat15">
+			<property name="BlendWeight" value="2"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.15"/>
+			<property name="TessDisplacementStrength" value="0.4"/>
+			<property name="TessDisplacementUpBias" value="0.0"/>
+		</microsplat-texture>
+
+		<!-- asphalt road - by splat an voxel -->
+		<!-- heavy use in splat1 red channel -->
+		<!-- remapped from that splat map channel -->
+		<microsplat-texture name="microsplat16">
+			<property name="BlendWeight" value="0.75"/>
+			<property name="CurveWeight" value="0.25"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<!-- never blend biome over streets -->
+			<property name="TopSoilBiome" value="0.1,0"/>
+			<property name="TessDisplacementOffset" value="-0.065"/>
+			<property name="TessDisplacementStrength" value="0.2"/>
+			<property name="TessDisplacementUpBias" value="0.75"/>
+		</microsplat-texture>
+
+		<!-- iron ore - by voxel only-->
+		<microsplat-texture name="microsplat17">
+			<property name="BlendWeight" value="2"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.15"/>
+			<property name="TessDisplacementStrength" value="0.3"/>
+			<property name="TessDisplacementUpBias" value="0.0"/>
+		</microsplat-texture>
+
+		<!-- potassium ore - by voxel only -->
+		<microsplat-texture name="microsplat18">
+			<property name="BlendWeight" value="2"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0"/>
+		</microsplat-texture>
+
+		<!-- rock slope - by voxel and biome (slope) -->
+		<microsplat-texture name="microsplat19">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.2"/>
+			<property name="TessDisplacementStrength" value="0.2"/>
+			<property name="TessDisplacementUpBias" value="0.5"/>
+		</microsplat-texture>
+
+		<!-- desert stone - by voxel and biome (slope) -->
+		<!-- seems to have some holes in height map? -->
+		<microsplat-texture name="microsplat20">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<!-- set to zero due to weird holyness? -->
+			<property name="TessDisplacementOffset" value="-0.05"/>
+			<property name="TessDisplacementStrength" value="0.1"/>
+			<property name="TessDisplacementUpBias" value="0"/>
+		</microsplat-texture>
+
+		<!-- oil shale - by voxel only -->
+		<microsplat-texture name="microsplat21">
+			<property name="BlendWeight" value="2"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.075"/>
+			<property name="TessDisplacementStrength" value="0.225"/>
+			<property name="TessDisplacementUpBias" value="0.0"/>
+		</microsplat-texture>
+
+		<!-- lead ore - by voxel only -->
+		<microsplat-texture name="microsplat22">
+			<property name="BlendWeight" value="2"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.125"/>
+			<property name="TessDisplacementStrength" value="0.25"/>
+			<property name="TessDisplacementUpBias" value="0.0"/>
+		</microsplat-texture>
+
+		<!-- destroyed ground (bricks) - by voxel only -->
+		<!-- seems to have a pretty bad height map -->
+		<microsplat-texture name="microsplat23">
+			<property name="BlendWeight" value="1"/>
+			<property name="CurveWeight" value="0.5"/>
+			<property name="TopSoilVoxel" value="1,1"/>
+			<property name="TopSoilBiome" value="1,0"/>
+			<property name="TessDisplacementOffset" value="-0.1"/>
+			<property name="TessDisplacementStrength" value="0.2"/>
+			<property name="TessDisplacementUpBias" value="0"/>
+		</microsplat-texture>
 	</append>
 </configs>

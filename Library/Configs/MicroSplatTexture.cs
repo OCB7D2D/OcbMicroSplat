@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using UnityEngine;
 using static StringParsers;
 
 public class ResourceAssetUrl
@@ -48,11 +49,20 @@ public class MicroSplatTexture
     public bool IsUsedByBiome = false;
     public bool IsUsedByVoxel = false;
     public bool IsUsedBySplat = false;
+    public bool HasSplatUVScale = false;
+    public bool HasSplatUVOffset = false;
 
     // Per texture shader settings
-    public UnityEngine.Vector2 SplatUVScale;
-    public UnityEngine.Vector2 SplatUVOffset;
+    public UnityEngine.Vector2 SplatUVScale = UnityEngine.Vector2.one;
+    public UnityEngine.Vector2 SplatUVOffset = UnityEngine.Vector2.zero;
+    public float TessDisplacementUpBias = 0.5f;
+    public float TessDisplacementOffset = -0.05f;
+    public float TessDisplacementStrength = 0.1f;
+    public float BlendWeight = 1.0f;
+    public float CurveWeight = 0.5f;
     // public float Metallic = 0f;
+    public Vector2 TopSoilVoxel = new Vector2(0.5f, 1);
+    public Vector2 TopSoilBiome = new Vector2(1, 0.25f);
 
     // Config for MicroSplat assets
     public ResourceAssetUrl Diffuse = null;
@@ -73,6 +83,20 @@ public class MicroSplatTexture
 
     // ####################################################################
     // ####################################################################
+
+    public void CopyConfigFrom(MicroSplatTexture config)
+    {
+        if (config == null) return;
+        SplatUVScale = config.SplatUVScale;
+        SplatUVOffset = config.SplatUVOffset;
+        TessDisplacementUpBias = config.TessDisplacementUpBias;
+        TessDisplacementOffset = config.TessDisplacementOffset;
+        TessDisplacementStrength = config.TessDisplacementStrength;
+        TopSoilBiome = config.TopSoilBiome;
+        TopSoilVoxel = config.TopSoilVoxel;
+        BlendWeight = config.BlendWeight;
+        CurveWeight = config.CurveWeight;
+    }
 
     public MicroSplatTexture(int id = -1, bool voxel = false)
     {
@@ -99,6 +123,17 @@ public class MicroSplatTexture
             else if (name == "SwitchNormal") SwitchNormal = bool.Parse(value);
             else if (name == "SplatUVScale") SplatUVScale = ParseVector2(value);
             else if (name == "SplatUVOffset") SplatUVOffset = ParseVector2(value);
+            else if (name == "TessDisplacementUpBias") TessDisplacementUpBias = float.Parse(value);
+            else if (name == "TessDisplacementOffset") TessDisplacementOffset = float.Parse(value);
+            else if (name == "TessDisplacementStrength") TessDisplacementStrength = float.Parse(value);
+            else if (name == "TopSoilBiome") TopSoilBiome = ParseVector2(value);
+            else if (name == "TopSoilVoxel") TopSoilVoxel = ParseVector2(value);
+            else if (name == "BlendWeight") BlendWeight = float.Parse(value);
+            else if (name == "CurveWeight") CurveWeight = float.Parse(value);
+            // Remeber custom configs for certain items
+            // Otherwise would overwrite from vanilla props
+            if (name == "SplatUVScale") HasSplatUVScale = true;
+            else if (name == "SplatUVOffset") HasSplatUVOffset = true;
             // else if (name == "Metallic") Metallic = float.Parse(value);
         }
     }

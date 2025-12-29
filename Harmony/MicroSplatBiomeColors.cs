@@ -11,19 +11,6 @@ using UnityEngine;
 static class ChunkProviderBiomeColorsPatch
 {
 
-    static ChunkProviderGenerateWorldFromRaw generateWorldFromRaw = null;
-
-    private static readonly HarmonyFieldProxy<IBiomeProvider> BiomeProviderField =
-        new HarmonyFieldProxy<IBiomeProvider>(typeof(ChunkProviderGenerateWorld), "m_BiomeProvider");
-
-    [HarmonyPatch(typeof(ChunkProviderGenerateWorldFromRaw), "Init")]
-    static class CaptureChunkProviderOnInitForLater
-    {
-        static void Prefix(ChunkProviderGenerateWorldFromRaw __instance)
-            => generateWorldFromRaw = __instance;
-    }
-
-
     [HarmonyPatch]
     static class GenerateWorldFromRawInitPatch
     {

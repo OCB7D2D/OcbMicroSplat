@@ -16,6 +16,9 @@ public class OcbMicroSplat : IModApi
     public static string DecalBundlePath;
     public static string DecalShaderBundle;
 
+    const PerTexFloat CurveInterpolator = (PerTexFloat)(4 * 19 + 0);
+    const PerTexFloat BlendWeightFactor = (PerTexFloat)(4 * 19 + 3);
+
     // ####################################################################
     // ####################################################################
 
@@ -146,6 +149,12 @@ public class OcbMicroSplat : IModApi
             Mathf.RoundToInt((num - (int)num) * 4f));
     }
 
+    public Color GetPropColor(MicroSplatPropData prop, int textureIndex, PerTexFloat channel)
+    {
+        int num = Mathf.RoundToInt((float)channel * 0.25f);
+        return prop.values[textureIndex * 32 + num];
+    }
+
     public void PrepareMicroSplatPatches(World world)
     {
 
@@ -186,8 +195,13 @@ public class OcbMicroSplat : IModApi
         for (int i = 0; i < 24; i++)
         {
             if (!(Config.GetTextureConfig($"microsplat{i}") is MicroSplatTexture cfg)) continue;
-            cfg.SplatUVScale = GetPropVector2(msPropData, i, PerTexVector2.SplatUVScale);
-            cfg.SplatUVOffset = GetPropVector2(msPropData, i, PerTexVector2.SplatUVOffset);
+            if (!cfg.HasSplatUVScale) cfg.SplatUVScale = GetPropVector2(msPropData, i, PerTexVector2.SplatUVScale);
+            if (!cfg.HasSplatUVOffset) cfg.SplatUVOffset = GetPropVector2(msPropData, i, PerTexVector2.SplatUVOffset);
+            // We know that we will never have any useful values for these in vanilla
+            // cfg.TessDisplacementUpBias = GetPropFloat(msPropData, i, PerTexFloat.DisplacementBias);
+            // cfg.TessDisplacementOffset = GetPropFloat(msPropData, i, PerTexFloat.DisplacementOffset);
+            // cfg.TessDisplacementStrength = GetPropFloat(msPropData, i, PerTexFloat.DisplacementStength);
+            // if (cfg.TessDisplacementStrength == 0) cfg.TessDisplacementStrength = 1;
             // cfg.Metallic = GetPropFloat(msPropData, i, PerTexFloat.Metallic);
         }
 
@@ -201,6 +215,12 @@ public class OcbMicroSplat : IModApi
             // Free two slots for use by new custom biomes
             if (layer.textureIndex == 1) layer.textureIndex = 19;
             else if (layer.textureIndex == 3) layer.textureIndex = 20;
+            // These are mapped directly in the shader code
+            else if (layer.textureIndex == 4) layer.textureIndex = 16;
+            else if (layer.textureIndex == 6) layer.textureIndex = 16;
+            else if (layer.textureIndex == 5) layer.textureIndex = 14;
+            else if (layer.textureIndex == 8) layer.textureIndex = 23;
+            else if (layer.textureIndex == 9) layer.textureIndex = 13;
             var cfg = Config.GetTextureConfig($"microsplat{layer.textureIndex}");
             if (cfg != null) cfg.IsUsedByBiome = true;
         }
@@ -235,19 +255,6 @@ public class OcbMicroSplat : IModApi
             }
         }
 
-        foreach (var tex in Config.MicroSplatWorldConfig.TexPatches)
-        {
-            msPropData.SetValue(tex.Key,
-                PerTexVector2.SplatUVScale,
-                tex.Value.SplatUVScale);
-            msPropData.SetValue(tex.Key,
-                PerTexVector2.SplatUVOffset,
-                tex.Value.SplatUVOffset);
-            // msPropData.SetValue(tex.Key,
-            //     PerTexFloat.Metallic,
-            //     tex.Value.Metallic);
-        }
-
         // Process all textures that are registered for in-use
         foreach (var kv in Config.MicroSplatTexturesConfigs.Textures)
         {
@@ -260,23 +267,15 @@ public class OcbMicroSplat : IModApi
                     kv.Key, texture.SlotIdx,
                     texture.GetUseString());
                 #endif
-                msPropData.SetValue(texture.SlotIdx,
-                    PerTexVector2.SplatUVScale,
-                    texture.SplatUVScale);
-                msPropData.SetValue(texture.SlotIdx,
-                    PerTexVector2.SplatUVOffset,
-                    texture.SplatUVOffset);
-                // msPropData.SetValue(texture.SlotIdx,
-                //     PerTexFloat.Metallic,
-                //     texture.Metallic);
+                SetupPropData(texture.SlotIdx, texture);
                 continue;
             }
             // Texture is only used as biome, so it can stay below index 12
             // As index below 12 can not be addressed by voxels via UVs
             if (texture.IsUsedByVoxel || texture.IsUsedByBiome)
             {
-                // Push textures used by voxels above slot 15
-                int min = texture.IsUsedByVoxel ? 16 : 0;
+                // Push textures used by voxels above slot 2
+                int min = texture.IsUsedByVoxel ? 2 : 0;
                 texture.SlotIdx = GetFreeSlot(occupied, min);
                 if (texture.SlotIdx == -1) throw new Exception(
                     "No more free slots in MicroSplat array");
@@ -302,15 +301,7 @@ public class OcbMicroSplat : IModApi
             #endif
             // Update the UvScale property
             // ToDo: Add more per-tex stuff?
-            msPropData.SetValue(texture.SlotIdx,
-                PerTexVector2.SplatUVScale,
-                texture.SplatUVScale);
-            msPropData.SetValue(texture.SlotIdx,
-                PerTexVector2.SplatUVOffset,
-                texture.SplatUVOffset);
-            // msPropData.SetValue(texture.SlotIdx,
-            //     PerTexFloat.Metallic,
-            //     texture.Metallic);
+            SetupPropData(texture.SlotIdx, texture);
 
             // Update terrain indexes for registered blocks that need updating
             if (Config.MicroSplatTexturesConfigs.Blocks.TryGetValue(kv.Key, out var blocks))
@@ -321,6 +312,11 @@ public class OcbMicroSplat : IModApi
                     block.TerrainTAIndex = kv.Value.SlotIdx;
                 }
             }
+        }
+
+        foreach (var tex in Config.MicroSplatWorldConfig.TexPatches)
+        {
+            SetupPropData(tex.Key, tex.Value);
         }
 
         MicroSplatBiomeLayer.PatchMicroSplatLayers(msProcData.layers);
@@ -337,6 +333,34 @@ public class OcbMicroSplat : IModApi
         Log.Out("#############################################");
         #endif
 
+    }
+
+    private static void SetupPropData(int idx, MicroSplatTexture texture)
+    {
+        msPropData.SetValue(idx,
+            PerTexVector2.SplatUVOffset,
+            texture.SplatUVOffset);
+        msPropData.SetValue(idx,
+            PerTexFloat.DisplacementBias,
+            texture.TessDisplacementUpBias);
+        msPropData.SetValue(idx,
+            PerTexFloat.DisplacementOffset,
+            texture.TessDisplacementOffset);
+        msPropData.SetValue(texture.SlotIdx,
+            PerTexFloat.DisplacementStength,
+            texture.TessDisplacementStrength);
+        msPropData.SetValue(idx,
+            CurveInterpolator,
+            texture.CurveWeight);
+        msPropData.SetValue(idx,
+            BlendWeightFactor,
+            texture.BlendWeight);
+        msPropData.SetValue(idx,
+            PerTexVector2.SplatUVScale,
+            texture.SplatUVScale);
+        // msPropData.SetValue(idx,
+        //     PerTexFloat.Metallic,
+        //     texture.Metallic);
     }
 
     // ####################################################################

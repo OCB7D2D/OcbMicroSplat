@@ -111,16 +111,6 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
         return $"missing {name}";
     }
 
-    static readonly HarmonyFieldProxy<MicroSplatPropData> VoxelMeshTerrainPropData =
-        new HarmonyFieldProxy<MicroSplatPropData>(typeof(VoxelMeshTerrain), "msPropData");
-    static readonly HarmonyFieldProxy<MicroSplatProceduralTextureConfig> VoxelMeshTerrainProcData =
-        new HarmonyFieldProxy<MicroSplatProceduralTextureConfig>(typeof(VoxelMeshTerrain), "msProcData");
-
-    static readonly HarmonyFieldProxy<Texture2D> VoxelMeshTerrainProcCurveTex =
-        new HarmonyFieldProxy<Texture2D>(typeof(VoxelMeshTerrain), "msProcCurveTex");
-    static readonly HarmonyFieldProxy<Texture2D> VoxelMeshTerrainProcParamTex =
-        new HarmonyFieldProxy<Texture2D>(typeof(VoxelMeshTerrain), "msProcParamTex");
-
     public float GetValue(MicroSplatPropData prop, int textureIndex, MicroSplatPropData.PerTexFloat channel)
     {
         int y = (int)((double)channel / 4.0);
@@ -151,6 +141,10 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
         if (mat.HasVector("_DistanceNoiseScaleStrengthFade")) Log.Out("DistanceNoiseScaleStrengthFade: {0}", mat.GetVector("_DistanceNoiseScaleStrengthFade"));
         if (mat.HasFloat("_TriplanarContrast")) Log.Out("TriplanarContrast: {0}", mat.GetFloat("_TriplanarContrast"));
         if (mat.HasVector("_TriplanarUVScale")) Log.Out("TriplanarUVScale: {0}", mat.GetVector("_TriplanarUVScale"));
+        // if (mat.HasVector("_TessParams1")) Log.Out("TessParams1: {0}", mat.GetVector("_TessParams1"));
+        if (mat.HasVector("_TessParams2")) Log.Out("TessParams2: {0}", mat.GetVector("_TessParams2"));
+        if (mat.HasVector("_TessPhongBias")) Log.Out("TessPhongBias: {0}", mat.GetVector("_TessPhongBias"));
+        if (mat.HasVector("_RecalcNormals")) Log.Out("RecalcNormals: {0}", mat.GetVector("_RecalcNormals"));
     }
 
     private static string CleanList(object val)
@@ -187,13 +181,16 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     Log.Out("Export took {0} seconds",
                         watch.ElapsedMilliseconds / 1000f);
                     return;
+                case "heightanalyze":
+                    MicroSplatDump.HeightAnalyize();
+                    return;
                 case "shader":
                     Log.Out("Inspect shader {0}",
                         mesh.material.shader);
                     DumpeShaderConfig(mesh.material);
                     return;
                 case "layers":
-                    if (VoxelMeshTerrainProcData.Get(null) is MicroSplatProceduralTextureConfig cfg)
+                    if (VoxelMeshTerrain.msProcData is MicroSplatProceduralTextureConfig cfg)
                     {
                         for (int i = 0; i < cfg.layers.Count; i++)
                         {
@@ -219,52 +216,38 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     }
                     return;
                 case "off":
-                    AccessTools.Method(typeof(VoxelMeshTerrain),
-                        "InitMicroSplat").Invoke(null, null);
+                    VoxelMeshTerrain.InitMicroSplat();
                     string textureAtlasClass = mesh.TextureAtlasClass;
                     Type type = Type.GetType(textureAtlasClass + ",Assembly-CSharp");
                     TextureAtlas instance = (TextureAtlas)Activator.CreateInstance(type);
-                    HarmonyFieldProxy<MeshDescriptionCollection> Collection = new HarmonyFieldProxy
-                        <MeshDescriptionCollection>(typeof(WorldStaticData), "meshDescCol");
-                    var meshDescCol = Collection.Get(null);
+                    var meshDescCol = WorldStaticData.meshDescCol;
                     instance.LoadTextureAtlas(MeshDescription.MESH_TERRAIN, meshDescCol, true);
                     mesh.Init(MeshDescription.MESH_TERRAIN, instance);
                     LoadManager.AddressableRequestTask<Material> assetRequestTask = LoadManager.
                         LoadAssetFromAddressables<Material>("TerrainTextures",
                         "Microsplat/MicroSplatTerrainInGame.mat", _loadSync: true);
-                    var material = UnityEngine.Object.Instantiate<Material>(assetRequestTask.Asset);
-                    mesh.materials = new Material[1];
-                    mesh.materials[0] = material;
+                    var material = UnityEngine.Object.Instantiate(assetRequestTask.Asset);
+                    mesh.materials[0].shader = material.shader;
                     mesh.materials[0].name = "Near Terrain";
                     mesh.materials[0].SetFloat("_ShaderMode", 2f);
-                    mesh.materialDistant = new Material(mesh.materials[0]);
+                    mesh.materialDistant.shader = material.shader;
                     mesh.materialDistant.SetFloat("_ShaderMode", 1f);
                     mesh.materialDistant.name = "Distant Terrain";
                     mesh.ReloadTextureArrays(true);
                     assetRequestTask.Release();
-                    foreach (var mat in UnityEngine.Object.FindObjectsOfType<Material>())
-                    {
-                        if (mat.name == "Distant Terrain") mat.shader = mesh.materialDistant.shader;
-                        else if (mat.name == "Near Terrain") mat.shader = mesh.materials[0].shader;
-                    }
                     return;
                 case "on":
                     OcbMicroSplat.Config.TerrainShaderConfig.LoadTerrainShaders(mesh);
-                    var data = VoxelMeshTerrainProcData.Get(null);
+                    var data = VoxelMeshTerrain.msProcData;
                     var curveTex = data.GetCurveTexture();
                     var paramTex = data.GetParamTexture();
-                    VoxelMeshTerrainProcCurveTex.Set(null, curveTex);
-                    VoxelMeshTerrainProcParamTex.Set(null, paramTex);
+                    VoxelMeshTerrain.msProcCurveTex = curveTex;
+                    VoxelMeshTerrain.msProcParamTex = paramTex;
                     mesh.material.SetTexture("_ProcTexCurves", curveTex);
                     mesh.material.SetTexture("_ProcTexParams", paramTex);
                     mesh.materialDistant.SetTexture("_ProcTexCurves", curveTex);
                     mesh.materialDistant.SetTexture("_ProcTexParams", paramTex);
                     OcbMicroSplat.Config.TerrainShaderConfig.WorldChanged(mesh);
-                    foreach (var mat in UnityEngine.Object.FindObjectsOfType<Material>())
-                    {
-                        if (mat.name == "Distant Terrain") mat.shader = mesh.materialDistant.shader;
-                        else if (mat.name == "Near Terrain") mat.shader = mesh.materials[0].shader;
-                    }
                     return;
             }
 
@@ -273,7 +256,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
             {
                 case "prop":
                     var slot = int.Parse(_params[1]);
-                    MicroSplatPropData prop = VoxelMeshTerrainPropData.Get(null);
+
+                    MicroSplatPropData prop = VoxelMeshTerrain.msPropData;
                     foreach (PerTexFloat channel in Enum.GetValues(typeof(MicroSplatPropData.PerTexFloat)))
                     {
                         Log.Out(" {0} => {1}", channel, GetValue(prop, slot, channel));
@@ -281,7 +265,7 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     return;
                 case "layer":
                     var idx = int.Parse(_params[1]);
-                    var data = VoxelMeshTerrainProcData.Get(null);
+                    var data = VoxelMeshTerrain.msProcData;
                     var layer = data.layers[idx];
                     Log.Out("<property name=\"weight\" value=\"{0}\"/>", layer.weight);
                     Log.Out("<property name=\"biome-weights-a\" value=\"{0}\"/>", CleanList(layer.biomeWeights));
@@ -316,13 +300,21 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     Log.Out("<property name=\"cavity-active\" value=\"{0}\"/>", layer.cavityMapActive);
                     Log.Out("<property name=\"cavity-curve-mode\" value=\"{0}\"/>", layer.cavityCurveMode);
                     return;
+                case "kwdon":
+                    mesh.material.EnableKeyword(_params[1]);
+                    mesh.materialDistant.EnableKeyword(_params[1]);
+                    return;
+                case "kwdoff":
+                    mesh.material.DisableKeyword(_params[1]);
+                    mesh.materialDistant.DisableKeyword(_params[1]);
+                    return;
             }
 
         if (_params.Count == 3)
             switch (_params[0])
             {
                 case "prop":
-                    MicroSplatPropData prop = VoxelMeshTerrainPropData.Get(null);
+                    MicroSplatPropData prop = VoxelMeshTerrain.msPropData;
                     for (int i = 0; i < 32; i += 1)
                     {
                         prop.SetValue(i, (PerTexFloat)int.Parse(_params[1]), float.Parse(_params[2]));
@@ -366,7 +358,7 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     return;
                 case "layer":
                     var idx = int.Parse(_params[1]);
-                    var data = VoxelMeshTerrainProcData.Get(null);
+                    var data = VoxelMeshTerrain.msProcData;
                     var layer = data.layers[idx];
                     switch (_params[2])
                     {
@@ -400,8 +392,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     var paramTex = data.GetParamTexture();
                     //MicroSplatBiome._msProcCurveTex = curveTex;
                     //MicroSplatBiome._msProcParamTex = paramTex;
-                    VoxelMeshTerrainProcCurveTex.Set(null, curveTex);
-                    VoxelMeshTerrainProcParamTex.Set(null, paramTex);
+                    VoxelMeshTerrain.msProcCurveTex = curveTex;
+                    VoxelMeshTerrain.msProcParamTex = paramTex;
                     mesh.material.SetTexture("_ProcTexCurves", curveTex);
                     mesh.material.SetTexture("_ProcTexParams", paramTex);
                     mesh.materialDistant.SetTexture("_ProcTexCurves", curveTex);
