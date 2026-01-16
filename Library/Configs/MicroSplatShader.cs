@@ -19,6 +19,7 @@ public class MicroSplatShader
     private Texture2D TexNoiseNormal1;
     private Texture2D TexNoiseNormal2;
     private Texture2D TexNoiseNormal3;
+    private Texture2D TexWindGlitter;
 
     // ####################################################################
     // ####################################################################
@@ -33,6 +34,7 @@ public class MicroSplatShader
     private DataLoader.DataPathIdentifier PathTexNoiseNormal1;
     private DataLoader.DataPathIdentifier PathTexNoiseNormal2;
     private DataLoader.DataPathIdentifier PathTexNoiseNormal3;
+    private DataLoader.DataPathIdentifier PathTexWindGlitter;
 
     // ####################################################################
     // ####################################################################
@@ -150,6 +152,7 @@ public class MicroSplatShader
         LoadAsset(PathTexNoiseNormal1, ref TexNoiseNormal1, false);
         LoadAsset(PathTexNoiseNormal2, ref TexNoiseNormal2, false);
         LoadAsset(PathTexNoiseNormal3, ref TexNoiseNormal3, false);
+        LoadAsset(PathTexWindGlitter, ref TexWindGlitter, false);
     }
 
     private void UnloadTexture(ref Texture2D texture)
@@ -168,6 +171,7 @@ public class MicroSplatShader
         UnloadTexture(ref TexNoiseNormal1);
         UnloadTexture(ref TexNoiseNormal2);
         UnloadTexture(ref TexNoiseNormal3);
+        UnloadTexture(ref TexWindGlitter);
     }
 
     // ####################################################################
@@ -248,6 +252,7 @@ public class MicroSplatShader
             mat.DisableKeyword("_MAX28TEXTURES");
             mat.EnableKeyword("_MAX32TEXTURES");
         }
+        mat.SetTexture("_GlitterWind", TexWindGlitter);
     }
 
     public void WorldChanged(MeshDescription terrain)
@@ -286,6 +291,7 @@ public class MicroSplatShader
         PathTexNoiseNormal1 = GetPath(props, "NoiseNormal1", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_01");
         PathTexNoiseNormal2 = GetPath(props, "NoiseNormal2", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02");
         PathTexNoiseNormal3 = GetPath(props, "NoiseNormal3", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03");
+        PathTexWindGlitter = GetPath(props, "NoiseNormal3", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_windglitter");
         // ParseVector4(props, "TessParams1", ref TessParams1);
         ParseVector4(props, "TessParams2", ref TessParams2);
         props.ParseVec("NoiseHeightData", ref NoiseHeightData);
