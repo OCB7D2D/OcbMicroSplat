@@ -1,0 +1,261 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb9b962dd7675847a24903344229fee, type: 3}
+  m_Name: TA_Decals
+  m_EditorClassIdentifier: 
+  Size: 20
+  Path: 
+  TexSize: 1
+  WrapMode: 0
+  FilterMode: 2
+  AnisoLevel: 8
+  Textures:
+  - Albedo: {fileID: 2800000, guid: fd97368895255ff489533102eb43934b, type: 3}
+    Height: {fileID: 2800000, guid: 041f75c4bc66d374d815bdcc1d9998e8, type: 3}
+    Normal: {fileID: 2800000, guid: 9f247347a81a7f24ba3340d47fc41ac3, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 0a30d66a289bf8b439020753ed100e89, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 8ab837cdc24673a49b9c9cabb7adb80c, type: 3}
+    Occlusion: {fileID: 2800000, guid: 4bcf357a99926a74da208131a782bf39, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 7f6c5f24182398c42a8b49d75223c816, type: 3}
+    Height: {fileID: 2800000, guid: 0c9798ae1ec1814459b555c7949e1453, type: 3}
+    Normal: {fileID: 2800000, guid: 142c05d7342f3cb45937887eb77175ea, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 01f87013ed9ee104a9a2d5b89a827e6d, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: bfbc8a0e86a01c1459d287302139328f, type: 3}
+    Occlusion: {fileID: 2800000, guid: facd9f535453acf47beb105e19c5af6a, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 9dc1e6eee9877d44999f736bda081576, type: 3}
+    Height: {fileID: 2800000, guid: 7c31863083444974e9fee758ae94b438, type: 3}
+    Normal: {fileID: 2800000, guid: 9e095bca492c2654d8600b0b5d8e94cc, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: e198dcf1c3dec1f4f94f55ce7f23f0f0, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 8633a2f1dc11c1d458bbeffe6b4f0130, type: 3}
+    Occlusion: {fileID: 2800000, guid: a5ccd2656398fc64abd64bba78330b64, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 9ed0b27b7e06e2f42a82e4fba17e2ad3, type: 3}
+    Height: {fileID: 2800000, guid: 2e56fdc1e64803d45a7016e95d105d91, type: 3}
+    Normal: {fileID: 2800000, guid: db3d7c2ab7ee832458da338d603d7275, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 78abf1f30eda97b448fca7e88f6f7cf9, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 5e6e17ac3cda0714aba2851f8a749676, type: 3}
+    Occlusion: {fileID: 2800000, guid: 58242855e2e6ab245bada016dbf59bb6, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 82ccadb7c81e2c146950272aa3c1cf24, type: 3}
+    Height: {fileID: 2800000, guid: f1fd59d317ce6ff48a6b8ee092fc05a1, type: 3}
+    Normal: {fileID: 2800000, guid: 192410fe0f0b5eb44b0b475c9f112119, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 1538bc736d73a0e49b95f097bca78f6a, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: c6fe1f8e650957f4f925569c609d60ab, type: 3}
+    Occlusion: {fileID: 2800000, guid: aacd706b56b3cb6488ab2f90cb370154, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 9075f7615d21efc43b11b50711ee4b7c, type: 3}
+    Height: {fileID: 2800000, guid: be794b789bcd3184194000d7715e41d1, type: 3}
+    Normal: {fileID: 2800000, guid: 40a3d03a7c98d8c4ebd1551d873c0356, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: e8ac87dd1e7c079449915aaa4bb0d0c9, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 74883b01baccdc94c8cf1ad3b0fba716, type: 3}
+    Occlusion: {fileID: 2800000, guid: 1dc397d053e7d764b834a2c3904f1191, type: 3}
+    Emission: {fileID: 2800000, guid: 9075f7615d21efc43b11b50711ee4b7c, type: 3}
+  - Albedo: {fileID: 2800000, guid: f313870565e414246850d6cb749d4576, type: 3}
+    Height: {fileID: 2800000, guid: 0b7161c7898dbf34c8fac886ae5e14b0, type: 3}
+    Normal: {fileID: 2800000, guid: a6a1b52344696ad47bd6152901dd9341, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 34367074bce04ef45915b2df4fedb460, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 61f1165ea5302844b890f395b661e0b1, type: 3}
+    Occlusion: {fileID: 2800000, guid: 32a3a9c7191de2443ae2bec51099c25f, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: cc404d910d3a44747a37cd0bb213284b, type: 3}
+    Height: {fileID: 2800000, guid: 0772ac0906defcd4c943741e7c303c0a, type: 3}
+    Normal: {fileID: 2800000, guid: 5323a30472d9b1d478a044b2003862ca, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 3a39dd1db7f046842a6f3416340fc8d4, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 61a4dc80c5d7cd9408d8ee9014cb0a0a, type: 3}
+    Occlusion: {fileID: 2800000, guid: 234699a8d0e70104f81f31998ac690d4, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 25a059813bbd2f441abb92b5e5e20fb2, type: 3}
+    Height: {fileID: 2800000, guid: f390658f3d464ae42b5eda7eacdfdb9d, type: 3}
+    Normal: {fileID: 2800000, guid: d8c2bdf0782a1314cbc777ab7d0bca69, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 64720613c04ab2d469cd9c544e016f90, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 20e7827fc08db3d42b0d2e453f13329c, type: 3}
+    Occlusion: {fileID: 2800000, guid: 1998fe41844acbb47a7eb44bcf5adcaf, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: c72f1b7ae9a25b84dbe20de02790bfce, type: 3}
+    Height: {fileID: 2800000, guid: 41b50527ace301a4da64016c0e30f583, type: 3}
+    Normal: {fileID: 2800000, guid: 82be06421e5c29c47b3660f42084bb1e, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 6760b29158bb10745abfc17c3dc8fcfd, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: fca6e0a3e4b2b64458b0344735cdd1a1, type: 3}
+    Occlusion: {fileID: 2800000, guid: adab4128fb2a32e4f9300bff501a6a89, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 8e3da7ebda3ea6a4588c1bc2b40752e9, type: 3}
+    Height: {fileID: 2800000, guid: 319af5a621506d944ab7d87e0c539aba, type: 3}
+    Normal: {fileID: 2800000, guid: 623d5c8e93818414bb91b34690790c50, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: ddc7b8f9b92c3de4aaec76111a4198be, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: b17f79b4ef49ffa4bb279b5ed0b0b658, type: 3}
+    Occlusion: {fileID: 2800000, guid: 71a6f19505a96414f913c52a1211fef6, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 0d32eb104cd7f4c44b70cf8e23ad589b, type: 3}
+    Height: {fileID: 2800000, guid: 63de6b437ede3d843b4cec00ebe516ce, type: 3}
+    Normal: {fileID: 2800000, guid: 8928f0509e76bb64a97d2f874fd0a78a, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: d2cb8817178b5e74cab3421b240f6074, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: b32b0220d120c314f8175ab94cb1dacf, type: 3}
+    Occlusion: {fileID: 2800000, guid: 7560af89fe92a1b4db71bbd13037df6d, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 75e5f8c1caef19b4491cc142439690a2, type: 3}
+    Height: {fileID: 2800000, guid: 71ee4e8141e583d43af5994c9bbc594f, type: 3}
+    Normal: {fileID: 2800000, guid: 0af4a74e9e009224b9f3eb54dbffac17, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: 782c83e141d27ad45b714d5ca8969b1c, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: c118d200af312364ab78c540b47c13b6, type: 3}
+    Occlusion: {fileID: 2800000, guid: f8652e3afd1a87e44a3a9cf67020c7c3, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 78fb908993f9d80418b0b9bce03da9e0, type: 3}
+    Height: {fileID: 2800000, guid: d558c25da5ca88c488796615ca5ccd1f, type: 3}
+    Normal: {fileID: 2800000, guid: c5f0f4f90f9b94d42bffa98a3077a037, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: d3f75ffaa5f6b514c97dde49d8db8170, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 09fd40e5b5808e84895203f235853609, type: 3}
+    Occlusion: {fileID: 2800000, guid: bc3fa045fa054f547bee05368afebe5e, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: e3d23a0122891c946ae835c39ccfb5b9, type: 3}
+    Height: {fileID: 2800000, guid: 474f33a275ca36449916c4a26e0cc66f, type: 3}
+    Normal: {fileID: 2800000, guid: 90d77c5e748daaa468caf515e0e2fa4c, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: b113361b358bdeb4eba46fe0011536c7, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: bc119ae19b67db048a9e359b43540148, type: 3}
+    Occlusion: {fileID: 2800000, guid: 5f3b9b029339f7443ac30092e85995f1, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: a749536e1b824f74482a613cddbe3eef, type: 3}
+    Height: {fileID: 2800000, guid: 39df164c88a6c1b4b807c4da140b6d39, type: 3}
+    Normal: {fileID: 2800000, guid: e807b64752d82f54799e38776a22ccca, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: d19324d0bdee54c458fff8ff4fec1e51, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 9345460c3973b874e9e1b1e2343f77b3, type: 3}
+    Occlusion: {fileID: 2800000, guid: 1133f8113eee19c4992160a4981862ea, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 7a19a831ca022ef4884c17c4b176226a, type: 3}
+    Height: {fileID: 2800000, guid: b3be444c99f31e048b0ce935ecd0ef7d, type: 3}
+    Normal: {fileID: 2800000, guid: 17e2fc31844270140b123bdf10185382, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: d1528abaff24912438ba684bd59a2fd5, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: d94f55937b593aa41b961bcc84f965d7, type: 3}
+    Occlusion: {fileID: 2800000, guid: f2effb6003de94a4ea7c73670d1cc45c, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 9c442b54587e91748b52dcbb627b2f12, type: 3}
+    Height: {fileID: 2800000, guid: 4cb0ed5bb16f19a45b3c78b9c6d33e7c, type: 3}
+    Normal: {fileID: 2800000, guid: 54b731748ceb16343af94f26e5667636, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: f32cd76345848e641851bbaf7421ca16, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 136981b79c290aa4f83d3fcd1f5afb42, type: 3}
+    Occlusion: {fileID: 2800000, guid: f9f66aa533e406a4ea7e1827a551acf2, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: 422a5ddecb4d3b3408ec09caa1e81d32, type: 3}
+    Height: {fileID: 2800000, guid: 012ba1e2eb452ab42b138b7bfcc1ff4d, type: 3}
+    Normal: {fileID: 2800000, guid: 258cea4409230054a8d8f941ba0a3c62, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: e489656d9e9fbd648978e31260c29998, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 323104646ea098e469537d9e478bc9ac, type: 3}
+    Occlusion: {fileID: 2800000, guid: 9ae0a033c832bc54c934995f450c2ff4, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: a6be40700cde329498a99571024a2c22, type: 3}
+    Height: {fileID: 2800000, guid: 00f44ffa7594d474082fa3171436d479, type: 3}
+    Normal: {fileID: 2800000, guid: a84c625aa90260b4280726f052376b95, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: f369b865d69bd1e4d9a845e59811939b, type: 3}
+    IsRoughness: 1
+    Metallic: {fileID: 2800000, guid: 227e3bbee4e1e0f41931d44535a20b1d, type: 3}
+    Occlusion: {fileID: 2800000, guid: 24bd17e33f2583148ab8969487d33c86, type: 3}
+    Emission: {fileID: 0}
