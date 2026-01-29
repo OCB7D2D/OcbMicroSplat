@@ -1,4 +1,3 @@
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -180,6 +179,12 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     watch.Stop();
                     Log.Out("Export took {0} seconds",
                         watch.ElapsedMilliseconds / 1000f);
+                    return;
+                case "dumpdecals":
+                    var path = "exports/decals";
+                    var rv = System.IO.Directory.CreateDirectory(path);
+                    Log.Out("Exporting to {0}", rv.FullName);
+                    OcbTextureDumper.DumpTexure(string.Format("{0}/decals.splat.png", path), OcbMicroSplatDecals.decalsTexture);
                     return;
                 case "heightanalyze":
                     MicroSplatDump.HeightAnalyize();

@@ -20,6 +20,10 @@ public class MicroSplatShader
     private Texture2D TexNoiseNormal2;
     private Texture2D TexNoiseNormal3;
 
+    private Texture2DArray TexDecalsAlbedo;
+    private Texture2DArray TexDecalsNormalSAO;
+    private Texture2DArray TexDecalsEmisMetal;
+
     // ####################################################################
     // ####################################################################
 
@@ -33,6 +37,10 @@ public class MicroSplatShader
     private DataLoader.DataPathIdentifier PathTexNoiseNormal1;
     private DataLoader.DataPathIdentifier PathTexNoiseNormal2;
     private DataLoader.DataPathIdentifier PathTexNoiseNormal3;
+
+    private DataLoader.DataPathIdentifier PathDecalsAlbedo;
+    private DataLoader.DataPathIdentifier PathDecalsNormalSAO;
+    private DataLoader.DataPathIdentifier PathDecalsEmisMetal;
 
     // ####################################################################
     // ####################################################################
@@ -150,9 +158,20 @@ public class MicroSplatShader
         LoadAsset(PathTexNoiseNormal1, ref TexNoiseNormal1, false);
         LoadAsset(PathTexNoiseNormal2, ref TexNoiseNormal2, false);
         LoadAsset(PathTexNoiseNormal3, ref TexNoiseNormal3, false);
+        LoadAsset(PathDecalsAlbedo, ref TexDecalsAlbedo, false);
+        LoadAsset(PathDecalsNormalSAO, ref TexDecalsNormalSAO, false);
+        LoadAsset(PathDecalsEmisMetal, ref TexDecalsEmisMetal, false);
     }
 
     private void UnloadTexture(ref Texture2D texture)
+    {
+        // This seems to cause issues!?
+        // Resources.UnloadAsset(texture);
+        // Release the reference
+        texture = null;
+    }
+
+    private void UnloadTexture(ref Texture2DArray texture)
     {
         // This seems to cause issues!?
         // Resources.UnloadAsset(texture);
@@ -168,6 +187,9 @@ public class MicroSplatShader
         UnloadTexture(ref TexNoiseNormal1);
         UnloadTexture(ref TexNoiseNormal2);
         UnloadTexture(ref TexNoiseNormal3);
+        // UnloadTexture(ref TexDecalsAlbedo);
+        // UnloadTexture(ref TexDecalsNormalSAO);
+        // UnloadTexture(ref TexDecalsNormalSAO);
     }
 
     // ####################################################################
@@ -218,6 +240,11 @@ public class MicroSplatShader
         mat.SetVector("_NormalNoiseScaleStrength3", NoiseNormal3Params);
         mat.SetTexture("_DetailNoise", TexNoiseDetail);
         mat.SetTexture("_DistanceNoise", TexNoiseDistant);
+
+        mat.SetTexture("_DecalAlbedo", TexDecalsAlbedo);
+        mat.SetTexture("_DecalNormalSAO", TexDecalsNormalSAO);
+        mat.SetTexture("_DecalEmisMetal", TexDecalsEmisMetal);
+
         mat.SetVector("_ResampleDistanceParams", ResampleDistanceParams);
         mat.SetVector("_DetailNoiseScaleStrengthFade", DetailNoiseScaleStrengthFade);
         mat.SetVector("_DistanceNoiseScaleStrengthFade", DistanceNoiseScaleStrengthFade);
@@ -286,6 +313,11 @@ public class MicroSplatShader
         PathTexNoiseNormal1 = GetPath(props, "NoiseNormal1", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_01");
         PathTexNoiseNormal2 = GetPath(props, "NoiseNormal2", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02");
         PathTexNoiseNormal3 = GetPath(props, "NoiseNormal3", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03");
+
+        PathDecalsAlbedo = GetPath(props, "DecalsAlbedo", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_diff_tarray");
+        PathDecalsNormalSAO = GetPath(props, "DecalsNormal", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_norm_tarray");
+        PathDecalsEmisMetal = GetPath(props, "DecalsSHAO", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_shao_tarray");
+
         // ParseVector4(props, "TessParams1", ref TessParams1);
         ParseVector4(props, "TessParams2", ref TessParams2);
         props.ParseVec("NoiseHeightData", ref NoiseHeightData);

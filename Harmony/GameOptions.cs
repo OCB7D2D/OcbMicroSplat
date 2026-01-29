@@ -35,6 +35,12 @@ public class GameOptions
         mesh.materialDistant.SetVector(name, value);
     }
 
+    static void SetTexture(MeshDescription mesh, string name, Texture value)
+    {
+        mesh.material.SetTexture(name, value);
+        mesh.materialDistant.SetTexture(name, value);
+    }
+
     // Must be called by mod init too
     // Since our patch is too late for early init
     public static void ApplyTerrainOptions()
@@ -118,6 +124,10 @@ public class GameOptions
 
         // _Phong = move to bary-center
         SetFloat(mesh, "_Phong", 0.725f);
+
+        // Set decals splatmap to our dynamic render texture
+        SetTexture(mesh, "_DecalSplat", OcbMicroSplatDecals.decalsTexture);
+
     }
 
     // Hook our new combo box into the ui workflow
@@ -175,16 +185,6 @@ public class GameOptions
             comboTessOpt.SelectedIndex = PlayerPrefs.GetInt("TerrainTessellation");
             comboAntiTileOpt.SelectedIndex = PlayerPrefs.GetInt("TerrainAntiTiling");
             // comboParallaxOpt.Value = PlayerPrefs.GetInt("TerrainParallax") != 0;
-        }
-    }
-
-    // Patch into function when options are applied to materials
-    [HarmonyPatch(typeof(GameOptionsManager), "ApplyTerrainOptions")]
-    public class GameOptionsManager_ApplyTerrainOptions
-    {
-        static void Postfix()
-        {
-            ApplyTerrainOptions();
         }
     }
 

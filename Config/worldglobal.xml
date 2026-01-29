@@ -15,6 +15,10 @@
 			<property name="NoiseNormal2" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02"/>
 			<property name="NoiseNormal3" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03"/>
 
+			<property name="DecalsAlbedo" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_diff_tarray"/>
+			<property name="DecalsNormal" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_norm_tarray"/>
+			<property name="DecalsSHAO" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_shao_tarray"/>
+
 			<property name="NoiseHeightData" value="0.5, 0.275"/>
 			<property name="WorldHeightRange" value="0, 500"/>
 

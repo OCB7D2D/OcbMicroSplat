@@ -62,6 +62,11 @@ public static class OcbTextureDumper
         bool linear = true, Func<Color[], Color[]> converter = null)
             => DumpTexure(path, (Texture)arr, idx, linear, converter);
 
+    // Dump a `RenderTexture` to disk at given `path`
+    public static void DumpTexure(string path, RenderTexture src,
+        bool linear = true, Func<Color[], Color[]> converter = null)
+            => DumpTexure(path, src, 0, linear, converter);
+
     // Dump generic `Texture` to disk at given `path`
     private static void DumpTexure2(string path, Texture src1, Texture src2, int idx = 0,
         bool linear = true, Func<Color[], Color[], Color[]> converter = null)

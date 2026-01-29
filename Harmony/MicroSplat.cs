@@ -8,6 +8,8 @@ using static MicroSplatPropData;
 public class OcbMicroSplat : IModApi
 {
 
+    public static String Path = null;
+
     public static OcbMicroSplat Instance = null;
 
     public static MicroSplatXmlConfig Config
@@ -24,6 +26,7 @@ public class OcbMicroSplat : IModApi
 
     public void InitMod(Mod mod)
     {
+        Path = mod.Path; // Store path for others
         if (GameManager.IsDedicatedServer) return;
         Log.Out("OCB Harmony Patch: " + GetType().ToString());
         Harmony harmony = new Harmony(GetType().ToString());
@@ -79,6 +82,7 @@ public class OcbMicroSplat : IModApi
         if (MeshDescription.meshes.Length < MeshDescription.MESH_TERRAIN) return;
         var terrain = MeshDescription.meshes[MeshDescription.MESH_TERRAIN];
         PrepareMicroSplatPatches(_world); // Do all the preparation once
+        OcbMicroSplatDecals.WorldChanged(_world, terrain);
         Config.TerrainShaderConfig.WorldChanged(terrain);
         Config.MicroSplatVoxelConfigs.WorldChanged(terrain);
     }
@@ -377,6 +381,8 @@ public class OcbMicroSplat : IModApi
             // Those call will bail out early if they detect no quality change
             OcbMicroSplat.Config.TerrainShaderConfig.LoadTerrainShaders(terrain);
             MicroSplatTextureUtils.ApplyMicroSplatTextures(terrain, patches);
+            OcbMicroSplat.Config.TerrainShaderConfig.InitMicroSplatMaterial(terrain.material);
+            OcbMicroSplat.Config.TerrainShaderConfig.InitMicroSplatMaterial(terrain.materialDistant);
         }
     }
 

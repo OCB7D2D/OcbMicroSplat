@@ -90,7 +90,7 @@ MonoBehaviour:
     IsRoughness: 1
     Metallic: {fileID: 2800000, guid: 74883b01baccdc94c8cf1ad3b0fba716, type: 3}
     Occlusion: {fileID: 2800000, guid: 1dc397d053e7d764b834a2c3904f1191, type: 3}
-    Emission: {fileID: 2800000, guid: 9075f7615d21efc43b11b50711ee4b7c, type: 3}
+    Emission: {fileID: 0}
   - Albedo: {fileID: 2800000, guid: f313870565e414246850d6cb749d4576, type: 3}
     Height: {fileID: 2800000, guid: 0b7161c7898dbf34c8fac886ae5e14b0, type: 3}
     Normal: {fileID: 2800000, guid: a6a1b52344696ad47bd6152901dd9341, type: 3}

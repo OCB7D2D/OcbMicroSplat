@@ -228,7 +228,7 @@ public static class HarmonyMicroSplatVoxels
             else if (__result.TerrainTAIndex == 9) __result.TerrainTAIndex = 13;
         }
     }
-
+    
     // ####################################################################
     // ####################################################################
 
