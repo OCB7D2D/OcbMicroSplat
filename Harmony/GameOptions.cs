@@ -88,37 +88,37 @@ public class GameOptions
             case 1: // Lowest
                 SetFloat(mesh, "_Tess", 128.0f);
                 // tess, mipBias, fade dist min, max
-                SetVector(mesh, "_TessParams1", new Vector4(3, 4, 15, 20));
+                SetVector(mesh, "_TessParams1", new Vector4(3, 5, 15, 20));
                 break;
             case 2: // Low
                 SetFloat(mesh, "_Tess", 96.0f);
                 // tess, mipBias, fade dist min, max
-                SetVector(mesh, "_TessParams1", new Vector4(4, 4, 16, 20));
+                SetVector(mesh, "_TessParams1", new Vector4(4, 5, 16, 20));
                 break;
             case 3: // Medium
                 SetFloat(mesh, "_Tess", 64.0f);
                 // tess, mipBias, fade dist min, max
-                SetVector(mesh, "_TessParams1", new Vector4(5, 4, 17, 20));
+                SetVector(mesh, "_TessParams1", new Vector4(5, 5, 17, 20));
                 break;
             case 4: // High
                 SetFloat(mesh, "_Tess", 32.0f);
                 // tess, mipBias, fade dist min, max
-                SetVector(mesh, "_TessParams1", new Vector4(6, 3, 18, 20));
+                SetVector(mesh, "_TessParams1", new Vector4(6, 4, 18, 22));
                 break;
             case 5: // Ultra
                 SetFloat(mesh, "_Tess", 16.0f);
                 // tess, mipBias, fade dist min, max
-                SetVector(mesh, "_TessParams1", new Vector4(8, 3, 19, 21));
+                SetVector(mesh, "_TessParams1", new Vector4(8, 4, 19, 24));
                 break;
             case 6: // Ultra+
                 SetFloat(mesh, "_Tess", 8.0f);
                 // tess, mipBias, fade dist min, max
-                SetVector(mesh, "_TessParams1", new Vector4(10, 3, 22, 25));
+                SetVector(mesh, "_TessParams1", new Vector4(10, 4, 22, 28));
                 break;
             default:
                 SetFloat(mesh, "_Tess", 256.0f);
                 // tess, mipBias, fade dist min, max
-                SetVector(mesh, "_TessParams1", new Vector4(5, 3, 17, 20));
+                SetVector(mesh, "_TessParams1", new Vector4(5, 5, 17, 20));
                 break;
         }
 

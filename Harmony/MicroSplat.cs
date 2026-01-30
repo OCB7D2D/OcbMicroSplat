@@ -350,7 +350,7 @@ public class OcbMicroSplat : IModApi
         msPropData.SetValue(idx,
             PerTexFloat.DisplacementOffset,
             texture.TessDisplacementOffset);
-        msPropData.SetValue(texture.SlotIdx,
+        msPropData.SetValue(idx,
             PerTexFloat.DisplacementStength,
             texture.TessDisplacementStrength);
         msPropData.SetValue(idx,

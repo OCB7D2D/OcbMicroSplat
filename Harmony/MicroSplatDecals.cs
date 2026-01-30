@@ -62,9 +62,9 @@ public class OcbMicroSplatDecals
             {
                 // Draw very seldomly (to accumulate work)
                 yield return new WaitForSeconds(0.25f);
-#if DEBUG
+                #if DEBUG
                 var watch = System.Diagnostics.Stopwatch.StartNew();
-#endif
+                #endif
                 if (OcbMicroSplatDecals.decalsTexture != null)
                 {
                     // decals queue is comming from background thrad
@@ -90,13 +90,13 @@ public class OcbMicroSplatDecals
                                     OcbMicroSplatDecals.decalsTexture, 0, 0,
                                     offset.x + w, offset.y + h);
                             }
-#if DEBUG
+                            #if DEBUG
                             watch.Stop();
                             // Report unexpected long draw calls
                             if (watch.ElapsedMilliseconds > 5) Log.Out(
-                                "Draw call took {0}ms (did {1} draws)",
+                                "Decals drawing took {0}ms (with {1} draws)",
                                 watch.ElapsedMilliseconds, decals.Count);
-#endif
+                            #endif
                             decals.Clear();
                         }
                     }
@@ -130,7 +130,8 @@ public class OcbMicroSplatDecals
     // ####################################################################
     // ####################################################################
 
-    // Apply custom micro splat textures when xml is loaded
+    // Listener to register where to draw decals
+    // Also disables rendering of original quad faces
     [HarmonyPatch(typeof(BlockShapeTerrain), "renderFace")]
     static class BlockShapeTerrainRenderFacePatch
     {
@@ -149,6 +150,8 @@ public class OcbMicroSplatDecals
 
     }
 
+    // Listener to register where to draw decals
+    // Also disables rendering of original quad faces
     [HarmonyPatch(typeof(BlockShapeCube), "renderFace")]
     static class BlockShapeCubeRenderFacePatch
     {
@@ -167,6 +170,7 @@ public class OcbMicroSplatDecals
     }
 
 
+    // Listener to register where to clear decals
     [HarmonyPatch(typeof(BlockShape), "OnBlockRemoved")]
     static class BlockShapeOnBlockRemovedPatch
     {
