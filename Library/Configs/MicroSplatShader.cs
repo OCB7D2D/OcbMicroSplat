@@ -1,6 +1,16 @@
 using System.Xml.Linq;
 using UnityEngine;
 using static StringParsers;
+static class DynamicPropertiesExtensions
+{
+    public static void ParseVec(this DynamicProperties instance, string _propName, ref Vector4 optionalValue)
+    {
+        if (instance.Values.TryGetValue(_propName, out var _value))
+        {
+            optionalValue = StringParsers.ParseVector4(_value);
+        }
+    }
+}
 
 public class MicroSplatShader
 {
@@ -45,31 +55,64 @@ public class MicroSplatShader
     // ####################################################################
     // ####################################################################
 
-    private Vector2 NoiseHeightData = new Vector2(0.5f, 0.275f);
+    // Base parameters for procedural biome height filters
+    // Biome height filters will scale to these absolute values
     private Vector2 WorldHeightRange = new Vector2(0.0f, 500f);
+    // Set frequency and amplitude for height noise
+    private Vector2 NoiseHeightData = new Vector2(0.5f, 0.275f);
 
-    private Vector2 NoiseNormal1Params = new Vector2(0.6f, 0.225f);
-    private Vector2 NoiseNormal2Params = new Vector2(0.325f, 0.175f);
-    private Vector2 NoiseNormal3Params = new Vector2(0.1350f, 0.125f);
-
-    // private Vector4 TessParams1 = new Vector4(128, 3, 15, 30);
-    private Vector4 TessParams2 = new Vector4(0.075f, 1.25f, 0.75f, 0);
-
-    private float TessPhongBias = 0.5f;
-    private float RecalcNormals = 0.25f;
-
+    // Set strength factor for texture resampling
     private float DistanceResampleAlbedoStrength = 0.85f;
     private float DistanceResampleNormalStrength = 0.65f;
     private float DistanceResampleMaterialStrength = 0.35f;
 
-    private Vector3 ResampleDistanceParams = new Vector4(0.25f, 0.5f, 100);
-    // Interestingly detail noise is really just a vec3 and distance vec4
-    // Distance has an additional factor stored in the `w` component
+    // Set frequency and amplitude for normal noise
+    // Depending on quality, only some may be active
+    private Vector2 NoiseNormal1Params = new Vector2(0.6f, 0.225f);
+    private Vector2 NoiseNormal2Params = new Vector2(0.325f, 0.175f);
+    private Vector2 NoiseNormal3Params = new Vector2(0.1350f, 0.125f);
+
+    // Params for close-up resample (uv scale, strength, near fading)
     private Vector3 DetailNoiseScaleStrengthFade = new Vector4(4.0f, 0.5f, 75.0f);
+
+    // Params for distance resample (uv scale, strength, near and far fading)
     private Vector4 DistanceNoiseScaleStrengthFade = new Vector4(0.25f, 0.5f, 100f, 500f);
 
+    // Params for distance resample (uv scale, near, far fading)
+    private Vector3 ResampleDistanceParams = new Vector4(0.25f, 0.5f, 100);
+
+    // Set frequency and amplitude for distant resample noise
+    private Vector2 ResampleDistanceNoise = new Vector2(0.5f, 0.5f);
+
+    // Contrast for triplanar sampling (0 to disable it)
     private float TriplanarContrast = 8;
-    private Vector4 TriplanarUVScale = new Vector4(1, 1, 1, 1);
+
+    // UV scaling for triplanar sampling (and offset)
+    private Vector4 TriplanarUVScale = new Vector4(1, 1, 0, 0);
+
+    // How visible should decals be on terrain
+    private float DecalsOpacity = 1.0f;
+
+    // How much should decals blend by height map
+    private float DecalsHeightBlend = 0.5f;
+
+    // How much to move vertices into barycentric interpolation
+    // Bigger values(0 to 1) make single blocks more spheric
+    // Big values may "grow" through thin neighbouring blocks
+    private float TessPhongBias = 0.25f;
+
+    // How much to use recalculated normals for triangles
+    // Big values (1) will loose smooth shading completely
+    // But can compensate for texture repeating "strikes"
+    private float TessRecalcNormals = 0.075f;
+
+    // displacement, shaping, upbias, (edge is unused)
+    private Vector4 TessParams2 = new Vector4(1f, 0.85f, 0.75f, 0);
+
+    // Governed via hardcoded settings to switch in the UI
+    // tessallation, mipBias, distance fade min, max
+    // Note: can't be set, only mentiond for reference
+    // private Vector4 TessParams1 = new Vector4(128, 3, 15, 30);
 
     // ####################################################################
     // ####################################################################
@@ -226,36 +269,41 @@ public class MicroSplatShader
     public void InitMicroSplatMaterial(Material mat)
     {
         if (mat == null) return;
+
+        var config = OcbMicroSplat.Config.MicroSplatWorldConfig;
+        mat.SetInt("_PCLayerCount", config.BiomeLayers.Count);
+
         mat.SetTexture("_NoiseHeight", TexNoisePerlin);
-        mat.SetVector("_NoiseHeightData", NoiseHeightData);
-        mat.SetVector("_WorldHeightRange", WorldHeightRange);
-        mat.SetFloat("_DistanceResampleAlbedoStrength", DistanceResampleAlbedoStrength);
-        mat.SetFloat("_DistanceResampleNormalStrength", DistanceResampleNormalStrength);
-        mat.SetFloat("_DistanceResampleMaterialStrength", DistanceResampleMaterialStrength);
+        mat.SetTexture("_DetailNoise", TexNoiseDetail);
+        mat.SetTexture("_DistanceNoise", TexNoiseDistant);
         mat.SetTexture("_NormalNoise", TexNoiseNormal1);
         mat.SetTexture("_NormalNoise2", TexNoiseNormal2);
         mat.SetTexture("_NormalNoise3", TexNoiseNormal3);
-        mat.SetVector("_NormalNoiseScaleStrength", NoiseNormal1Params);
-        mat.SetVector("_NormalNoiseScaleStrength2", NoiseNormal2Params);
-        mat.SetVector("_NormalNoiseScaleStrength3", NoiseNormal3Params);
-        mat.SetTexture("_DetailNoise", TexNoiseDetail);
-        mat.SetTexture("_DistanceNoise", TexNoiseDistant);
-
         mat.SetTexture("_DecalAlbedo", TexDecalsAlbedo);
         mat.SetTexture("_DecalNormalSAO", TexDecalsNormalSAO);
         mat.SetTexture("_DecalEmisMetal", TexDecalsEmisMetal);
 
-        mat.SetVector("_ResampleDistanceParams", ResampleDistanceParams);
+        mat.SetVector("_WorldHeightRange", WorldHeightRange);
+        mat.SetVector("_NoiseHeightData", NoiseHeightData);
+        mat.SetFloat("_DistanceResampleAlbedoStrength", DistanceResampleAlbedoStrength);
+        mat.SetFloat("_DistanceResampleNormalStrength", DistanceResampleNormalStrength);
+        mat.SetFloat("_DistanceResampleMaterialStrength", DistanceResampleMaterialStrength);
+        mat.SetVector("_NormalNoiseScaleStrength", NoiseNormal1Params);
+        mat.SetVector("_NormalNoiseScaleStrength2", NoiseNormal2Params);
+        mat.SetVector("_NormalNoiseScaleStrength3", NoiseNormal3Params);
         mat.SetVector("_DetailNoiseScaleStrengthFade", DetailNoiseScaleStrengthFade);
         mat.SetVector("_DistanceNoiseScaleStrengthFade", DistanceNoiseScaleStrengthFade);
+        mat.SetVector("_ResampleDistanceParams", ResampleDistanceParams);
+        mat.SetVector("_ResampleDistanceNoise", ResampleDistanceNoise);
         mat.SetFloat("_TriplanarContrast", TriplanarContrast);
         mat.SetVector("_TriplanarUVScale", TriplanarUVScale);
-        var config = OcbMicroSplat.Config.MicroSplatWorldConfig;
-        mat.SetInt("_PCLayerCount", config.BiomeLayers.Count);
-        // mat.SetVector("_TessParams1", TessParams1);
-        mat.SetVector("_TessParams2", TessParams2);
+        mat.SetFloat("_DecalsOpacity", DecalsOpacity);
+        mat.SetFloat("_DecalsHeightBlend", DecalsHeightBlend);
         mat.SetFloat("_TessPhongBias", TessPhongBias);
-        mat.SetFloat("_RecalcNormals", RecalcNormals);
+        mat.SetFloat("_TessRecalcNormals", TessRecalcNormals);
+        mat.SetVector("_TessParams2", TessParams2);
+        // mat.SetVector("_TessParams1", TessParams1);
+
         // Use conditional keyword for max textures
         if (MaxTextures == 24)
         {
@@ -313,28 +361,30 @@ public class MicroSplatShader
         PathTexNoiseNormal1 = GetPath(props, "NoiseNormal1", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_01");
         PathTexNoiseNormal2 = GetPath(props, "NoiseNormal2", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02");
         PathTexNoiseNormal3 = GetPath(props, "NoiseNormal3", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03");
-
         PathDecalsAlbedo = GetPath(props, "DecalsAlbedo", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_diff_tarray");
         PathDecalsNormalSAO = GetPath(props, "DecalsNormal", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_norm_tarray");
         PathDecalsEmisMetal = GetPath(props, "DecalsSHAO", "#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_shao_tarray");
 
-        // ParseVector4(props, "TessParams1", ref TessParams1);
-        ParseVector4(props, "TessParams2", ref TessParams2);
-        props.ParseVec("NoiseHeightData", ref NoiseHeightData);
         props.ParseVec("WorldHeightRange", ref WorldHeightRange);
-        props.ParseVec("NoiseNormal1Params", ref NoiseNormal1Params);
-        props.ParseVec("NoiseNormal2Params", ref NoiseNormal2Params);
-        props.ParseVec("NoiseNormal3Params", ref NoiseNormal3Params);
-        props.ParseVec("ResampleDistanceParams", ref ResampleDistanceParams);
-        props.ParseVec("DetailNoiseScaleStrengthFade", ref DetailNoiseScaleStrengthFade);
-        ParseVector4(props, "DistanceNoiseScaleStrengthFade", ref DistanceNoiseScaleStrengthFade);
+        props.ParseVec("NoiseHeightData", ref NoiseHeightData);
         props.ParseFloat("DistanceResampleAlbedoStrength", ref DistanceResampleAlbedoStrength);
         props.ParseFloat("DistanceResampleNormalStrength", ref DistanceResampleNormalStrength);
         props.ParseFloat("DistanceResampleMaterialStrength", ref DistanceResampleMaterialStrength);
+        props.ParseVec("NoiseNormal1Params", ref NoiseNormal1Params);
+        props.ParseVec("NoiseNormal2Params", ref NoiseNormal2Params);
+        props.ParseVec("NoiseNormal3Params", ref NoiseNormal3Params);
+        props.ParseVec("DetailNoiseScaleStrengthFade", ref DetailNoiseScaleStrengthFade);
+        props.ParseVec("DistanceNoiseScaleStrengthFade", ref DistanceNoiseScaleStrengthFade);
+        props.ParseVec("ResampleDistanceParams", ref ResampleDistanceParams);
+        props.ParseVec("ResampleDistanceNoise", ref ResampleDistanceNoise);
         props.ParseFloat("TriplanarContrast", ref TriplanarContrast);
-        ParseVector4(props, "TriplanarUVScale", ref TriplanarUVScale);
+        props.ParseVec("TriplanarUVScale", ref TriplanarUVScale);
+        props.ParseFloat("DecalsOpacity", ref DecalsOpacity);
+        props.ParseFloat("DecalsHeightBlend", ref DecalsHeightBlend);
         props.ParseFloat("TessPhongBias", ref TessPhongBias);
-        props.ParseFloat("RecalcNormals", ref RecalcNormals);
+        props.ParseFloat("TessRecalcNormals", ref TessRecalcNormals);
+        props.ParseVec("TessParams2", ref TessParams2);
+        // ParseVector4(props, "TessParams1", ref TessParams1);
     }
 
     // ####################################################################

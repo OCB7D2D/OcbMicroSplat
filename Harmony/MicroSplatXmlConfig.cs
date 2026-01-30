@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 public class MicroSplatXmlConfig

@@ -22,16 +22,6 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
     public override bool IsExecuteOnClient => true;
     public override bool AllowedInMainMenu => false;
 
-    public static Vector4 ParseVector4(string _input)
-    {
-        SeparatorPositions separatorPositions = GetSeparatorPositions(_input, ',', 3);
-        if (separatorPositions.TotalFound != 3) return Vector4.zero;
-        return new Vector4(ParseFloat(_input, 0, separatorPositions.Sep1 - 1),
-            ParseFloat(_input, separatorPositions.Sep1 + 1, separatorPositions.Sep2 - 1),
-            ParseFloat(_input, separatorPositions.Sep2 + 1, separatorPositions.Sep3 - 1),
-            ParseFloat(_input, separatorPositions.Sep3 + 1));
-    }
-
     private AnimationCurve ParseAnimationKeys(string v)
     {
         var curve = new AnimationCurve();
@@ -119,31 +109,37 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
         return prop.GetValue(textureIndex, y)[channel1];
     }
 
-    void DumpeShaderConfig(Material mat)
+    void DumpShaderConfig(Material mat)
     {
         if (mat.HasTexture("_NoiseHeight")) Log.Out("NoiseHeight: {0}", mat.GetTexture("_NoiseHeight"));
-        if (mat.HasVector("_NoiseHeightData")) Log.Out("NoiseHeightData: {0}", mat.GetVector("_NoiseHeightData"));
-        if (mat.HasVector("_WorldHeightRange")) Log.Out("WorldHeightRange: {0}", mat.GetVector("_WorldHeightRange"));
-        if (mat.HasFloat("_DistanceResampleAlbedoStrength")) Log.Out("DistanceResampleAlbedoStrength: {0}", mat.GetFloat("_DistanceResampleAlbedoStrength"));
-        if (mat.HasFloat("_DistanceResampleNormalStrength")) Log.Out("DistanceResampleNormalStrength: {0}", mat.GetFloat("_DistanceResampleNormalStrength"));
-        if (mat.HasFloat("_DistanceResampleMaterialStrength")) Log.Out("DistanceResampleMaterialStrength: {0}", mat.GetFloat("_DistanceResampleMaterialStrength"));
+        if (mat.HasTexture("_DetailNoise")) Log.Out("DetailNoise: {0}", mat.GetTexture("_DetailNoise"));
+        if (mat.HasTexture("_DistanceNoise")) Log.Out("DistanceNoise: {0}", mat.GetTexture("_DistanceNoise"));
         if (mat.HasTexture("_NormalNoise")) Log.Out("NormalNoise: {0}", mat.GetTexture("_NormalNoise"));
         if (mat.HasTexture("_NormalNoise2")) Log.Out("NormalNoise2: {0}", mat.GetTexture("_NormalNoise2"));
         if (mat.HasTexture("_NormalNoise3")) Log.Out("NormalNoise3: {0}", mat.GetTexture("_NormalNoise3"));
+        if (mat.HasTexture("_TexDecalsAlbedo")) Log.Out("TexDecalsAlbedo: {0}", mat.GetTexture("_TexDecalsAlbedo"));
+        if (mat.HasTexture("_DecalNormalSAO")) Log.Out("DecalNormalSAO: {0}", mat.GetTexture("_DecalNormalSAO"));
+        if (mat.HasTexture("_DecalEmisMetal")) Log.Out("DecalEmisMetal: {0}", mat.GetTexture("_DecalEmisMetal"));
+        if (mat.HasVector("_WorldHeightRange")) Log.Out("WorldHeightRange: {0}", mat.GetVector("_WorldHeightRange"));
+        if (mat.HasVector("_NoiseHeightData")) Log.Out("NoiseHeightData: {0}", mat.GetVector("_NoiseHeightData"));
+        if (mat.HasFloat("_DistanceResampleAlbedoStrength")) Log.Out("DistanceResampleAlbedoStrength: {0}", mat.GetFloat("_DistanceResampleAlbedoStrength"));
+        if (mat.HasFloat("_DistanceResampleNormalStrength")) Log.Out("DistanceResampleNormalStrength: {0}", mat.GetFloat("_DistanceResampleNormalStrength"));
+        if (mat.HasFloat("_DistanceResampleMaterialStrength")) Log.Out("DistanceResampleMaterialStrength: {0}", mat.GetFloat("_DistanceResampleMaterialStrength"));
         if (mat.HasVector("_NormalNoiseScaleStrength")) Log.Out("NormalNoiseScaleStrength: {0}", mat.GetVector("_NormalNoiseScaleStrength"));
         if (mat.HasVector("_NormalNoiseScaleStrength2")) Log.Out("NormalNoiseScaleStrength2: {0}", mat.GetVector("_NormalNoiseScaleStrength2"));
         if (mat.HasVector("_NormalNoiseScaleStrength3")) Log.Out("NormalNoiseScaleStrength3: {0}", mat.GetVector("_NormalNoiseScaleStrength3"));
-        if (mat.HasTexture("_DetailNoise")) Log.Out("DetailNoise: {0}", mat.GetTexture("_DetailNoise"));
-        if (mat.HasTexture("_DistanceNoise")) Log.Out("DistanceNoise: {0}", mat.GetTexture("_DistanceNoise"));
-        if (mat.HasVector("_ResampleDistanceParams")) Log.Out("ResampleDistanceParams: {0}", mat.GetVector("_ResampleDistanceParams"));
         if (mat.HasVector("_DetailNoiseScaleStrengthFade")) Log.Out("DetailNoiseScaleStrengthFade: {0}", mat.GetVector("_DetailNoiseScaleStrengthFade"));
         if (mat.HasVector("_DistanceNoiseScaleStrengthFade")) Log.Out("DistanceNoiseScaleStrengthFade: {0}", mat.GetVector("_DistanceNoiseScaleStrengthFade"));
+        if (mat.HasVector("_ResampleDistanceParams")) Log.Out("ResampleDistanceParams: {0}", mat.GetVector("_ResampleDistanceParams"));
+        if (mat.HasVector("_ResampleDistanceNoise")) Log.Out("ResampleDistanceNoise: {0}", mat.GetVector("_ResampleDistanceNoise"));
         if (mat.HasFloat("_TriplanarContrast")) Log.Out("TriplanarContrast: {0}", mat.GetFloat("_TriplanarContrast"));
         if (mat.HasVector("_TriplanarUVScale")) Log.Out("TriplanarUVScale: {0}", mat.GetVector("_TriplanarUVScale"));
-        // if (mat.HasVector("_TessParams1")) Log.Out("TessParams1: {0}", mat.GetVector("_TessParams1"));
+        if (mat.HasFloat("_DecalsOpacity")) Log.Out("DecalsOpacity: {0}", mat.GetFloat("_DecalsOpacity"));
+        if (mat.HasFloat("_DecalsHeightBlend")) Log.Out("DecalsHeightBlend: {0}", mat.GetFloat("_DecalsHeightBlend"));
+        if (mat.HasFloat("_TessPhongBias")) Log.Out("TessPhongBias: {0}", mat.GetFloat("_TessPhongBias"));
+        if (mat.HasFloat("_TessRecalcNormals")) Log.Out("TessRecalcNormals: {0}", mat.GetFloat("_TessRecalcNormals"));
         if (mat.HasVector("_TessParams2")) Log.Out("TessParams2: {0}", mat.GetVector("_TessParams2"));
-        if (mat.HasVector("_TessPhongBias")) Log.Out("TessPhongBias: {0}", mat.GetVector("_TessPhongBias"));
-        if (mat.HasVector("_RecalcNormals")) Log.Out("RecalcNormals: {0}", mat.GetVector("_RecalcNormals"));
+        // if (mat.HasVector("_TessParams1")) Log.Out("TessParams1: {0}", mat.GetVector("_TessParams1"));
     }
 
     private static string CleanList(object val)
@@ -192,7 +188,7 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                 case "shader":
                     Log.Out("Inspect shader {0}",
                         mesh.material.shader);
-                    DumpeShaderConfig(mesh.material);
+                    DumpShaderConfig(mesh.material);
                     return;
                 case "layers":
                     if (VoxelMeshTerrain.msProcData is MicroSplatProceduralTextureConfig cfg)

@@ -1,13 +1,16 @@
 <configs>
 	<append xpath="/worldglobal">
+    <!-- apply base config to all maps -->
 		<microsplat-shader map-only="*">
-			<!-- you may define your own shader if wanted, but we don't really recommend to mess with this directly -->
+
+      <!-- you may define your own shader if wanted, but we don't really recommend to mess with this directly -->
 			<property name="Shader" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplatUber"/>
 			<property name="ShaderTess" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/OcbMicroSplatUberTess"/>
-			<!-- metal means the mac graphics api, which requires a platform specific bundle (can't be bundles into one unfortunately) -->
+      <!-- metal means the mac graphics api, which requires a platform specific bundle (can't be bundles into one unfortunately) -->
 			<property name="MetalShader" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplatUber"/>
 			<property name="MetalShaderTess" value="#@modfolder:Resources/OcbMicroSplat.metal.unity3d?assets/OcbMicroSplat/OcbMicroSplatUberTess"/>
 
+      <!-- textures for normal noise (and probably other anti-tiling effects) -->
 			<property name="NoisePerlin" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_perlin"/>
 			<property name="NoiseDetail" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise"/>
 			<property name="NoiseDistant" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_noise"/>
@@ -15,61 +18,70 @@
 			<property name="NoiseNormal2" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_02"/>
 			<property name="NoiseNormal3" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/microsplat_def_detail_normal_03"/>
 
+      <!-- texture arrays for decals rendering (custom for OcbMicroSplat) -->
 			<property name="DecalsAlbedo" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_diff_tarray"/>
 			<property name="DecalsNormal" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_norm_tarray"/>
 			<property name="DecalsSHAO" value="#@modfolder:Resources/OcbMicroSplat.unity3d?assets/OcbMicroSplat/TA_Decals_shao_tarray"/>
 
-			<property name="NoiseHeightData" value="0.5, 0.275"/>
-			<property name="WorldHeightRange" value="0, 500"/>
+      <!-- Base parameters for procedural biome height filters -->
+      <!-- Biome height filters will scale to these absolute values -->
+      <property name="WorldHeightRange" value="0, 500"/>
 
-			<property name="DistanceResampleAlbedoStrength" value="0.85"/>
+      <!-- Set frequency and amplitude for height noise -->
+      <property name="NoiseHeightData" value="0.5, 0.275"/>
+
+      <!-- Set strength factor for texture resampling -->
+      <property name="DistanceResampleAlbedoStrength" value="0.85"/>
 			<property name="DistanceResampleNormalStrength" value="0.65"/>
 			<property name="DistanceResampleMaterialStrength" value="0.35"/>
 
-			<property name="NoiseNormal1Params" value="0.6, 0.225"/>
+      <!-- Set frequency and amplitude for normal noise -->
+      <!-- Depending on quality, only some may be active -->
+      <property name="NoiseNormal1Params" value="0.6, 0.225"/>
 			<property name="NoiseNormal2Params" value="0.325, 0.175"/>
 			<property name="NoiseNormal3Params" value="0.135, 0.125"/>
 
-			<!-- Governed via hardcoded settings to switch in the UI -->
-			<!-- tessallation, mipBias, distance fade min, max -->
-			<!-- <property name="TessParams1" value="128, 3, 15, 30"/> -->
-			<!-- displacement, shaping, upbias, (edge/unused) -->
-			<property name="TessParams2" value="1, 0.85, 0.75, 0"/>
+      <!-- Params for distance resample (uv scale, near, far fading) -->
+      <property name="ResampleDistanceParams" value="0.25, 0.5, 100"/>
 
-			<property name="TessPhongBias" value="0.25"/>
-			<property name="RecalcNormals" value="0.075"/>
+      <!-- Set frequency and amplitude for distant resample noise -->
+      <property name="DistanceResampleNoise" value="0.5, 0.5"/>
+      
+      <!-- Params for close-up resample (uv scale, strength, near fading) -->
+      <property name="DetailNoiseScaleStrengthFade" value="8, 0.4, 30"/>
 
-			<property name="ResampleDistanceParams" value="0.25, 0.5, 100"/>
+      <!-- Params for distance resample (uv scale, strength, near and far fading) -->
+      <property name="DistanceNoiseScaleStrengthFade" value="2, 0.5, 50, 100"/>
 
-			<property name="DetailNoiseScaleStrengthFade" value="8, 0.4, 30"/>
-			<property name="DistanceNoiseScaleStrengthFade" value="2, 0.5, 50, 100"/>
+			<!-- Contrast for triplanar sampling (0 to disable it) -->
+      <property name="TriplanarContrast" value="8"/>
+      <!-- UV scaling for triplanar sampling (and offset) -->
+      <property name="TriplanarUVScale" value="1, 1, 0, 0"/>
 
-			<property name="TriplanarContrast" value="8"/>
-			<property name="TriplanarUVScale" value="1, 1, 0, 0"/>
+      <!-- How visible should decals be on terrain -->
+      <property name="_DecalsOpacity" value="1.0"/>
+      <!-- How much should decals blend by height map -->
+      <property name="_DecalsHeightBlend" value="0.5"/>
 
-			<!-- Below are the default shader settings (looks weird)
+      <!-- How much to move vertices into barycentric interpolation -->
+      <!-- Bigger values (0 to 1) make single blocks more spheric -->
+      <!-- Big values may "grow" through thin neighbouring blocks -->
+      <property name="TessPhongBias" value="0.25"/>
 
-			<property name="NoiseHeightData" value="1.0, 0.15"/>
-			<property name="WorldHeightRange" value="0.0, 250"/>
+      <!-- How much to use recalculated normals for triangles -->
+      <!-- Big values (1) will loose smooth shading completely -->
+      <!-- But can compensate for texture repeating "strikes" -->
+      <property name="TessRecalcNormals" value="0.075"/>
 
-			<property name="NoiseNormal1Params" value="10.0, 0.5"/>
-			<property name="NoiseNormal2Params" value="80.0, 1.0"/>
-			<property name="NoiseNormal3Params" value="8.0, 0.5"/>
+      <!-- displacement, shaping, upbias, (edge is unused) -->
+      <property name="TessParams2" value="1, 0.85, 0.75, 0"/>
 
-			<property name="DistanceResampleAlbedoStrength" value="1.0"/>
-			<property name="DistanceResampleNormalStrength" value="1.0"/>
-			<property name="DistanceResampleMaterialStrength" value="0.35"/>
+      <!-- Governed via hardcoded settings to switch in the UI -->
+      <!-- tessallation, mipBias, distance fade min, max -->
+      <!-- Note: can't be set, only mentiond for reference -->
+      <!-- <property name="TessParams1" value="128, 3, 15, 30"/> -->
 
-			<property name="ResampleDistanceParams" value="0.08, 50.0, 100.0"/>
-
-			<property name="DetailNoiseScaleStrengthFade" value="4.0, 0.5, 5.0"/>
-			<property name="DistanceNoiseScaleStrengthFade" value="100, 2, 10, 50"/>
-
-			<property name="TriplanarContrast" value="8"/>
-			<property name="TriplanarUVScale" value="1, 1, 0, 0"/>
-
-			-->
-		</microsplat-shader>
+    </microsplat-shader>
 
 		<!-- snow ground - used by biome only -->
 		<microsplat-texture name="microsplat0">
