@@ -80,19 +80,35 @@ public class MicroSplatBiomeLayer
             props.ParseEnum("erosion-curve-mode", ref layer.erosionCurveMode);
             props.ParseEnum("cavity-curve-mode", ref layer.cavityCurveMode);
             // props.ParseInt("microsplat-index", ref layer.textureIndex);
-            if (props.Contains("biome-weights-a")) layer.biomeWeights =
-                StringParsers.ParseColor(props.GetString("biome-weights-a"));
-            if (props.Contains("biome-weights-b")) layer.biomeWeights2 =
-                StringParsers.ParseColor(props.GetString("biome-weights-b"));
+            if (props.Contains("biome-mask-color")) Log.Error("biome-mask-color "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-weights-b")) Log.Error("biome-weights-b "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-index"))
+            {
+                int bidx = props.GetInt("biome-index");
+                layer.biomeWeights = layer.biomeWeights2 = Vector4.zero;
+                if (bidx >= 0 && bidx < MicroSplatBiomeColor.BiomeColMap.Length)
+                    layer.biomeWeights = MicroSplatBiomeColor.BiomeColMap[bidx];
+                else Log.Error("Biome Index is out of bounds");
+            }
             // Allow to set weights for only a certain biome
-            props.ParseFloat($"biome-weight-1", ref layer.biomeWeights.x);
-            props.ParseFloat($"biome-weight-2", ref layer.biomeWeights.y);
-            props.ParseFloat($"biome-weight-3", ref layer.biomeWeights.z);
-            props.ParseFloat($"biome-weight-4", ref layer.biomeWeights.w);
-            props.ParseFloat($"biome-weight-5", ref layer.biomeWeights2.x);
-            props.ParseFloat($"biome-weight-6", ref layer.biomeWeights2.y);
-            props.ParseFloat($"biome-weight-7", ref layer.biomeWeights2.z);
-            props.ParseFloat($"biome-weight-8", ref layer.biomeWeights2.w);
+            if (props.Contains("biome-weight-1")) Log.Error("biome-weight-1 "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-weight-2")) Log.Error("biome-weight-2 "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-weight-3")) Log.Error("biome-weight-3 "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-weight-4")) Log.Error("biome-weight-4 "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-weight-5")) Log.Error("biome-weight-5 "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-weight-6")) Log.Error("biome-weight-6 "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-weight-7")) Log.Error("biome-weight-7 "
+                + "no longer supported, use biome-index instead");
+            if (props.Contains("biome-weight-8")) Log.Error("biome-weight-8 "
+                + "no longer supported, use biome-index instead");
             if (cfg.Heights != null) layer.heightCurve.keys = cfg.Heights.ToArray();
             if (cfg.Slopes != null) layer.slopeCurve.keys = cfg.Slopes.ToArray();
         }

@@ -45,6 +45,11 @@ static class ChunkProviderBiomeColorsPatch
                 col1 = value.Color1;
                 col2 = value.Color2;
             }
+            // Post process to support up to 16 or 32 biomes
+            // Uses hidden `_PCBIOMEMASK16` MicroSplat feature
+            // Possible since biomes never overlap and blend
+            // col1 = Color.clear;
+            // col2 = Color.clear;
         }
 
         // ####################################################################
@@ -77,13 +82,28 @@ static class ChunkProviderBiomeColorsPatch
                     if (codes[j].opcode != OpCodes.Ldloc_S) continue;
                     if (!(codes[j].operand is LocalBuilder biome)) continue;
                     if (!typeof(BiomeDefinition).IsAssignableFrom(biome.LocalType)) continue;
-                    codes.Insert(i++, new CodeInstruction(OpCodes.Ldloca_S, col1));
-                    codes.Insert(i++, new CodeInstruction(OpCodes.Ldloca_S, col2));
-                    codes.Insert(i++, new CodeInstruction(OpCodes.Ldloc_S, biome));
-                    codes.Insert(i++, CodeInstruction.Call(
-                        typeof(GenerateWorldFromRawInitPatch),
-                        "ExecutePatched"));
-                    return codes;
+                    // Search end of switch statement
+                    for (int n = j; n < j + 40; n++)
+                    {
+                        if (codes[n + 0].opcode ==  OpCodes.Ldloca_S &&
+                            codes[n + 1].opcode == OpCodes.Ldloc_S &&
+                            codes[n + 2].opcode == OpCodes.Ldloc_S &&
+                            codes[n + 3].opcode == OpCodes.Call)
+                        {
+                            List<Label> labels = new List<Label>();
+                            codes[n].labels.CopyTo(labels); // Copy existing labels
+                            codes[n].labels.Clear(); // Clear the original labels
+                            codes.Insert(n + 0, new CodeInstruction(OpCodes.Ldloca_S, col1));
+                            codes.Insert(n + 1, new CodeInstruction(OpCodes.Ldloca_S, col2));
+                            codes.Insert(n + 2, new CodeInstruction(OpCodes.Ldloc_S, biome));
+                            codes.Insert(n + 3, CodeInstruction.Call(
+                                typeof(GenerateWorldFromRawInitPatch),
+                                "ExecutePatched"));
+                            // Assign previous jump labels
+                            codes[n + 0].labels = labels;
+                            return codes;
+                        }
+                    }
                 }
                 break;
             }

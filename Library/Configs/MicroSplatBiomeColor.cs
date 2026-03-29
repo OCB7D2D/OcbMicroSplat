@@ -8,20 +8,50 @@ public class MicroSplatBiomeColor
     // ####################################################################
     // ####################################################################
 
-    public Color Color1 = Color.black;
-    public Color Color2 = Color.black;
+    public static Vector4[] BiomeColMap = new Vector4[16]
+    {
+        new Vector4(1,0,0,0), 
+        new Vector4(0,1,0,0), 
+        new Vector4(0,0,1,0), 
+        new Vector4(0,0,0,1), 
+        new Vector4(0,0,0,0),
+        new Vector4(1,1,0,0),
+        new Vector4(1,0,1,0),
+        new Vector4(1,0,0,1),
+        new Vector4(0,1,1,0),
+        new Vector4(0,1,0,1),
+        new Vector4(0,0,1,1),
+        new Vector4(1,1,1,0),
+        new Vector4(1,1,0,1),
+        new Vector4(1,0,1,1),
+        new Vector4(0,1,1,1),
+        new Vector4(1,1,1,1),
+    };
+
+    // ####################################################################
+    // ####################################################################
+
+    public Color Color1 = Color.clear;
+    public Color Color2 = Color.clear;
 
     // ####################################################################
     // ####################################################################
 
     public void Parse(XElement xml)
     {
-        if (!xml.HasAttribute("color1")) throw new Exception(
-            $"Mandatory attribute `color1` missing on {xml.Name}");
-        if (!xml.HasAttribute("color2")) throw new Exception(
-            $"Mandatory attribute `color2` missing on {xml.Name}");
-        Color1 = StringParsers.ParseColor(xml.GetAttribute("color1"));
-        Color2 = StringParsers.ParseColor(xml.GetAttribute("color2"));
+        if (xml.HasAttribute("color1")) throw new Exception(
+            $"biome-map.color1 in {xml.Name} no longer "
+            + "supported, use biome-index instead");
+        if (xml.HasAttribute("color2")) throw new Exception(
+            $"biome-map.color2 in {xml.Name} no longer "
+            + "supported, use biome-index instead");
+
+        if (!xml.HasAttribute("biome-index")) throw new Exception(
+            $"Mandatory attribute `biome-index` missing on {xml.Name}");
+
+        byte bidx = byte.Parse(xml.GetAttribute("biome-index"));
+        Color1 = BiomeColMap[bidx];
+        Color2 = Color.clear;
     }
 
     // ####################################################################

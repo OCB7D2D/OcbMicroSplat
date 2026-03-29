@@ -127,8 +127,10 @@
     <Compile Include="Library\Textures\OcbTextureUtils.cs" />
     <Compile Include="Library\Utils\HarmonyUtils.cs" />
     <Compile Include="Library\Utils\ModXmlPatcher.cs" />
+    <Compile Include="Library\Utils\StaticRandom.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\biomes.xml" />
     <Content Include="Config\blocks.xml" />
     <Content Include="Config\Localization.txt" />
     <Content Include="Config\worldglobal.xml" />

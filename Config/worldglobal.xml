@@ -366,3 +366,10 @@
 		</microsplat-texture>
 	</append>
 </configs>
+
+<!-- 
+FWIW this is the current state, with improved decals.
+They should now no longer change rotation on chunk redraw.
+And decals should only draw at the specified height and not above or below.
+But some may fade out a little if on high slopes, haven't found a fix for that yet.
+-->

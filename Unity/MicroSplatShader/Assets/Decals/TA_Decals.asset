@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb9b962dd7675847a24903344229fee, type: 3}
   m_Name: TA_Decals
   m_EditorClassIdentifier: 
-  Size: 20
+  Size: 21
   Path: 
   TexSize: 1
   WrapMode: 0
@@ -78,6 +78,18 @@ MonoBehaviour:
     IsRoughness: 1
     Metallic: {fileID: 2800000, guid: c6fe1f8e650957f4f925569c609d60ab, type: 3}
     Occlusion: {fileID: 2800000, guid: aacd706b56b3cb6488ab2f90cb370154, type: 3}
+    Emission: {fileID: 0}
+  - Albedo: {fileID: 2800000, guid: df7ed7a33e0a35f4c9be903f7b4ae816, type: 3}
+    Height: {fileID: 0}
+    Normal: {fileID: 2800000, guid: 3bd2121ac2d74f14597365edde9b1d79, type: 3}
+    IsNormalSwitched: 1
+    IsNormalInverted: 0
+    IsHeightCentered: 0
+    IsHeightNormalized: 0
+    Smoothness: {fileID: 2800000, guid: d7778d2ad361b564fb0fdb2ff40bbf84, type: 3}
+    IsRoughness: 0
+    Metallic: {fileID: 0}
+    Occlusion: {fileID: 2800000, guid: 50a7cf080151f4042889487631fad81a, type: 3}
     Emission: {fileID: 0}
   - Albedo: {fileID: 2800000, guid: 9075f7615d21efc43b11b50711ee4b7c, type: 3}
     Height: {fileID: 2800000, guid: be794b789bcd3184194000d7715e41d1, type: 3}
@@ -152,9 +164,9 @@ MonoBehaviour:
     Occlusion: {fileID: 2800000, guid: 71a6f19505a96414f913c52a1211fef6, type: 3}
     Emission: {fileID: 0}
   - Albedo: {fileID: 2800000, guid: 0d32eb104cd7f4c44b70cf8e23ad589b, type: 3}
-    Height: {fileID: 2800000, guid: 63de6b437ede3d843b4cec00ebe516ce, type: 3}
+    Height: {fileID: 2800000, guid: 7a14303719e75564483a88a429ee330a, type: 3}
     Normal: {fileID: 2800000, guid: 8928f0509e76bb64a97d2f874fd0a78a, type: 3}
-    IsNormalSwitched: 1
+    IsNormalSwitched: 0
     IsNormalInverted: 0
     IsHeightCentered: 0
     IsHeightNormalized: 0

@@ -160,6 +160,7 @@ public static class MicroSplatTextureUtils
         // Find maximum array index we need to patch via xml
         foreach (var texture in patches) size
             = Math.Max(size, texture.SlotIdx + 1);
+        if (size == 0) return; // Avoid out-of-bound error
         if (terrain == null) throw new Exception("MESH MISSING");
         if (!terrain.IsSplatmap(MeshDescription.MESH_TERRAIN)) return;
         if (!(terrain.textureAtlas is TextureAtlasTerrain atlas))

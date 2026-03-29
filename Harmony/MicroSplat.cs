@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using static MicroSplatPropData;
+using static UnityDistantTerrain;
 
 public class OcbMicroSplat : IModApi
 {
@@ -15,8 +16,8 @@ public class OcbMicroSplat : IModApi
     public static MicroSplatXmlConfig Config
         = new MicroSplatXmlConfig();
 
-    public static string DecalBundlePath;
-    public static string DecalShaderBundle;
+    // public static string DecalBundlePath;
+    // public static string DecalShaderBundle;
 
     const PerTexFloat CurveInterpolator = (PerTexFloat)(4 * 19 + 0);
     const PerTexFloat BlendWeightFactor = (PerTexFloat)(4 * 19 + 3);
@@ -37,10 +38,10 @@ public class OcbMicroSplat : IModApi
         #endif
         if (!PlayerPrefs.HasKey("TerrainTessellation"))
             PlayerPrefs.SetInt("TerrainTessellation", 2);
-        DecalShaderBundle = DecalBundlePath = System.IO.Path
-            .Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
-        if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)
-            DecalShaderBundle = System.IO.Path.Combine(mod.Path, "Resources/OcbDecalShader.metal.unity3d");
+        // DecalShaderBundle = DecalBundlePath = System.IO.Path
+        //     .Combine(mod.Path, "Resources/OcbDecalShader.unity3d");
+        // if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)
+        //     DecalShaderBundle = System.IO.Path.Combine(mod.Path, "Resources/OcbDecalShader.metal.unity3d");
         Instance = this; // Remember static instance to use by patch below
     }
 
@@ -180,8 +181,6 @@ public class OcbMicroSplat : IModApi
         msProcData = LoadManager.LoadAssetFromAddressables<MicroSplatProceduralTextureConfig>("TerrainTextures",
             "Microsplat/MicroSplatTerrainInGame_proceduraltexture.asset", _loadSync: true).Asset;
 
-        if (Config.MicroSplatWorldConfig.ResetLayers) msProcData.layers.Clear();
-
         string level = GamePrefs.GetString(EnumGamePrefs.GameWorld);
         var worldPath = PathAbstractions.WorldsSearchPaths.GetLocation(level);
         var splat3 = MicroSplatTextureUtils.GetChannelUsage(worldPath.FullPath + "/splat3_processed.png");
@@ -225,6 +224,29 @@ public class OcbMicroSplat : IModApi
             else if (layer.textureIndex == 5) layer.textureIndex = 14;
             else if (layer.textureIndex == 8) layer.textureIndex = 23;
             else if (layer.textureIndex == 9) layer.textureIndex = 13;
+        }
+
+        // Truncate/Reset vanilla layers
+        if (Config.MicroSplatWorldConfig.TruncateLayers >= 0)
+        {
+            Log.Out("Truncate {1} biome layers to {0}",
+                Config.MicroSplatWorldConfig.TruncateLayers,
+                msProcData.layers.Count);
+            msProcData.layers.RemoveRange(
+                Config.MicroSplatWorldConfig.TruncateLayers,
+                msProcData.layers.Count - Config.MicroSplatWorldConfig.TruncateLayers);
+        }
+        if (Config.MicroSplatWorldConfig.ResetLayers)
+        {
+            Log.Out("Reset {0} biome layers",
+                msProcData.layers.Count);
+            msProcData.layers.Clear();
+        }
+
+        // Mark texture usage of remaining layers
+        for (int i = 0; i < msProcData.layers.Count; i++)
+        {
+            var layer = msProcData.layers[i];
             var cfg = Config.GetTextureConfig($"microsplat{layer.textureIndex}");
             if (cfg != null) cfg.IsUsedByBiome = true;
         }
@@ -436,6 +458,7 @@ public class OcbMicroSplat : IModApi
             }
 
             #if DEBUG
+            Log.Out("Using {0} Biome Layers", msProcData.layers.Count);
             Log.Out("#############################################");
             Log.Out("#############################################");
             #endif

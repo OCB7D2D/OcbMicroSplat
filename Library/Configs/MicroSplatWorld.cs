@@ -23,6 +23,7 @@ public class MicroSplatWorld
 
     // Keep the vanilla layer config?
     public bool ResetLayers = false;
+    public int TruncateLayers = -1;
 
     // ####################################################################
     // ####################################################################
@@ -84,7 +85,7 @@ public class MicroSplatWorld
         config.Parse(xml);
     }
 
-    // Parsing a `biome-layer` element in `biome-config`
+    // Parsing a `biome-layer` element in `biomes-config`
     public void ParseBiomeLayer(XElement xml)
     {
         int index = BiomeLayers.Count;
@@ -108,10 +109,34 @@ public class MicroSplatWorld
     // Currently only used to set the `reset` flag
     public void ParseBiomeLayers(XElement xml)
     {
-        if (!xml.HasAttribute("reset")) return;
-        string reset = xml.GetAttribute("reset");
-        ResetLayers = bool.Parse(reset);
-        if (ResetLayers) BiomeLayers.Clear();
+        if (xml.HasAttribute("reset"))
+        {
+            string reset = xml.GetAttribute("reset");
+            ResetLayers = bool.Parse(reset);
+            // Sync already read config to vanilla
+            if (ResetLayers)
+            {
+                #if DEBUG
+                Log.Out("Reset {0} biome layers", BiomeLayers.Count);
+                #endif
+                BiomeLayers.Clear();
+            }
+        }
+        if (xml.HasAttribute("truncate"))
+        {
+            string truncate = xml.GetAttribute("truncate");
+            TruncateLayers = int.Parse(truncate);
+            // Sync already read config to vanilla
+            if (TruncateLayers >= 0)
+            {
+                #if DEBUG
+                Log.Out("Truncate {1} biome layers to {0}",
+                    TruncateLayers, BiomeLayers.Count);
+                #endif
+                BiomeLayers.RemoveRange(TruncateLayers,
+                    BiomeLayers.Count - TruncateLayers);
+            }
+        }
     }
 
     // ####################################################################

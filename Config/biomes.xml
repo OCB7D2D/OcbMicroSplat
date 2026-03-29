@@ -1,0 +1,13 @@
+﻿<configs>
+
+  <append xpath="/worldgeneration/pois/poi">
+
+    <decal texture="16" face="0" prob=".001"/>
+    <decal texture="17" face="0" prob=".001"/>
+    <decal texture="18" face="0" prob=".001"/>
+    <decal texture="19" face="0" prob=".001"/>
+    <decal texture="20" face="0" prob=".001"/>
+
+  </append>
+
+</configs>

@@ -269,8 +269,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     var data = VoxelMeshTerrain.msProcData;
                     var layer = data.layers[idx];
                     Log.Out("<property name=\"weight\" value=\"{0}\"/>", layer.weight);
-                    Log.Out("<property name=\"biome-weights-a\" value=\"{0}\"/>", CleanList(layer.biomeWeights));
-                    Log.Out("<property name=\"biome-weights-b\" value=\"{0}\"/>", CleanList(layer.biomeWeights2));
+                    Log.Out("<property name=\"biome-mask-color\" value=\"{0}\"/>", CleanList(layer.biomeWeights));
+                    // Log.Out("<property name=\"biome-weights-b\" value=\"{0}\"/>", CleanList(layer.biomeWeights2));
                     Log.Out("<property name=\"noise-active\" value=\"{0}\"/>", layer.noiseActive);
                     Log.Out("<property name=\"noise-frequency\" value=\"{0}\"/>", layer.noiseFrequency);
                     Log.Out("<property name=\"noise-offset\" value=\"{0}\"/>", layer.noiseOffset);
@@ -381,8 +381,13 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                         case "cavity-curve-mode": layer.cavityCurveMode = EnumUtils.Parse(_params[3],
                             MicroSplatProceduralTextureConfig.Layer.CurveMode.Curve); break;
                         case "microsplat-index": layer.textureIndex = int.Parse(_params[3]); break;
-                        case "biome-weights-a": layer.biomeWeights = ParseVector4(_params[3]); break;
-                        case "biome-weights-b": layer.biomeWeights2 = ParseVector4(_params[3]); break;
+                        case "biome-mask-color": Log.Error("biome-mask-color no longer supported, use biome-index instead"); break;
+                        case "biome-index":
+                            int index = int.Parse(_params[3]);
+                            layer.biomeWeights = MicroSplatBiomeColor.BiomeColMap[index];
+                            layer.biomeWeights2 = Color.clear;
+                        break;
+                        // case "biome-weights-b": layer.biomeWeights2 = ParseVector4(_params[3]); break;
                         case "slope-keyframes": layer.slopeCurve = ParseAnimationKeys(_params[3]); break;
                         case "height-keyframes": layer.heightCurve = ParseAnimationKeys(_params[3]); break;
                         case "erosion-keyframes": layer.erosionMapCurve = ParseAnimationKeys(_params[3]); break;
