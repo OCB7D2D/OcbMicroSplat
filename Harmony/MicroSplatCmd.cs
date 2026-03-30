@@ -196,8 +196,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                         for (int i = 0; i < cfg.layers.Count; i++)
                         {
                             var layer = cfg.layers[i];
-                            Log.Out("Layer {0} => {1}/{2} #{3}", i,
-                                layer.biomeWeights, layer.biomeWeights2,
+                            Log.Out("Layer {0} => Biome #{1}, texture #{2}", i,
+                                MicroSplatBiomeColor.GetBiomeIndex(layer.biomeWeights),
                                 layer.textureIndex);
                         }
                     }

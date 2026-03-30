@@ -28,6 +28,15 @@ public class MicroSplatBiomeColor
         new Vector4(1,1,1,1),
     };
 
+    public static int GetBiomeIndex(Vector4 color)
+    {
+        for (int i = 0; i < BiomeColMap.Length; i++)
+        {
+            if (BiomeColMap[i] == color) return i;
+        }
+        return -1;
+    }
+
     // ####################################################################
     // ####################################################################
 

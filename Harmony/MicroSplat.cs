@@ -306,14 +306,19 @@ public class OcbMicroSplat : IModApi
                 if (texture.SlotIdx == -1) throw new Exception(
                     "No more free slots in MicroSplat array");
                 occupied[texture.SlotIdx] = true;
+                #if DEBUG
+                Log.Out("Patch texture {0} at {1} ({2})",
+                    kv.Key, texture.SlotIdx,
+                    texture.GetUseString());
+                #endif
                 if (!patches.Contains(texture))
                     patches.Add(texture);
             }
             // Skip unused ones
             else
             {
-                #if DEBUG
-                Log.Out("Skip {0} at {1} ({2})",
+                #if DBGTRACE
+                Log.Out("Skip texture {0} at {1} ({2})",
                     kv.Key, texture.SlotIdx,
                     texture.GetUseString());
                 #endif

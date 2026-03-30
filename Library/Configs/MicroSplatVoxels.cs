@@ -41,8 +41,19 @@ public class MicroSplatVoxels
             $"Mandatory attribute `name` missing on {xml.Name}");
         string name = xml.GetAttribute("name");
         if (!Voxels.TryGetValue(name, out MicroSplatVoxel voxel))
-            Log.Warning("Skipping unused voxel {0}", name);
-        else voxel.Parse(xml);
+        {
+            #if DBGTRACE
+            Log.Warning("Skipping voxel {0} (Unused)", name);
+            #endif
+        }
+        else 
+        {
+            voxel.Parse(xml);
+            #if DEBUG
+            Log.Warning("Patch voxel {0} (#{1})",
+                name, voxel.GetTexId());
+            #endif
+        }
     }
 
     // ####################################################################
