@@ -66,7 +66,8 @@ public class MicroSplatVoxels
             foreach (KeyValuePair<string, float> kv in voxel.Value.textures)
             {
                 var texture = OcbMicroSplat.Config.GetTextureConfig(kv.Key);
-                if (texture != null) texture.IsUsedByVoxel = true; 
+                Log.Out("  Mark Voxel Texture {0}", voxel.Key);
+                if (texture != null) texture.RegisterVoxelUsage(voxel.Value); 
                 else Log.Error("Couldn't find MicroSplat {0}", kv.Key);
             }
         }
@@ -113,9 +114,10 @@ public class MicroSplatVoxels
             var cfg = OcbMicroSplat.Config.GetTextureConfig(texture);
             // Patch the different texture into the old atlas
             // This is idempotent, worst case texture isn't used
-            PatchVoxelTexture(cfg.Diffuse, ref atlas.diffuse[idx], voxel.Name);
-            PatchVoxelTexture(cfg.Normal, ref atlas.normal[idx], voxel.Name);
-            PatchVoxelTexture(cfg.Specular, ref atlas.specular[idx], voxel.Name);
+            Log.Out("- Patching texture {0} => {1} (voxel {3} id {2})", texture, cfg.SlotIdx, idx, voxel.Name);
+            if (cfg.Diffuse != null) PatchVoxelTexture(cfg.Diffuse, ref atlas.diffuse[idx], voxel.Name);
+            if (cfg.Normal != null) PatchVoxelTexture(cfg.Normal, ref atlas.normal[idx], voxel.Name);
+            if (cfg.Specular != null) PatchVoxelTexture(cfg.Specular, ref atlas.specular[idx], voxel.Name);
             // Extend the UV map for e.g. falling blocks
             atlas.uvMapping[idx] = new UVRectTiling()
             {

@@ -13,6 +13,7 @@ public static class MicroSplatXmlFilters
     // Maybe some textures are no longer in use and up for grab?
     private static void ParseHardCodedVoxelUsages(XElement root, MicroSplatTextures config)
     {
+        string bname = root.GetAttribute("name");
         // fish out hard-coded texture ids
         // code is a bit crude, but gets it done
         foreach (var child in root.Elements("property"))
@@ -26,17 +27,24 @@ public static class MicroSplatXmlFilters
             {
                 switch (id)
                 {
-                    case 33: config.Textures["microsplat17"].IsUsedByVoxel = true; break;
-                    case 1: config.Textures["microsplat19"].IsUsedByVoxel = true; break;
-                    case 440: config.Textures["microsplat21"].IsUsedByVoxel = true; break;
-                    case 438: config.Textures["microsplat23"].IsUsedByVoxel = true; break;
-                    case 10: config.Textures["microsplat16"].IsUsedByVoxel = true; break;
-                    case 300: config.Textures["microsplat18"].IsUsedByVoxel = true; break;
-                    case 184: config.Textures["microsplat20"].IsUsedByVoxel = true; break;
-                    case 316: config.Textures["microsplat22"].IsUsedByVoxel = true; break;
-                    case 2: config.Textures["microsplat13"].IsUsedByVoxel = true; break;
-                    case 11: config.Textures["microsplat14"].IsUsedByVoxel = true; break;
-                    case 34: config.Textures["microsplat15"].IsUsedByVoxel = true; break;
+                    case 1: config.RegisterVoxelUsage("microsplat19", bname); break;
+                    case 2: config.RegisterVoxelUsage("microsplat13", bname); break;
+                    case 6: config.RegisterVoxelUsage("microsplat0", bname); break;
+                    case 8: config.RegisterVoxelUsage("microsplat4", bname); break;
+                    case 10: config.RegisterVoxelUsage("microsplat4", bname); break;
+                    // case 10: config.RegisterVoxelUsage("microsplat16", bname); break;
+                    case 11: config.RegisterVoxelUsage("microsplat5", bname); break;
+                    // case 11: config.RegisterVoxelUsage("microsplat14", bname); break;
+                    case 33: config.RegisterVoxelUsage("microsplat17", bname); break;
+                    case 34: config.RegisterVoxelUsage("microsplat15", bname); break;
+                    case 184: config.RegisterVoxelUsage("microsplat20", bname); break;
+                    case 185: config.RegisterVoxelUsage("microsplat7", bname); break;
+                    case 195: config.RegisterVoxelUsage("microsplat2", bname); break;
+                    case 288: config.RegisterVoxelUsage("microsplat10", bname); break;
+                    case 300: config.RegisterVoxelUsage("microsplat18", bname); break;
+                    case 316: config.RegisterVoxelUsage("microsplat22", bname); break;
+                    case 438: config.RegisterVoxelUsage("microsplat23", bname); break;
+                    case 440: config.RegisterVoxelUsage("microsplat21", bname); break;
                 }
             }
         }

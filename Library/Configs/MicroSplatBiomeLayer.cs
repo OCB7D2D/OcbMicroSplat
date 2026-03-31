@@ -63,7 +63,7 @@ public class MicroSplatBiomeLayer
             var props = cfg.Props;
             if (texcfg != null)
             {
-                texcfg.IsUsedByBiome = true;
+                texcfg.RegisterBiomeUsage(cfg);
                 layer.textureIndex = texcfg.SlotIdx;
             }
             props.ParseFloat("weight", ref layer.weight);

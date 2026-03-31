@@ -39,6 +39,14 @@ public class MicroSplatTextures
     // ####################################################################
     // ####################################################################
 
+    public void RegisterVoxelUsage(string tname, string bname)
+    {
+        Textures[tname].RegisterVoxelUsage(bname);
+    }
+
+    // ####################################################################
+    // ####################################################################
+
     public void Parse(XElement xml)
     {
         if (!xml.HasAttribute("name")) throw new Exception(
@@ -64,6 +72,7 @@ public class MicroSplatTextures
             var texture = new MicroSplatTexture();
             /*if (i > 3)*/ texture.SlotIdx = i;
             Textures.Add(name, texture);
+            texture.IsInternal = true;
             texture.SrcIdx = i;
         }
     }

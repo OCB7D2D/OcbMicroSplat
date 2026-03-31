@@ -39,8 +39,7 @@ public static class HarmonyMicroSplatVoxels
                 case 11: return 5; // Gravel
                 case 33: return 17; // OreIron
                 case 34: return 15; // OreCoal
-                // case 184: return 20;
-                case 184: return 0; // SandStone
+                case 184: return 20; // SandStone
                 case 185: return 7; // Sand, DesertGround, SandStone
                 case 195: return 2; // TopSoil, ForrestGround
                 case 288: return 10; // BurntForestGround, DestroyedGrass
@@ -190,7 +189,7 @@ public static class HarmonyMicroSplatVoxels
                 MicroSplatVoxel voxel = OcbMicroSplat.Config.GetOrCreateVoxelConfig(name);
                 if (!voxel.blocks.Contains(__instance)) voxel.blocks.Add(__instance);
                 #if DEBUG
-                Log.Out("Discovered voxel {0} in block {1} (voxel id {2}/{3})",
+                Log.Out("Discovered voxel texture {0} in block {1} (voxel id {2}/{3})",
                     name, __instance.GetBlockName(), voxel.Index, voxel.GetTexId());
                 #endif
                 __instance.SetSideTextureId(voxel.GetTexId(), 0);
@@ -222,8 +221,8 @@ public static class HarmonyMicroSplatVoxels
             else if (__result.TerrainTAIndex == 3) __result.TerrainTAIndex = 20;
             // These are mapped directly in the shader code
             else if (__result.TerrainTAIndex == 4) __result.TerrainTAIndex = 16;
-            else if (__result.TerrainTAIndex == 6) __result.TerrainTAIndex = 16;
             else if (__result.TerrainTAIndex == 5) __result.TerrainTAIndex = 14;
+            else if (__result.TerrainTAIndex == 6) __result.TerrainTAIndex = 16;
             else if (__result.TerrainTAIndex == 8) __result.TerrainTAIndex = 23;
             else if (__result.TerrainTAIndex == 9) __result.TerrainTAIndex = 13;
         }

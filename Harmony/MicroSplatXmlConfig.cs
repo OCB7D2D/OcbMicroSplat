@@ -104,8 +104,6 @@ public class MicroSplatXmlConfig
         if (max < 24) max = 24;
         else if (max < 28) max = 28;
         else if (max < 32) max = 32;
-        // else throw new System.Exception(
-        //     "Exceeded MicroSplat texture count");
         TerrainShaderConfig.MaxTextures = max;
     }
 

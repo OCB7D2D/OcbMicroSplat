@@ -46,11 +46,16 @@ public class MicroSplatTexture
     public int SlotIdx = -1;
 
     public bool SwitchNormal = false;
+    public bool IsInternal = false;
     public bool IsUsedByBiome = false;
     public bool IsUsedByVoxel = false;
     public bool IsUsedBySplat = false;
     public bool HasSplatUVScale = false;
     public bool HasSplatUVOffset = false;
+
+    // Keep a list of block/biome names with voxel configs
+    public HashSet<string> BlockNames = new HashSet<string>();
+    public HashSet<int> BiomeLayers = new HashSet<int>();
 
     // Per texture shader settings
     public UnityEngine.Vector2 SplatUVScale = UnityEngine.Vector2.one;
@@ -136,6 +141,37 @@ public class MicroSplatTexture
             else if (name == "SplatUVOffset") HasSplatUVOffset = true;
             // else if (name == "Metallic") Metallic = float.Parse(value);
         }
+    }
+
+    // ####################################################################
+    // ####################################################################
+    
+
+    public void RegisterVoxelUsage(MicroSplatVoxel voxel)
+    {
+        IsUsedByVoxel = true;
+        foreach (var block in voxel.blocks)
+            BlockNames.Add(block.blockName);
+    }
+
+    public void RegisterVoxelUsage(string bname)
+    {
+        IsUsedByVoxel = true;
+        BlockNames.Add(bname);
+    }
+
+    
+    public void RegisterBiomeUsage(MicroSplatBiomeLayer layer)
+    {
+        IsUsedByBiome = true;
+        var idx = layer.LayerIndex;
+        BiomeLayers.Add(idx);
+    }
+
+    public void RegisterBiomeUsage(int layer)
+    {
+        IsUsedByBiome = true;
+        BiomeLayers.Add(layer);
     }
 
     // ####################################################################
