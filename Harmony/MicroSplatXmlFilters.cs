@@ -29,18 +29,11 @@ public static class MicroSplatXmlFilters
                 {
                     case 1: config.RegisterVoxelUsage("microsplat19", bname); break;
                     case 2: config.RegisterVoxelUsage("microsplat13", bname); break;
-                    case 6: config.RegisterVoxelUsage("microsplat0", bname); break;
-                    case 8: config.RegisterVoxelUsage("microsplat4", bname); break;
-                    case 10: config.RegisterVoxelUsage("microsplat4", bname); break;
-                    // case 10: config.RegisterVoxelUsage("microsplat16", bname); break;
-                    case 11: config.RegisterVoxelUsage("microsplat5", bname); break;
-                    // case 11: config.RegisterVoxelUsage("microsplat14", bname); break;
+                    case 10: config.RegisterVoxelUsage("microsplat16", bname); break;
+                    case 11: config.RegisterVoxelUsage("microsplat14", bname); break;
                     case 33: config.RegisterVoxelUsage("microsplat17", bname); break;
                     case 34: config.RegisterVoxelUsage("microsplat15", bname); break;
                     case 184: config.RegisterVoxelUsage("microsplat20", bname); break;
-                    case 185: config.RegisterVoxelUsage("microsplat7", bname); break;
-                    case 195: config.RegisterVoxelUsage("microsplat2", bname); break;
-                    case 288: config.RegisterVoxelUsage("microsplat10", bname); break;
                     case 300: config.RegisterVoxelUsage("microsplat18", bname); break;
                     case 316: config.RegisterVoxelUsage("microsplat22", bname); break;
                     case 438: config.RegisterVoxelUsage("microsplat23", bname); break;

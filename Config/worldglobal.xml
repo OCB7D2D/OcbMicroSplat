@@ -364,6 +364,81 @@
 			<property name="TessDisplacementStrength" value="0.2"/>
 			<property name="TessDisplacementUpBias" value="0"/>
 		</microsplat-texture>
+
+		<!-- voxel mapping for vanilla textures -->
+		<microsplat-voxel name="microsplat0">
+			<texture name="microsplat0" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat1">
+			<texture name="microsplat1" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat2">
+			<texture name="microsplat2" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat3">
+			<texture name="microsplat3" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat4">
+			<texture name="microsplat4" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat5">
+			<texture name="microsplat5" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat6">
+			<texture name="microsplat6" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat7">
+			<texture name="microsplat7" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat8">
+			<texture name="microsplat8" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat9">
+			<texture name="microsplat9" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat10">
+			<texture name="microsplat10" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat11">
+			<texture name="microsplat11" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat12">
+			<texture name="microsplat12" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat13">
+			<texture name="microsplat13" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat14">
+			<texture name="microsplat14" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat15">
+			<texture name="microsplat15" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat16">
+			<texture name="microsplat16" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat17">
+			<texture name="microsplat17" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat18">
+			<texture name="microsplat18" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat19">
+			<texture name="microsplat19" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat20">
+			<texture name="microsplat21" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat21">
+			<texture name="microsplat21" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat22">
+			<texture name="microsplat22" weight="1"/>
+		</microsplat-voxel>
+		<microsplat-voxel name="microsplat23">
+			<texture name="microsplat23" weight="1"/>
+		</microsplat-voxel>
+
 	</append>
 </configs>
 
