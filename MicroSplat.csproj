@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Harmony\BugfixChangeBlocks.cs" />
     <Compile Include="Harmony\BugfixDecorateRoads.cs" />
+    <Compile Include="Harmony\ExtendMicroSplatTo64.cs" />
     <Compile Include="Harmony\FixMeshGeneratorNormals.cs" />
     <Compile Include="Harmony\MicroSplatDecals.cs" />
     <Compile Include="Harmony\MicroSplatBiomeColors.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Library\Configs\MicroSplatVoxel.cs" />
     <Compile Include="Library\Configs\MicroSplatVoxels.cs" />
     <Compile Include="Library\Configs\MicroSplatWorld.cs" />
+    <Compile Include="Library\MicroSplat\OcbPropData.cs" />
     <Compile Include="Library\Textures\MicroSplatDump.cs" />
     <Compile Include="Library\Textures\MicroSplatTextureUtils.cs" />
     <Compile Include="Library\Textures\OcbTextureDumper.cs" />

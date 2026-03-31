@@ -50,8 +50,8 @@ public class MicroSplatVoxels
         {
             voxel.Parse(xml);
             #if DEBUG
-            Log.Warning("Patch voxel {0} (#{1})",
-                name, voxel.GetTexId());
+            // Log.Warning("Patch voxel {0} (#{1})",
+            //     name, voxel.GetTexId());
             #endif
         }
     }

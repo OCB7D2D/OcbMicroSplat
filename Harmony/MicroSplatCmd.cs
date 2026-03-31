@@ -170,8 +170,8 @@ public class OcbMicroSplatCmd : ConsoleCmdAbstract
                     var watch = new Stopwatch();
                     watch.Start();
                     MicroSplatDump.DumpSplatMaps();
-                    MicroSplatDump.DumpMicroSplat();
-                    MicroSplatDump.DumpOldTerrain();
+                    //MicroSplatDump.DumpMicroSplat();
+                    //MicroSplatDump.DumpOldTerrain();
                     watch.Stop();
                     Log.Out("Export took {0} seconds",
                         watch.ElapsedMilliseconds / 1000f);

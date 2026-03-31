@@ -91,6 +91,17 @@ static class ModXmlPatcher
                 if (!result) return false;
             }
         }
+        else if (conditions.StartsWith("world:"))
+        {
+            Log.Out("HAVING START CONDIATION WORLD");
+            Log.Out("HAVING START CONDIATION WORLD");
+            Log.Out("HAVING START CONDIATION WORLD");
+            Log.Out("HAVING START CONDIATION WORLD");
+            Log.Out("HAVING START CONDIATION WORLD");
+            Log.Out("HAVING START CONDIATION WORLD");
+            Log.Out("HAVING START CONDIATION WORLD");
+            Log.Out("HAVING START CONDIATION WORLD");
+        }
         else
         {
             foreach (string condition in conditions.Split(','))
@@ -409,7 +420,7 @@ static class ModXmlPatcher
             if (!string.IsNullOrEmpty(version))
             {
                 // Check if version is too new for us
-                if (int.Parse(version) > 6) return true;
+                if (int.Parse(version) > 7) return true;
             }
             // Call out to static helper function
             __result = PatchXml(_xmlFile, _patchFile,

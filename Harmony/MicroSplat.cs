@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using static MicroSplatPropData;
-using static UnityDistantTerrain;
 
 public class OcbMicroSplat : IModApi
 {
@@ -118,11 +117,12 @@ public class OcbMicroSplat : IModApi
     // ####################################################################
     // ####################################################################
 
-    private static int GetFreeSlot(bool[] occupied, int off = 0)
+    private static int GetFreeSlot(bool[] occupied, int off = 0, bool limit = true)
     {
         for (int i = off; i < occupied.Length; i++)
             if (!occupied[i]) return i;
-        return -1;
+        if (limit) return -1;
+        return occupied.Length;
     }
 
     // ####################################################################
@@ -174,7 +174,7 @@ public class OcbMicroSplat : IModApi
 
         patches.Clear();
 
-        var occupied = new bool[32];
+        var occupied = new bool[128];
 
         msPropData = LoadManager.LoadAssetFromAddressables<MicroSplatPropData>("TerrainTextures",
             "Microsplat/MicroSplatTerrainInGame_propdata.asset", _loadSync: true).Asset;
@@ -298,7 +298,7 @@ public class OcbMicroSplat : IModApi
             }
             // Texture is only used as biome, so it can stay below index 12
             // As index below 12 can not be addressed by voxels via UVs
-            if (texture.IsUsedByVoxel || texture.IsUsedByBiome)
+            if (texture.IsUsedByVoxel)
             {
                 // Push textures used by voxels above slot 2
                 int min = texture.IsUsedByVoxel ? 2 : 0;
@@ -315,18 +315,57 @@ public class OcbMicroSplat : IModApi
                     patches.Add(texture);
             }
             // Skip unused ones
-            else
+            else continue;
+            // Apply given textures to slot
+            #if DEBUG
+            Log.Out("Voxel {0} at {1} ({2})",
+                kv.Key, texture.SlotIdx,
+                texture.GetUseString());
+            #endif
+            // Update the UvScale property
+            // ToDo: Add more per-tex stuff?
+            SetupPropData(texture.SlotIdx, texture);
+
+            // Update terrain indexes for registered blocks that need updating
+            if (Config.MicroSplatTexturesConfigs.Blocks.TryGetValue(kv.Key, out var blocks))
             {
-                #if DBGTRACE
-                Log.Out("Skip texture {0} at {1} ({2})",
+                foreach (var name in blocks)
+                {
+                    var block = Block.GetBlockByName(name);
+                    block.TerrainTAIndex = kv.Value.SlotIdx;
+                }
+            }
+        }
+
+        // Process all textures that are registered for in-use
+        foreach (var kv in Config.MicroSplatTexturesConfigs.Textures)
+        {
+            var texture = kv.Value;
+            // Skip all items that have an index
+            if (texture.SrcIdx != -1) continue;
+            // Texture is only used as biome, so it can stay below index 12
+            // As index below 12 can not be addressed by voxels via UVs
+            if (!texture.IsUsedByVoxel && texture.IsUsedByBiome)
+            {
+                // Push textures used by voxels above slot 2
+                int min = texture.IsUsedByVoxel ? 2 : 0;
+                texture.SlotIdx = GetFreeSlot(occupied, min, false);
+                if (texture.SlotIdx == -1) throw new Exception(
+                    "No more free slots in MicroSplat array");
+                occupied[texture.SlotIdx] = true;
+                #if DEBUG
+                Log.Out("Patch texture {0} at {1} ({2})",
                     kv.Key, texture.SlotIdx,
                     texture.GetUseString());
                 #endif
-                continue;
+                if (!patches.Contains(texture))
+                    patches.Add(texture);
             }
+            // Skip unused ones
+            else continue;
             // Apply given textures to slot
             #if DEBUG
-            Log.Out("Apply {0} at {1} ({2})",
+            Log.Out("Biome {0} at {1} ({2})",
                 kv.Key, texture.SlotIdx,
                 texture.GetUseString());
             #endif
@@ -357,6 +396,7 @@ public class OcbMicroSplat : IModApi
         int max = 23; // Figure out max index used
         for (int n = 0; n < occupied.Length; n++)
             if (occupied[n]) max = Mathf.Max(max, n);
+
         Config.SetMaxTexturesCount(max);
 
         #if DEBUG
