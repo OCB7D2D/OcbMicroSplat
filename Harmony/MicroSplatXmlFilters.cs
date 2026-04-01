@@ -21,25 +21,7 @@ public static class MicroSplatXmlFilters
             if (!child.HasAttribute("name")) continue;
             if (child.GetAttribute("name") != "Texture") continue;
             if (!child.HasAttribute("value")) continue;
-            foreach (int id in child.GetAttribute("value").Split(
-                    new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(textureId => int.Parse(textureId)))
-            {
-                switch (id)
-                {
-                    case 1: config.RegisterVoxelUsage("microsplat19", bname); break;
-                    case 2: config.RegisterVoxelUsage("microsplat13", bname); break;
-                    case 10: config.RegisterVoxelUsage("microsplat16", bname); break;
-                    case 11: config.RegisterVoxelUsage("microsplat14", bname); break;
-                    case 33: config.RegisterVoxelUsage("microsplat17", bname); break;
-                    case 34: config.RegisterVoxelUsage("microsplat15", bname); break;
-                    case 184: config.RegisterVoxelUsage("microsplat20", bname); break;
-                    case 300: config.RegisterVoxelUsage("microsplat18", bname); break;
-                    case 316: config.RegisterVoxelUsage("microsplat22", bname); break;
-                    case 438: config.RegisterVoxelUsage("microsplat23", bname); break;
-                    case 440: config.RegisterVoxelUsage("microsplat21", bname); break;
-                }
-            }
+            OcbMicroSplat.Config.ReportBlocks.Add(bname);
         }
     }
 
@@ -55,8 +37,6 @@ public static class MicroSplatXmlFilters
             var elements = _xmlFile.XmlDoc.Root.Elements("block");
             foreach (XElement block in elements.ToList())
             {
-                ParseHardCodedVoxelUsages(block, OcbMicroSplat
-                    .Config.MicroSplatTexturesConfigs);
                 if (!block.HasAttribute("map-only")) continue;
                 var filters = block.GetAttribute("map-only").Split(
                     new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
@@ -67,6 +47,17 @@ public static class MicroSplatXmlFilters
                     block.GetAttribute("name"));
                 block.Remove();
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(BlocksFromXml), "InitBlock")]
+    private static class BlocksFromXmlInitBlockPatch
+    {
+        static void Prefix(Block block)
+        {
+            if (!block.Properties.Contains("Texture")) return;
+            if (!(block.shape is BlockShapeTerrain)) return;
+            OcbMicroSplat.Config.ReportBlocks.Add(block.blockName);
         }
     }
 

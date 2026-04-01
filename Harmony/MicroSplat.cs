@@ -1,7 +1,6 @@
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using static MicroSplatPropData;
@@ -165,6 +164,18 @@ public class OcbMicroSplat : IModApi
         return prop.values[textureIndex * 32 + num];
     }
 
+    private void RegisterTexID(Block block, int texID)
+    {
+        if (Config.ReportBlocks.Contains(block.blockName))
+            Log.Out("block {0} has {1}", block.blockName, texID);
+        var slotIdx = MicroSplatRemaps.GetMicroSplatIndex(texID);
+        if (slotIdx == -1) return; // Skip if texture ID is unknown
+        slotIdx = MicroSplatRemaps.RemapFromSplat(slotIdx);
+        if (!(Config.GetTextureConfig($"microsplat{slotIdx}") is MicroSplatTexture cfg)) return;
+        cfg.RegisterVoxelUsage(block.blockName);
+    }
+
+
     public void PrepareMicroSplatPatches(World world)
     {
 
@@ -200,6 +211,28 @@ public class OcbMicroSplat : IModApi
         Config.MicroSplatTexturesConfigs.Textures["microsplat10"].IsUsedBySplat = splat4.b > 0;
         Config.MicroSplatTexturesConfigs.Textures["microsplat11"].IsUsedBySplat = splat4.a > 0;
 
+        // Find voxel usage from all blocks
+        Log.Out("Mark voxel usage from blocks");
+        foreach (var block in Block.list)
+        {
+            if (block == null) continue;
+            foreach (var info in block.textureInfos)
+            {
+                if (info.bTextureForEachSide)
+                {
+                    foreach (int texID in info.sideTextureIds)
+                    {
+                        RegisterTexID(block, texID);
+                    }
+                }
+                else
+                {
+                    int texID = info.singleTextureId;
+                    RegisterTexID(block, texID);
+                }
+            }
+        }
+
         // Copy per-texture configs from current setup
         for (int i = 0; i < 24; i++)
         {
@@ -221,15 +254,35 @@ public class OcbMicroSplat : IModApi
         for (int i = 0; i < msProcData.layers.Count; i++)
         {
             var layer = msProcData.layers[i];
+            if (!OcbMicroSplat.Config.MicroSplatRemapConfig.Mappings
+                .TryGetValue(layer.textureIndex, out int to)) continue;
+            Log.Out("Map layer #{0} texture from #{1} to #{2}",
+                i, layer.textureIndex, to);
+            layer.textureIndex = to;
             // Free two slots for use by new custom biomes
-            if (layer.textureIndex == 1) layer.textureIndex = 19;
-            else if (layer.textureIndex == 3) layer.textureIndex = 20;
-            // These are mapped directly in the shader code
-            else if (layer.textureIndex == 4) layer.textureIndex = 16;
-            else if (layer.textureIndex == 6) layer.textureIndex = 16;
-            else if (layer.textureIndex == 5) layer.textureIndex = 14;
-            else if (layer.textureIndex == 8) layer.textureIndex = 23;
-            else if (layer.textureIndex == 9) layer.textureIndex = 13;
+            // if (layer.textureIndex == 1) layer.textureIndex = 19;
+            // else if (layer.textureIndex == 3) layer.textureIndex = 20;
+
+            // // These are mapped directly in the shader code
+            // else if (layer.textureIndex == 4) layer.textureIndex = 16;
+            // else if (layer.textureIndex == 6) layer.textureIndex = 16;
+            // else if (layer.textureIndex == 5) layer.textureIndex = 14;
+            // else if (layer.textureIndex == 8) layer.textureIndex = 23;
+            // else if (layer.textureIndex == 9) layer.textureIndex = 13;
+        }
+
+        // Map all block terrain indexes
+        foreach (var block in Block.list)
+        {
+            if (block == null) continue; // How can this happens? But it does!
+            if (!OcbMicroSplat.Config.MicroSplatRemapConfig.Mappings
+                .TryGetValue(block.TerrainTAIndex, out int to)) continue;
+            // Only log if not the default value or for all terrain blocks
+            // ToDo: maybe make this a bit smarter (e.g. check for shape)
+            if (block.TerrainTAIndex != 1 || block.Properties.Contains("TerrainIndex"))
+                Log.Out("Map {0} terrain texture from #{1} to #{2}",
+                block.blockName, block.TerrainTAIndex, to);
+            block.TerrainTAIndex = to;
         }
 
         // Truncate/Reset vanilla layers
@@ -481,6 +534,7 @@ public class OcbMicroSplat : IModApi
             foreach (var bname in texture.BlockNames)
             {
                 var block = Block.GetBlockByName(bname);
+                if (!Config.ReportBlocks.Contains(bname)) continue;
                 if (block == null) Log.Out("    Other: {0}", bname);
                 else Log.Out("    Block: {0} (TA #{1})",
                     bname, block.TerrainTAIndex);

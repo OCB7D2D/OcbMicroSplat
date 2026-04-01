@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 public class MicroSplatXmlConfig
@@ -9,12 +10,17 @@ public class MicroSplatXmlConfig
 
     public readonly MicroSplatShader TerrainShaderConfig = new MicroSplatShader();
     public readonly MicroSplatTextures MicroSplatTexturesConfigs = new MicroSplatTextures();
+    public readonly MicroSplatRemaps MicroSplatRemapConfig = new MicroSplatRemaps();
     public readonly MicroSplatVoxels MicroSplatVoxelConfigs = new MicroSplatVoxels();
     public readonly MicroSplatWorld MicroSplatWorldConfig = new MicroSplatWorld();
 
     // Properties that configure MicroSplat shader
     public readonly DynamicProperties ShaderProps
         = new DynamicProperties();
+
+    // Register names of block to repport
+    public HashSet<string> ReportBlocks
+        = new HashSet<string>();
 
     // ####################################################################
     // ####################################################################
@@ -27,6 +33,8 @@ public class MicroSplatXmlConfig
                 OcbMicroSplat.Config.TerrainShaderConfig.Parse(child);
             else if (child.Name == "biomes-config")
                 OcbMicroSplat.Config.MicroSplatWorldConfig.Parse(child);
+            else if (child.Name == "microsplat-remap")
+                OcbMicroSplat.Config.MicroSplatRemapConfig.Parse(child);
             else if (child.Name == "microsplat-texture")
                 OcbMicroSplat.Config.MicroSplatTexturesConfigs.Parse(child);
             else if (child.Name == "microsplat-voxel")

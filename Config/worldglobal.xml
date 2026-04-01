@@ -83,6 +83,18 @@
 
 		</microsplat-shader>
 
+		<!-- Save remappings which should never be removed -->
+		<microsplat-remap name="slopeStone" from="19" to="1" />
+		<microsplat-remap name="desertStone" from="20" to="3" />
+		<!-- Optional remappings if splatmaps aren't touched -->
+		<microsplat-remap name="roadAsphalt" from="16" to="4" />
+		<microsplat-remap name="roadGravel" from="14" to="5" />
+		<microsplat-remap name="nukedGround" from="23" to="8" />
+		<microsplat-remap name="dirtGround" from="13" to="9" />
+
+		<!-- very similar to roadAsphalt and barely used -->
+		<microsplat-remap name="otherAsphalt" from="6" to="4" />
+
 		<!-- snow ground - used by biome only -->
 		<microsplat-texture name="microsplat0">
 			<property name="BlendWeight" value="1"/>

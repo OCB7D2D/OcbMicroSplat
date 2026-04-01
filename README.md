@@ -130,9 +130,9 @@ reference from, e.g. if in a Biome Layer, "Road" Splatmap or via
 vertex configuration (ores etc.).
 
 0) Snow (Biome)
-1) Stone? (Unused)
+1) Stone? (Unused) => map to 19
 2) Grass (Biome)
-3) Desert Stone (Unused) => same as 20
+3) Desert Stone (Unused) => map to 20
 
 4) Asphalt Road (Splat) => same as 16
 5) Gravel Road (Splat) => same as 14
@@ -145,19 +145,19 @@ vertex configuration (ores etc.).
 11) Desert Blend A (Biome)
 
 12) Desert Blend B (Biome) // unaddressable
-13) Dirt Ground (Voxel)
-14) Gravel Road (Voxel)
+13) Dirt Ground (Voxel) => map to 9
+14) Gravel Road (Voxel) => map to 5
 15) Coal Ore (Voxel)
 
-16) Asphalt Road (Voxel)
+16) Asphalt Road (Voxel) => map to 4
 17) Iron Ore (Voxel)
 18) Potassium Ore (Voxel)
-19) Rock Slope (Voxel, Biome)
+19) Rock Slope (Voxel, Biome) => same as 1
 
-20) Desert Stone (Voxel, Biome)
+20) Desert Stone (Voxel, Biome) => same as 3
 21) Oil Shale (Voxel)
 22) Lead Ore (Voxel)
-23) Destroyed Ground (Voxel)
+23) Destroyed Ground (Voxel) => same as 8
 
 24 - 27) custom slots
 28 - 31) custom slots
