@@ -267,6 +267,7 @@ just how the shader works and certainly a good tradeoff for performance.
 ### Version 1.0.3
 
 - Fix issue with voxel texture blending for V2.6 stable
+- Add more proper fix for sub-biome top-soil rendering
 
 ### Version 1.0.2
 

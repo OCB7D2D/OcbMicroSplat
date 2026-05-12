@@ -36,6 +36,7 @@ public class MicroSplatVoxel
         Index = index;
         color = Color.clear;
         uv = uv2 = uv3 = uv4 = Vector2.zero;
+        color.w = 1; // init fully opaque
     }
 
     // ####################################################################
@@ -53,6 +54,8 @@ public class MicroSplatVoxel
                 .ParseVector2(xml.GetAttribute("uv3"));
         if (xml.HasAttribute("uv4")) uv4 = StringParsers
                 .ParseVector2(xml.GetAttribute("uv4"));
+        if (xml.HasAttribute("blend")) color.w = float
+                .Parse(xml.GetAttribute("blend"));
         foreach (XElement child in xml.Elements("texture"))
         {
             if (!child.HasAttribute("name")) throw new Exception(
@@ -79,10 +82,10 @@ public class MicroSplatVoxel
         }
         // Enable w/a component if we have voxel info
         // ToDo: check out in detail how this works
-        if (color.w != 0) return; // keep original value
-        if (uv.x != 0 || uv.y != 0 || uv2.x != 0 || uv2.y != 0 ||
-            uv3.x != 0 || uv3.y != 0 || uv4.x != 0 || uv4.y != 0)
-            color.w = 1f;
+        // if (color.w != 0) return; // keep original value
+        // if (uv.x != 0 || uv.y != 0 || uv2.x != 0 || uv2.y != 0 ||
+        //     uv3.x != 0 || uv3.y != 0 || uv4.x != 0 || uv4.y != 0)
+        //     color.w = 1f;
     }
 
     // ####################################################################

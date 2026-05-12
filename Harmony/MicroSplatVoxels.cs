@@ -33,7 +33,7 @@ public static class HarmonyMicroSplatVoxels
         {
             // Disable TopSoil rendering fully?
             // Otherwise sub-biomes will not render!
-            _data.bTopSoil = false;
+            // _data.bTopSoil = false;
             // Nothing to be done on dedicated servers
             if (GameManager.IsDedicatedServer) return true;
             // This might be our fantasy ID, intercept and correct
@@ -48,7 +48,7 @@ public static class HarmonyMicroSplatVoxels
                 if (voxel == null) Log.Warning(
                     "Found no voxel config for {0}", vid);
                 if (voxel == null) return true;
-                _data.bTopSoil = false;
+                // _data.bTopSoil = false;
                 _data.color = voxel.color;
                 _data.uv = voxel.uv; _data.uv2 = voxel.uv2;
                 _data.uv3 = voxel.uv3; _data.uv4 = voxel.uv4;

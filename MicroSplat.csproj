@@ -106,6 +106,7 @@
     <Compile Include="Harmony\MicroSplatXmlConfig.cs" />
     <Compile Include="Harmony\MicroSplatXmlFilters.cs" />
     <Compile Include="Harmony\SkipTexturesRelease.cs" />
+    <Compile Include="Harmony\SubMeshTopSoil.cs" />
     <Compile Include="Harmony\TessellationOption.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeColor.cs" />
     <Compile Include="Library\Configs\MicroSplatBiomeLayer.cs" />
