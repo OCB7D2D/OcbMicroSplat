@@ -264,6 +264,10 @@ just how the shader works and certainly a good tradeoff for performance.
 
 ## Changelog
 
+### Version 1.0.3
+
+- Fix issue with voxel texture blending for V2.6 stable
+
 ### Version 1.0.2
 
 - Recompile for 7D2D V2.5 experimental
