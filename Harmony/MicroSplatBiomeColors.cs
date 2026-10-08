@@ -96,10 +96,13 @@ static class ChunkProviderBiomeColorsPatch
                     codes.Insert(i++, CodeInstruction.Call(
                         typeof(GenerateWorldFromRawInitPatch),
                         "ExecutePatched"));
+                    // 7DTD 3.x: log success/failure so a silent IL mismatch is visible
+                    Log.Out(" Patched ChunkProviderGenerateWorldFromRaw.Init biome colors");
                     return codes;
                 }
                 break;
             }
+            Log.Warning(" ChunkProviderGenerateWorldFromRaw.Init biome color patch did not match - custom sub-biome colors will not apply");
             return codes;
         }
 

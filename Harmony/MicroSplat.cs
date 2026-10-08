@@ -42,8 +42,10 @@ public class OcbMicroSplat : IModApi
     // ####################################################################
 
     // Call `HandleWorldChanged` after splatmaps are processed
+    // 7DTD 3.x: constructor gained a second string parameter (_worldPath):
+    // WorldBiomeProviderFromImage(string _levelName, string _worldPath, WorldBiomes _biomes, int _worldSize)
     [HarmonyPatch(typeof(WorldBiomeProviderFromImage), MethodType.Constructor,
-        new System.Type[] { typeof(string), typeof(WorldBiomes), typeof(int)})]
+        new System.Type[] { typeof(string), typeof(string), typeof(WorldBiomes), typeof(int)})]
     public class WorldBiomeProviderFromImage_Ctor
     {
         public static void Prefix(WorldBiomeProviderFromImage __instance)

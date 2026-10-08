@@ -49,50 +49,12 @@ public class TessellationOption
         mesh.material.SetFloat("_Phong", 0.725f);
     }
 
-    // Our combo box (should only even have one)
-    static XUiC_ComboBoxList<string> comboTessOpt = null;
-
-    // Hook our new combo box into the ui workflow
-    [HarmonyPatch(typeof(XUiC_OptionsVideo), "Init")]
-    public class XUiC_OptionsVideo_Init
-    {
-        // The original handler (use reflection for protected)
-        static readonly MethodInfo handler = AccessTools.Method(
-            typeof(XUiC_OptionsVideo), "AnyPresetValueChanged");
-
-        static void Prefix(XUiC_OptionsVideo __instance)
-        {
-            // The UI element with our combo box
-            comboTessOpt = __instance
-                .GetChildById("TerrainTessellation")
-                .GetChildByType<XUiC_ComboBoxList<string>>();
-            // Hook into event to invoke the regular UI handler
-            comboTessOpt.OnValueChangedGeneric += (XUiController sender) => {
-                handler.Invoke(__instance, new object[] { sender });
-            };
-
-        }
-    }
-
-    // Patch into function when apply is hit on the UI
-    [HarmonyPatch(typeof(XUiC_OptionsVideo), "applyChanges")]
-    public class XUiC_OptionsVideo_applyChanges
-    {
-        static void Prefix(XUiC_OptionsVideo __instance)
-        {
-            PlayerPrefs.SetInt("TerrainTessellation", comboTessOpt.SelectedIndex);
-        }
-    }
-
-    // Patch into function when video settings UI is loaded
-    [HarmonyPatch(typeof(XUiC_OptionsVideo), "updateGraphicOptions")]
-    public class XUiC_OptionsVideo_updateGraphicOptions
-    {
-        static void Prefix(XUiC_OptionsVideo __instance)
-        {
-            comboTessOpt.SelectedIndex = PlayerPrefs.GetInt("TerrainTessellation");
-        }
-    }
+    // 7DTD 3.x: the "Terrain Tessellation" dropdown in Options > Video is removed for now. 3.x rebuilt the
+    // video options UI on a new option-entry system (XUiC_OptionEntryAbs); XUiC_OptionsVideo no longer has
+    // applyChanges / updateGraphicOptions / AnyPresetValueChanged, so the old hooks fail to patch at
+    // startup. The setting itself still works: ApplyTerrainOptions below reads PlayerPrefs
+    // "TerrainTessellation" (Off by default; values chosen on 2.x persist). Re-adding the dropdown means
+    // building it on the new option-entry classes; Config/XUi_Menu/windows.xml is removed with it.
 
     // Patch into function when options are applied to materials
     [HarmonyPatch(typeof(GameOptionsManager), "ApplyTerrainOptions")]
@@ -104,21 +66,8 @@ public class TessellationOption
         }
     }
 
-    // Patch into function when video settings are set to defaults
-    [HarmonyPatch(typeof(GameOptionsManager), "SetGraphicsQuality")]
-    public class GameOptionsManager_SetGraphicsQuality
-    {
-        static void Postfix()
-        {
-            switch (GamePrefs.GetInt(EnumGamePrefs.OptionsGfxQualityPreset))
-            {
-                case 1: PlayerPrefs.SetInt("TerrainTessellation", 1); break;
-                case 2: PlayerPrefs.SetInt("TerrainTessellation", 2); break;
-                case 3: PlayerPrefs.SetInt("TerrainTessellation", 3); break;
-                case 4: PlayerPrefs.SetInt("TerrainTessellation", 4); break;
-                default: PlayerPrefs.SetInt("TerrainTessellation", 0); break;
-            }
-        }
-    }
-    
+    // 7DTD 3.x: the SetGraphicsQuality postfix (graphics presets setting tessellation) is removed along
+    // with the dropdown - without the dropdown, a preset could silently turn on tessellation (rated
+    // "Performance impact: Very High") with no way to see or undo it in game.
+
 }
