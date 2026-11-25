@@ -44,9 +44,10 @@ public class OcbMicroSplat : IModApi
     // ####################################################################
     // ####################################################################
 
-    // Call `HandleWorldChanged` after splatmaps are processed
+    // Call `HandleWorldChanged` after splatmaps are processed.
+    // v3.x: the constructor gained a `string _worldPath` 2nd parameter
     [HarmonyPatch(typeof(WorldBiomeProviderFromImage), MethodType.Constructor,
-        new System.Type[] { typeof(string), typeof(WorldBiomes), typeof(int)})]
+        new System.Type[] { typeof(string), typeof(string), typeof(WorldBiomes), typeof(int)})]
     public class WorldBiomeProviderFromImage_Ctor
     {
         public static void Prefix(WorldBiomeProviderFromImage __instance)

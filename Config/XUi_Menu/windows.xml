@@ -1,7 +1,8 @@
 <configs>
-	<remove xpath="/windows/window[@name='optionsVideo']//rect[@tab_key='xuiOptionsVideoQuality']//videooption[@name='Occlusion']/following-sibling::rect"/>
-	<insertafter xpath="/windows/window[@name='optionsVideo']//rect[@tab_key='xuiOptionsVideoQuality']//videooption[@name='TerrainQuality']">
-		<videooption name="TerrainAntiTiling" type="ComboBoxList`1[System.String]" values="Off,Low,High,Ultra" localization_prefix="xuiOptionsVideoPresets" value_wrap="false"/>
-		<videooption name="TerrainTessellation" type="ComboBoxList`1[System.String]" values="Off,Lowest,Low,Medium,High,Ultra,Ultra+" localization_prefix="xuiOptionsVideoPresets" value_wrap="false"/>
+	<!-- V3.X: the quality options are now <options_combo_intindex>/<options_combo_bool> instead of <videooption>.
+	-->
+	<insertafter xpath="/windows/window[@name='optionsVideo']//rect[@tab_key='xuiOptionsVideoQuality']//options_combo_intindex[@name='TerrainQuality']">
+		<options_combo_custom name="TerrainAntiTiling" name_localization_prefix="xuiOptionsVideo" prefname="" type="ComboBoxList`1[System.String]" values="Off,Low,High,Ultra" localization_prefix="xuiOptionsVideoPresets" value_wrap="false" apply_defaults="false"/>
+		<options_combo_custom name="TerrainTessellation" name_localization_prefix="xuiOptionsVideo" prefname="" type="ComboBoxList`1[System.String]" values="Off,Lowest,Low,Medium,High,Ultra,Ultra+" localization_prefix="xuiOptionsVideoPresets" value_wrap="false" apply_defaults="false"/>
 	</insertafter>
 </configs>
