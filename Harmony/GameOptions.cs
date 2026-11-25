@@ -1,13 +1,12 @@
 ﻿using HarmonyLib;
-using System.Reflection;
 using UnityEngine;
 
 public class GameOptions
 {
 
     // Our combo box (should only even have one)
-    static XUiC_ComboBoxList<string> comboTessOpt = null;
-    static XUiC_ComboBoxList<string> comboAntiTileOpt = null;
+    // static XUiC_ComboBoxList<string> comboTessOpt = null; *no longer needed*
+    // static XUiC_ComboBoxList<string> comboAntiTileOpt = null; *no longer needed*
     // static XUiC_ComboBoxBool comboParallaxOpt = null;
     // static XUiC_ComboBoxBool comboParallaxOpt = null;
 
@@ -124,57 +123,27 @@ public class GameOptions
     [HarmonyPatch(typeof(XUiC_OptionsVideo), "Init")]
     public class XUiC_OptionsVideo_Init
     {
-        // The original handler (use reflection for protected)
-        static readonly MethodInfo handler = AccessTools.Method(
-            typeof(XUiC_OptionsVideo), "AnyPresetValueChanged");
-
-        static void Prefix(XUiC_OptionsVideo __instance)
+        static void Postfix(XUiC_OptionsVideo __instance)
         {
-            // The UI element with our combo box
-            comboTessOpt = __instance
-                .GetChildById("TerrainTessellation")
-                .GetChildByType<XUiC_ComboBoxList<string>>();
-            comboAntiTileOpt = __instance
-                .GetChildById("TerrainAntiTiling")
-                .GetChildByType<XUiC_ComboBoxList<string>>();
-            // comboParallaxOpt = __instance
-            //     .GetChildById("TerrainParallax")
-            //     .GetChildByType<XUiC_ComboBoxBool>();
-            // Hook into event to invoke the regular UI handler
-            comboTessOpt.OnValueChangedGeneric += (XUiController sender) =>
-                handler.Invoke(__instance, new object[] { sender });
-            comboAntiTileOpt.OnValueChangedGeneric += (XUiController sender) =>
-                handler.Invoke(__instance, new object[] { sender });
-
-            // comboParallaxOpt.OnValueChangedGeneric += (XUiController sender) => {
-            //     handler.Invoke(__instance, new object[] { sender });
-            // };
-
+            WireCustomCombo(__instance, "TerrainTessellation");
+            WireCustomCombo(__instance, "TerrainAntiTiling");
         }
-    }
-
-    // Patch into function when apply is hit on the UI
-    [HarmonyPatch(typeof(XUiC_OptionsVideo), "applyChanges")]
-    public class XUiC_OptionsVideo_applyChanges
-    {
-        static void Prefix(XUiC_OptionsVideo __instance)
-        {
-            // Log.Out("Apply changes {0}", comboParallaxOpt.Value ? 0 : 1);
-            PlayerPrefs.SetInt("TerrainTessellation", comboTessOpt.SelectedIndex);
-            PlayerPrefs.SetInt("TerrainAntiTiling", comboAntiTileOpt.SelectedIndex);
-            // PlayerPrefs.SetInt("TerrainParallax", comboParallaxOpt.Value ? 1 : 0);
-        }
-    }
-
-    // Patch into function when video settings UI is loaded
-    [HarmonyPatch(typeof(XUiC_OptionsVideo), "updateGraphicOptions")]
-    public class XUiC_OptionsVideo_updateGraphicOptions
-    {
-        static void Prefix(XUiC_OptionsVideo __instance)
-        {
-            comboTessOpt.SelectedIndex = PlayerPrefs.GetInt("TerrainTessellation");
-            comboAntiTileOpt.SelectedIndex = PlayerPrefs.GetInt("TerrainAntiTiling");
-            // comboParallaxOpt.Value = PlayerPrefs.GetInt("TerrainParallax") != 0;
+        static void WireCustomCombo(XUiC_OptionsVideo view, string key) {
+            if (!(view.GetChildById("Option" + key) is XUiC_OptionEntryCustom entry)) {
+                Log.Warning("[MicroSplat] video option 'Option " + key + "' not found (XUi patch missing?)");
+                return;
+            }
+            XUiC_ComboBoxList<string> combo = entry.GetChildByType<XUiC_ComboBoxList<string>>();
+            if (combo == null) {
+                Log.Warning("[MicroSplat] combobox for '" + key + "' not found");
+                return;
+            }
+            // Open  stored value into the combo
+            entry.GetSettingValue = () => combo.SelectedIndex = Mathf.Clamp(PlayerPrefs.GetInt(key, 0), 0, Mathf.Max(0, combo.Elements.Count - 1));
+            // Save and apply the selected index
+            entry.ApplyChanges = _ => PlayerPrefs.SetInt(key, combo.SelectedIndex);
+            // Sets "*" changed marker next to the label
+            entry.IsChangedDelegate = () => combo.SelectedIndex != PlayerPrefs.GetInt(key, 0);
         }
     }
 
